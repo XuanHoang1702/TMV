@@ -1,0 +1,267 @@
+
+/*sec 01*/
+.cl-body-bg {
+    background: url(../images/baogia/bg_baogia.png) rgba(255, 234, 210, 0.7) 38.81% no-repeat;
+    background-position: 105% -5%;
+    /*background-position: top right;*/
+    /* padding: 50px 0;*/
+}
+.cl-sec04 {
+    background: linear-gradient(90deg, #153B71 0%, #2461B7 52%, #153B71 100%);
+}
+
+    .cl-sec04 .h-sec4-info {
+        display: block;
+        align-items: center;
+        align-content: center;
+        margin: 25px 0;
+    }
+
+        .cl-sec04 .h-sec4-info h4 {
+            font-family: Inter;
+            font-weight: 700;
+            font-size: 40px;
+            line-height: 60px;
+            letter-spacing: 0%;
+            vertical-align: middle;
+            color: #FFFFFF;
+        }
+
+        .cl-sec04 .h-sec4-info p {
+            font-family: Inter;
+            font-weight: 400;
+            font-size: 16px;
+            line-height: 24px;
+            letter-spacing: 0%;
+            vertical-align: middle;
+            color: #FFFFFF;
+        }
+
+.h-sec4-form {
+    align-content: center;
+}
+
+.cl-sec01 {
+    /* padding: 100px 0;*/
+    padding-top: 50px;
+    max-width: 80%;
+}
+
+    .cl-sec01 .cl-title {
+        font-family: Inter;
+        font-weight: 700;
+        font-size: 36px;
+        line-height: 54px;
+        letter-spacing: 0%;
+        text-align: center;
+        vertical-align: middle;
+        color: #1C4F97;
+        padding: 5px 20px;
+    }
+    .cl-sec01 .cl-desc {
+        padding: 20px 0;
+    }
+        .cl-sec01 .cl-desc p {
+            font-family: Inter;
+            font-weight: 400;
+            font-size: 14px;
+            line-height: 20px;
+            letter-spacing: 0%;
+            text-align: center;
+            vertical-align: middle;
+            color: #000;
+            margin-bottom: unset;
+        }
+
+.ab-banner-desc {
+    padding: 20px 0px 30px 0px !important;
+    border-bottom: 1px solid #00000033;
+    margin: 0 30px;
+}
+    .cl-panel-list {
+    padding-bottom: 50px;
+}
+.cl-panel-body {
+    background: #FFFFFF66;
+    gap: 24px;
+    padding: 32px;
+    border-top-left-radius: 24px;
+    border-top-right-radius: 24px;
+}
+.cl-panel-footer {
+    background: linear-gradient(176.64deg, #F5EEE4 2.09%, #EADBC7 96.56%);
+    gap: 30px;
+    padding: 32px 40px 10px;
+    border-bottom-right-radius: 24px;
+    border-bottom-left-radius: 24px;
+}
+
+.cl-pl-item {
+    background: #FFFFFF80;
+    gap: 30px;
+    border-radius: 24px;
+    border-width: 1px;
+    padding: 28px 40px;
+    margin: 10px 0;
+}
+.cl-img {
+    justify-items: center;
+    align-items: center;
+    align-content: center;
+}
+.cl-ct-info {
+    align-content: center;
+}
+.cl-info{}
+    .cl-info h4 {
+        font-family: Inter;
+        font-weight: 700;
+        font-size: 32px;
+        line-height: 48px;
+        letter-spacing: 0%;
+        vertical-align: middle;
+        color: #1C4F97;
+    }
+.ul-info {
+    list-style: disc;
+    margin: 0;
+    padding: 20px;
+}
+.ul-info li{}
+
+.cl-aboutUs-info, .cl-aboutUs-1, .cl-aboutUs-3 {
+    padding: 50px 0;
+}
+
+.info-avartar {
+   /* text-align: center;*/
+}
+
+.info-desc {
+    align-items: center;
+    align-content: end;
+}
+    .info-desc .icon_nhay_1 {
+        text-align: left;
+        margin: 15px 0;
+    }
+    .info-desc .icon_nhay_2 {
+        text-align: right;
+        margin: 15px 0;
+    }
+    .info-desc h4 {
+        font-family: Inter;
+        font-weight: 700;
+        font-size: 36px;
+        line-height: 54px;
+        letter-spacing: 0%;
+        vertical-align: middle;
+        color: #1C4F97;
+    }
+    .info-desc p {
+        font-family: Inter;
+        font-weight: 400;
+        font-size: 14px;
+        line-height: 20px;
+        letter-spacing: 0%;
+        text-align: justify;
+        vertical-align: middle;
+        color: #000;
+        margin: 15px 0;
+    }
+
+.cl-aboutUs-1 h4.cl-title {
+    font-family: Inter;
+    font-weight: 700;
+    font-size: 36px;
+    line-height: 54px;
+    letter-spacing: 0%;
+    vertical-align: middle;
+    color: #1C4F97;
+}
+.cl-aboutUs-1 .cl-desc p {
+    font-family: Inter;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 20px;
+    letter-spacing: 0%;
+    text-align: justify;
+    vertical-align: middle;
+    color:#000;
+}
+
+.cl-aboutUs-2 .cl-item {
+    padding: 10px 0;
+    /*padding: 10px 25px;*/
+}
+    .cl-aboutUs-2 .cl-item .cl-icon {
+        padding: 15px 0;
+    }
+    .cl-aboutUs-2 .cl-item h2 {
+        font-family: Inter;
+        font-weight: 700;
+        font-size: 20px;
+        line-height: 30px;
+        letter-spacing: 0%;
+        vertical-align: middle;
+        color: #1C4F97;
+    }
+    .cl-aboutUs-2 .cl-item p {
+        font-family: Inter;
+        font-weight: 400;
+        font-size: 14px;
+        line-height: 20px;
+        letter-spacing: 0%;
+        text-align: justify;
+        vertical-align: middle;
+        color: #000;
+    }
+
+.cl-aboutUs-3 .cl-image {
+    padding:0 15px;
+    text-align:center;
+}
+
+.cl-aboutUs-4 {
+    border-top: 0.5px solid #000;
+    border-bottom: 0.5px solid #000;
+    padding: 50px 0;
+    position: relative;
+    margin: 35px 0;
+}
+
+    .cl-aboutUs-4 .dv-title {
+        position: absolute;
+        background: #fff0df;
+        color: #000;
+        border: 1px solid #000;
+        padding: 10px 35px;
+        border-radius: 25px;
+        top: -26px;
+        left: 39%;
+        font-family: Inter;
+        font-weight: 400;
+        font-size: 20px;
+        line-height: 30px;
+        text-align: justify;
+        vertical-align: middle;
+    }
+    .cl-aboutUs-4 .cl-content {
+    }
+        .cl-aboutUs-4 .cl-content .cl-ul-lists {
+            padding: 0;
+            margin: 0;
+        }
+            .cl-aboutUs-4 .cl-content .cl-ul-lists li {
+                padding: 3px 0;
+            }
+                .cl-aboutUs-4 .cl-content .cl-ul-lists li i {
+                    margin-right: 10px;
+                }
+            .cl-aboutUs-4 .cl-content .cl-ul-lists li label {
+            }
+
+
+.cl-aboutUs-0, .cl-aboutUs-info, .cl-aboutUs-1, .cl-aboutUs-2, .cl-aboutUs-3 {
+    padding: 10px 90px;
+}

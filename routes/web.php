@@ -29,6 +29,16 @@ Route::middleware(['auth'])->group(function () {
     Volt::route('settings/password', 'settings.password')->name('settings.password');
     Volt::route('settings/appearance', 'settings.appearance')->name('settings.appearance');
 });
+//Frontend Routes
+Route::get('/', function () {return view('home');})->name('home');
+Route::get('/ve-dr-dat', function () {return view('about');})->name('about');
+Route::get('/dich-vu', function () {return view('services.index');})->name('services.index');
+Route::get('/dich-vu/{slug}', function ($slug) {return view('services.show', compact('slug'));})->name('services.detail');
+Route::get('/bao-gia', function () {return view('pricing');})->name('pricing');
+Route::get('/tin-tuc', function () {return view('news.index');})->name('news.index');
+Route::get('/tin-tuc/{slug}', function ($slug) {return view('news.show', compact('slug'));})->name('news.detail');
+Route::get('/tin-tuc/danh-muc/{category}', function ($category) {return view('news.category', compact('category'));})->name('news.category');
+Route::get('/lien-he', function () {return view('contact');})->name('contact');
 
 // Admin Auth Routes
 Route::get('/admin/login', [AuthController::class, 'showLoginForm'])->name('admin.login');
@@ -85,6 +95,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
     // Profile
     Route::get('profile/edit', [AuthController::class, 'editProfile'])->name('profile.edit');
     Route::put('profile/update', [AuthController::class, 'updateProfile'])->name('profile.update');
+
 
     //Menu
     Route::resource('menus', MenuController::class);

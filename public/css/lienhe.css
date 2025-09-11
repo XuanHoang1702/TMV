@@ -1,0 +1,138 @@
+
+/*sec 01*/
+.cl-h-sec01 {
+    background: linear-gradient(180deg, rgba(255, 234, 210, 0.7) 38.81%, rgba(255, 234, 210, 0) 100%);
+}
+
+.cl-sec04 {
+    background: linear-gradient(90deg, #153B71 0%, #2461B7 52%, #153B71 100%);
+}
+
+    .cl-sec04 .h-sec4-info {
+        display: block;
+        align-items: center;
+        align-content: center;
+        margin: 25px 0;
+    }
+
+        .cl-sec04 .h-sec4-info h4 {
+            font-family: Inter;
+            font-weight: 700;
+            font-size: 40px;
+            line-height: 60px;
+            letter-spacing: 0%;
+            vertical-align: middle;
+            color: #FFFFFF;
+        }
+
+        .cl-sec04 .h-sec4-info p {
+            font-family: Inter;
+            font-weight: 400;
+            font-size: 16px;
+            line-height: 24px;
+            letter-spacing: 0%;
+            vertical-align: middle;
+            color: #FFFFFF;
+        }
+
+.h-sec4-form {
+    align-content: center;
+}
+
+
+.cl-body-bg {
+    background: url(../images/bg_dich_vu.png) #fff no-repeat;
+    background-position: 62% 24%;
+}
+
+
+.cl-sec01 {
+    padding: 100px 0;
+    max-width: 80%;
+}
+
+    .cl-sec01 .cl-title {
+        font-family: Inter;
+        font-weight: 700;
+        font-size: 36px;
+        line-height: 54px;
+        letter-spacing: 0%;
+        text-align: center;
+        vertical-align: middle;
+        color: #1C4F97;
+    }
+    .cl-sec01 .cl-desc {
+        padding: 0px 0 20px;
+    }
+        .cl-sec01 .cl-desc p {
+            font-family: Inter;
+            font-weight: 400;
+            font-size: 14px;
+            line-height: 20px;
+            letter-spacing: 0%;
+            text-align: center;
+            vertical-align: middle;
+            color: #000;
+            margin-bottom: unset;
+        }
+
+.cl-panel-list {
+    padding-bottom: 50px;
+}
+.cl-panel-body {
+    background: #FFFFFF66;
+    gap: 24px;
+    padding: 32px;
+    border-top-left-radius: 24px;
+    border-top-right-radius: 24px;
+}
+.cl-panel-footer {
+    background: linear-gradient(176.64deg, #F5EEE4 2.09%, #EADBC7 96.56%);
+    gap: 30px;
+    padding: 32px 40px 10px;
+    border-bottom-right-radius: 24px;
+    border-bottom-left-radius: 24px;
+}
+
+.cl-pl-item {
+    background: #FFFFFF80;
+    gap: 30px;
+    border-radius: 24px;
+    border-width: 1px;
+    padding: 28px 40px;
+    margin: 10px 0;
+}
+.cl-img {
+    justify-items: center;
+    align-items: center;
+    align-content: center;
+}
+.cl-ct-info {
+    align-content: center;
+}
+.cl-info{}
+    .cl-info h4 {
+        font-family: Inter;
+        font-weight: 700;
+        font-size: 32px;
+        line-height: 48px;
+        letter-spacing: 0%;
+        vertical-align: middle;
+        color: #1C4F97;
+        text-align: center;
+        margin-bottom: 23px;
+    }
+.ul-info {
+    list-style: disc;
+    margin: 0;
+    padding: 0 38px;
+}
+.ul-info li{}
+
+.cl-sec01 {
+    padding: 45px 90px;
+}
+.ab-banner-desc {
+    padding: 0px 0px 30px 0px !important;
+    border-bottom: 1px solid #00000033;
+}
