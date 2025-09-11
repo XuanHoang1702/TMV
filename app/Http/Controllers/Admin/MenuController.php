@@ -88,4 +88,13 @@ class MenuController extends Controller
 
         return redirect()->route('admin.menus.index')->with('success', 'Menu status updated.');
     }
+
+    public function show($route)
+    {
+        $menu = Menu::where('route', $route)->first();
+        if (!$menu) {
+            abort(404);
+        }
+        return view('menu.show', compact('menu'));
+    }
 }
