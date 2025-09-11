@@ -99,8 +99,8 @@ Route::prefix('admin')->name('admin.')->group(function () {
 
     //Menu
     Route::resource('menus', MenuController::class);
-    Route::get('menu/{menu}', [MenuController::class, 'show'])->where('route', '.*');
     Route::post('menus/{menu}/toggle-status', [MenuController::class, 'toggleStatus'])->name('menus.toggle-status');
+    Route::get('menu/{route}', [MenuController::class, 'show'])->where('route', '.*');
 
 });
 
