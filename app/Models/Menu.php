@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Menu extends Model
 {
+    protected $table = 'menus';
     protected $fillable = [
         'label',
         'icon',
