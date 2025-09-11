@@ -12,6 +12,7 @@ use App\Http\Controllers\Admin\MediaController;
 use App\Http\Controllers\Admin\SettingController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\CategoryController;
+use App\Http\Controllers\Admin\MenuController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -35,7 +36,7 @@ Route::post('/admin/login', [AuthController::class, 'login'])->name('admin.login
 Route::post('/admin/logout', [AuthController::class, 'logout'])->name('admin.logout');
 
 // Admin Routes
-Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
+Route::prefix('admin')->name('admin.')->group(function () {
     // Dashboard
     Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
 
@@ -84,6 +85,12 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     // Profile
     Route::get('profile/edit', [AuthController::class, 'editProfile'])->name('profile.edit');
     Route::put('profile/update', [AuthController::class, 'updateProfile'])->name('profile.update');
+
+    //Menu
+    Route::resource('menus', MenuController::class);
+    Route::post('menus/{menu}/toggle-status', [MenuController::class, 'toggleStatus'])
+        ->name('menus.toggle-status');
+
 });
 
 require __DIR__.'/auth.php';
