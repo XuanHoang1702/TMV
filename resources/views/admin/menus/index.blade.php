@@ -2,6 +2,9 @@
 
 @section('title', 'Quản lý Menu')
 
+@if(session('success'))
+    <div class="alert alert-success">{{ session('success') }}</div>
+@endif
 @section('content')
 <div class="container-fluid">
     <div class="row">
@@ -103,7 +106,7 @@
                         </tbody>
                     </table>
                     <div class="d-flex justify-content-center">
-                        {{ $menus->links() }}
+                   {{ $menus->links('vendor.pagination.bootstrap-5') }}
                     </div>
                 </div>
             </div>
