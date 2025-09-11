@@ -86,6 +86,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::get('profile/edit', [AuthController::class, 'editProfile'])->name('profile.edit');
     Route::put('profile/update', [AuthController::class, 'updateProfile'])->name('profile.update');
 
+    
     //Menu
     Route::resource('menus', MenuController::class);
     Route::post('menus/{menu}/toggle-status', [MenuController::class, 'toggleStatus'])
