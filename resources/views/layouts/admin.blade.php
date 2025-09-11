@@ -26,14 +26,15 @@
             </div>
             <ul class="sidebar-menu list-unstyled">
                 @foreach ($adminMenu as $item)
-                    <li class="{{ request()->routeIs($item['route']) ? 'active bg-primary' : '' }} rounded mb-2">
-                        <a href="{{ route($item['route']) }}"
-                            class="d-flex align-items-center text-white text-decoration-none px-3 py-2">
-                            <i class="{{ $item['icon'] }} me-2"></i>
-                            <span>{{ $item['label'] }}</span>
-                        </a>
-                    </li>
+                <li class="{{ isset($item['route']) && request()->routeIs($item['route']) ? 'active bg-primary' : '' }} rounded mb-2">
+                    <a href="{{ $item['link'] }}"
+                        class="d-flex align-items-center text-white text-decoration-none px-3 py-2">
+                        <i class="{{ $item['icon'] }} me-2"></i>
+                        <span>{{ $item['label'] }}</span>
+                    </a>
+                </li>
                 @endforeach
+
                 <li class="{{ request()->routeIs('admin.menus.*') ? 'active bg-primary' : '' }} rounded mb-2">
                     <a href="{{ route('admin.menus.index') }}"
                         class="d-flex align-items-center text-white text-decoration-none px-3 py-2">

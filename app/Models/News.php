@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Route;
 
 class News extends Model
 {
@@ -40,4 +41,12 @@ class News extends Model
             }
         });
     }
+
+    public function getLinkAttribute()
+    {
+        return \Route::has($this->route)
+            ? route($this->route)
+            : url($this->route);
+    }
+
 }
