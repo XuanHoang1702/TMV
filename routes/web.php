@@ -53,7 +53,8 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::post('news/{news}/unpublish', [NewsController::class, 'unpublish'])->name('news.unpublish');
 
     // Appointments Management
-    Route::resource('appointments', AppointmentController::class)->except(['create', 'store']);
+    #Route::resource('appointments', AppointmentController::class)->except(['create', 'store']);
+    Route::post('appointments', [AppointmentController::class, 'store'])->name('appointments.store');
     Route::post('appointments/{appointment}/status', [AppointmentController::class, 'updateStatus'])->name('appointments.update-status');
     Route::get('appointments-calendar', [AppointmentController::class, 'calendar'])->name('appointments.calendar');
     Route::get('appointments-export', [AppointmentController::class, 'export'])->name('appointments.export');
