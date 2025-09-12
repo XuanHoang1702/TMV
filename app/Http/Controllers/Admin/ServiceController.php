@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Service;
+use App\Models\Category;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
@@ -21,7 +22,8 @@ class ServiceController extends Controller
 
     public function create()
     {
-        return view('admin.services.create');
+        $categories = Category::orderBy('name')->get();
+        return view('admin.services.create', compact('categories'));
     }
 
     public function store(Request $request)
@@ -35,7 +37,7 @@ class ServiceController extends Controller
             'icon' => 'nullable|image|mimes:png|max:1024',
             'price_range' => 'nullable|string|max:100',
             'duration' => 'nullable|string|max:50',
-            'category' => 'required|string|max:100',
+            'category_id' => 'required|exists:categories,id',
             'is_active' => 'boolean',
             'sort_order' => 'integer',
             'meta_title' => 'nullable|string|max:255',
@@ -58,7 +60,8 @@ class ServiceController extends Controller
 
     public function edit(Service $service)
     {
-        return view('admin.services.edit', compact('service'));
+        $categories = Category::orderBy('name')->get();
+        return view('admin.services.edit', compact('service', 'categories'));
     }
 
     public function update(Request $request, Service $service)
@@ -72,7 +75,7 @@ class ServiceController extends Controller
             'icon' => 'nullable|image|mimes:png|max:1024',
             'price_range' => 'nullable|string|max:100',
             'duration' => 'nullable|string|max:50',
-            'category' => 'required|string|max:100',
+            'category_id' => 'required|exists:categories,id',
             'is_active' => 'boolean',
             'sort_order' => 'integer',
             'meta_title' => 'nullable|string|max:255',

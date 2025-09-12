@@ -1,0 +1,179 @@
+<!-- Booking Popup Component -->
+<div id="booking_Popup" class="modal fade cl-bgPop" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog modal-lg" style="max-width: 35%;">
+        <div class="modal-content">
+            <div class="modal-header" style="flex-direction:unset;">
+                <h5 id="myModalLabel" class="modal-title" style="font-weight:bold">
+                    ĐẶT LỊCH HẸN TƯ VẤN THẨM MỸ
+                </h5>
+                <p>Hãy để chúng tôi giúp bạn trở nên tự tin và rạng rỡ hơn</p>
+                <button type="button" class="btn btn-pop" data-bs-dismiss="modal" aria-label="Close"
+                    onclick="onClose_Popup()"><i class="fa fa-times"></i></button>
+            </div>
+            <form action="{{ route('appointments.store') }}" method="POST" class="smart-form">
+                @csrf
+                <div class="row">
+                    <div class="col-12 col-sm-12">
+                        <input type="text" name="customer_name" placeholder="Họ & tên" class="ctr-h-input"
+                            value="{{ old('customer_name') }}" required />
+                        <div class="text-danger" id="error_customer_name"></div>
+                        @error('customer_name')
+                            <div class="text-danger">{{ $message }}</div>
+                        @enderror
+                    </div>
+                    <div class="col-12 col-sm-12">
+                        <input type="text" name="customer_phone" placeholder="Số điện thoại" class="ctr-h-input"
+                            value="{{ old('customer_phone') }}" required />
+                        <div class="text-danger" id="error_customer_phone"></div>
+                        @error('customer_phone')
+                            <div class="text-danger">{{ $message }}</div>
+                        @enderror
+                    </div>
+                    <div class="col-12 col-sm-12">
+                        <select name="service_id" class="ctr-h-input" id="service_id">
+                            <option value="">Chọn dịch vụ</option>
+                            @foreach ($services as $service)
+                                <option value="{{ $service->id }}"
+                                    {{ old('service_id') == $service->id ? 'selected' : '' }}>
+                                    {{ $service->name }}
+                                </option>
+                            @endforeach
+                        </select>
+                        <div class="text-danger" id="error_service_id"></div>
+                        @error('service_id')
+                            <div class="text-danger">{{ $message }}</div>
+                        @enderror
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-12 col-sm-6">
+                        <input type="time" name="appointment_time" placeholder="Chọn giờ hẹn" class="ctr-h-input"
+                            value="{{ old('appointment_time') }}" required />
+                        <div class="text-danger" id="error_appointment_time"></div>
+                        @error('appointment_time')
+                            <div class="text-danger">{{ $message }}</div>
+                        @enderror
+                    </div>
+                    <div class="col-12 col-sm-6">
+                        <input type="date" name="appointment_date" placeholder="Chọn ngày hẹn" class="ctr-h-input"
+                            value="{{ old('appointment_date') }}" required />
+                        <div class="text-danger" id="error_appointment_date"></div>
+                        @error('appointment_date')
+                            <div class="text-danger">{{ $message }}</div>
+                        @enderror
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-12 col-sm-12">
+                        <textarea name="notes" rows="3" placeholder="Ghi chú" class="ctr-h-input">{{ old('notes') }}</textarea>
+                        <div class="text-danger" id="error_notes"></div>
+                        @error('notes')
+                            <div class="text-danger">{{ $message }}</div>
+                        @enderror
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-12 col-sm-12">
+                        <button type="submit" class="cl-btn-full">
+                            <span>Đặt lịch ngay</span>
+                            <i class="fa fa-angle-right"></i>
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+    // Toast từ session Laravel
+    @if(session('success'))
+        Swal.fire({
+            icon: 'success',
+            title: 'Thành công',
+            text: '{{ session('success') }}',
+            timer: 3000,
+            showConfirmButton: false,
+            toast: true,
+            position: 'top-end'
+        });
+    @endif
+
+    @if(session('error'))
+        Swal.fire({
+            icon: 'error',
+            title: 'Thất bại',
+            text: '{{ session('error') }}',
+            timer: 3000,
+            showConfirmButton: false,
+            toast: true,
+            position: 'top-end'
+        });
+    @endif
+
+    // Validate form frontend và hiển thị lỗi trong form
+    document.querySelector('.smart-form').addEventListener('submit', function(e) {
+        // Xóa lỗi cũ
+        document.querySelectorAll('.text-danger[id^="error_"]').forEach(el => el.innerText = '');
+
+        let hasError = false;
+        let name = document.querySelector('[name="customer_name"]').value.trim();
+        let phone = document.querySelector('[name="customer_phone"]').value.trim();
+        let service = document.querySelector('[name="service_id"]').value;
+        let time = document.querySelector('[name="appointment_time"]').value;
+        let date = document.querySelector('[name="appointment_date"]').value;
+        let notes = document.querySelector('[name="notes"]').value.trim();
+
+        // Validate tên
+        if (!name) {
+            document.getElementById('error_customer_name').innerText = 'Tên không được để trống';
+            hasError = true;
+        } else if (name.length < 3) {
+            document.getElementById('error_customer_name').innerText = 'Tên phải có ít nhất 3 ký tự';
+            hasError = true;
+        } else if (!/^[a-zA-ZÀ-ỹ\s]+$/u.test(name)) {
+            document.getElementById('error_customer_name').innerText = 'Tên không hợp lệ, chỉ chứa chữ cái';
+            hasError = true;
+        }
+
+        // Validate số điện thoại
+        let invalidNumbers = ['0000000000','1234567890','1111111111','2222222222'];
+        if (!phone) {
+            document.getElementById('error_customer_phone').innerText = 'Số điện thoại không được để trống';
+            hasError = true;
+        } else if (!/^\d{10}$/.test(phone) || !/^(03|05|07|08|09)/.test(phone) || invalidNumbers.includes(phone)) {
+            document.getElementById('error_customer_phone').innerText = 'Số điện thoại không hợp lệ';
+            hasError = true;
+        }
+
+        // Validate dịch vụ
+        if (!service) {
+            document.getElementById('error_service_id').innerText = 'Vui lòng chọn dịch vụ';
+            hasError = true;
+        }
+
+        // Validate giờ hẹn
+        if (!time) {
+            document.getElementById('error_appointment_time').innerText = 'Vui lòng chọn giờ hẹn';
+            hasError = true;
+        }
+
+        // Validate ngày hẹn
+        if (!date) {
+            document.getElementById('error_appointment_date').innerText = 'Vui lòng chọn ngày hẹn';
+            hasError = true;
+        }
+
+        // Validate ghi chú
+        if (notes.length > 1000) {
+            document.getElementById('error_notes').innerText = 'Ghi chú tối đa 1000 ký tự';
+            hasError = true;
+        }
+
+        if (hasError) e.preventDefault(); // Ngăn submit nếu có lỗi
+    });
+</script>

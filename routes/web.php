@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+
 use Livewire\Volt\Volt;
 use App\Http\Controllers\Admin\AuthController;
 use App\Http\Controllers\Admin\DashboardController;
@@ -13,7 +14,9 @@ use App\Http\Controllers\Admin\SettingController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\MenuController;
-
+use App\Http\Controllers\Admin\BannerController;
+use App\Models\Banner;
+use App\Models\Category;
 Route::get('/', function () {
     return view('welcome');
 })->name('home');
@@ -30,7 +33,16 @@ Route::middleware(['auth'])->group(function () {
     Volt::route('settings/appearance', 'settings.appearance')->name('settings.appearance');
 });
 //Frontend Routes
-Route::get('/', function () {return view('home');})->name('home');
+Route::get('/', function () {
+    $banners = Banner::where('is_active', true)->orderBy('order')->get();
+    $categories = Category::where('type', 'services')
+        ->where('is_active', true)
+        ->orderBy('order')
+        ->get();
+    return view('home', compact('banners', 'categories'));
+})->name('home');
+
+//---------------------
 Route::get('/ve-dr-dat', function () {return view('about');})->name('about');
 Route::get('/dich-vu', function () {return view('services.index');})->name('services.index');
 Route::get('/dich-vu/{slug}', function ($slug) {return view('services.show', compact('slug'));})->name('services.detail');
@@ -39,6 +51,8 @@ Route::get('/tin-tuc', function () {return view('news.index');})->name('news.ind
 Route::get('/tin-tuc/{slug}', function ($slug) {return view('news.show', compact('slug'));})->name('news.detail');
 Route::get('/tin-tuc/danh-muc/{category}', function ($category) {return view('news.category', compact('category'));})->name('news.category');
 Route::get('/lien-he', function () {return view('contact');})->name('contact');
+
+Route::post('/dat-lich', [\App\Http\Controllers\Admin\AppointmentController::class, 'storeFrontend'])->name('appointments.store');
 
 // Admin Auth Routes
 Route::get('/admin/login', [AuthController::class, 'showLoginForm'])->name('admin.login');
@@ -63,8 +77,8 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::post('news/{news}/unpublish', [NewsController::class, 'unpublish'])->name('news.unpublish');
 
     // Appointments Management
-    #Route::resource('appointments', AppointmentController::class)->except(['create', 'store']);
-    Route::post('appointments', [AppointmentController::class, 'store'])->name('appointments.store');
+
+    Route::resource('appointments', AppointmentController::class);
     Route::post('appointments/{appointment}/status', [AppointmentController::class, 'updateStatus'])->name('appointments.update-status');
     Route::get('appointments-calendar', [AppointmentController::class, 'calendar'])->name('appointments.calendar');
     Route::get('appointments-export', [AppointmentController::class, 'export'])->name('appointments.export');
@@ -97,11 +111,13 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::get('profile/edit', [AuthController::class, 'editProfile'])->name('profile.edit');
     Route::put('profile/update', [AuthController::class, 'updateProfile'])->name('profile.update');
 
-
     //Menu
     Route::resource('menus', MenuController::class);
     Route::post('menus/{menu}/toggle-status', [MenuController::class, 'toggleStatus'])->name('menus.toggle-status');
     Route::get('menu/{route}', [MenuController::class, 'show'])->where('route', '.*');
+
+    // Banners Management
+    Route::resource('banners', BannerController::class);
 
 });
 

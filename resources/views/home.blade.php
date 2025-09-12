@@ -7,86 +7,11 @@
 @endsection
 
 @section('content')
-<div class="cl-banner">
-    <div class="container" data-aos="zoom-in" data-aos-duration="3000">
-        <div class="row">
-            <div class="col-md-12 ct-banner"></div>
-        </div>
-    </div>
-</div>
+@include('layouts.banners', ['banners' => $banners])
 <div class="cl-h-sec01">
     <div class="container">
-        <div class="cl-sec01-cate" data-aos="zoom-in" data-aos-duration="3000">
-            <div class="row">
-                <div class="col-12 col-sm-3">
-                    <div class="col-item">
-                        <a href="{{ route('services.detail', 'dich-vu-tham-my-co-be') }}" class="a-cate-item">
-                            <img src="{{ asset('images/home/icon_cate1.png') }}" />
-                            <label>PHẪU THUẬT THẨM MỸ CÔ BÉ</label>
-                        </a>
-                    </div>
-                </div>
-                <div class="col-12 col-sm-3">
-                    <div class="col-item">
-                        <a href="{{ route('services.detail', 'dich-vu-phau-thuat-tao-hinh-tham-my-nguc') }}" class="a-cate-item">
-                            <img src="{{ asset('images/home/icon_cate2.png') }}" />
-                            <label>PHẪU THUẬT TẠO HÌNH THẨM MỸ NGỰC</label>
-                        </a>
-                    </div>
-                </div>
-                <div class="col-12 col-sm-3">
-                    <div class="col-item">
-                        <a href="{{ route('services.detail', 'dich-vu-phau-thuat-tao-hinh-tham-my-mong') }}" class="a-cate-item">
-                            <img src="{{ asset('images/home/icon_cate3.png') }}" />
-                            <label>PHẪU THUẬT TẠO HÌNH THẨM MỸ MÔNG</label>
-                        </a>
-                    </div>
-                </div>
-                <div class="col-12 col-sm-3">
-                    <div class="col-item">
-                        <a href="{{ route('services.detail', 'hut-mo-cay-mo') }}" class="a-cate-item">
-                            <img src="{{ asset('images/home/icon_cate4.png') }}" />
-                            <label>HÚT MỠ <br />CẤY MỠ</label>
-                        </a>
-                    </div>
-                </div>
-            </div>
-            <!--row 2-->
-            <div class="row">
-                <div class="col-12 col-sm-3">
-                    <div class="col-item">
-                        <a href="{{ route('services.detail', 'dich-vu-phau-thuat-tao-hinh-tham-my-mat') }}" class="a-cate-item">
-                            <img src="{{ asset('images/home/icon_cate5.png') }}" />
-                            <label>PHẪU THUẬT TẠO HÌNH THẨM MỸ MẮT</label>
-                        </a>
-                    </div>
-                </div>
-                <div class="col-12 col-sm-3">
-                    <div class="col-item">
-                        <a href="{{ route('services.detail', 'dich-vu-phau-thuat-tao-hinh-tham-my-mui') }}" class="a-cate-item">
-                            <img src="{{ asset('images/home/icon_cate6.png') }}" />
-                            <label>PHẪU THUẬT TẠO HÌNH THẨM MỸ MŨI</label>
-                        </a>
-                    </div>
-                </div>
-                <div class="col-12 col-sm-3">
-                    <div class="col-item">
-                        <a href="{{ route('services.detail', 'dich-vu-phau-thuat-tao-hinh-tham-my-vung-mat') }}" class="a-cate-item">
-                            <img src="{{ asset('images/home/icon_cate7.png') }}" />
-                            <label>PHẪU THUẬT TẠO HÌNH THẨM MỸ VÙNG MẶT</label>
-                        </a>
-                    </div>
-                </div>
-                <div class="col-12 col-sm-3">
-                    <div class="col-item">
-                        <a href="{{ route('services.detail', 'tham-my-noi-khoa') }}" class="a-cate-item">
-                            <img src="{{ asset('images/home/icon_cate8.png') }}" />
-                            <label>THẨM MỸ <br />NỘI KHOA</label>
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </div>
+        @include('layouts.category-list', ['categories' => $categories])
+
         <!--Vững Chuyên Môn, Giàu Tâm Đức-->
         <div class="cl-sec01-desc">
             <div class="row">

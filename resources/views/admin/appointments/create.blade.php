@@ -22,52 +22,45 @@
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label for="name">Họ tên *</label>
-                                    <input type="text" class="form-control @error('name') is-invalid @enderror"
-                                           id="name" name="name" value="{{ old('name') }}" required>
-                                    @error('name')
+                                    <label for="customer_name">Họ tên *</label>
+                                    <input type="text" class="form-control @error('customer_name') is-invalid @enderror"
+                                           id="customer_name" name="customer_name" value="{{ old('customer_name') }}" required>
+                                    @error('customer_name')
                                         <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
                                 </div>
 
                                 <div class="form-group">
-                                    <label for="email">Email *</label>
-                                    <input type="email" class="form-control @error('email') is-invalid @enderror"
-                                           id="email" name="email" value="{{ old('email') }}" required>
-                                    @error('email')
+                                    <label for="customer_email">Email *</label>
+                                    <input type="email" class="form-control @error('customer_email') is-invalid @enderror"
+                                           id="customer_email" name="customer_email" value="{{ old('customer_email') }}" required>
+                                    @error('customer_email')
                                         <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
                                 </div>
 
                                 <div class="form-group">
-                                    <label for="phone">Số điện thoại *</label>
-                                    <input type="text" class="form-control @error('phone') is-invalid @enderror"
-                                           id="phone" name="phone" value="{{ old('phone') }}" required>
-                                    @error('phone')
+                                    <label for="customer_phone">Số điện thoại *</label>
+                                    <input type="text" class="form-control @error('customer_phone') is-invalid @enderror"
+                                           id="customer_phone" name="customer_phone" value="{{ old('customer_phone') }}" required>
+                                    @error('customer_phone')
                                         <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
                                 </div>
 
                                 <div class="form-group">
-                                    <label for="service">Dịch vụ</label>
-                                    <select class="form-control @error('service') is-invalid @enderror" id="service" name="service">
+                                    <label for="service_id">Dịch vụ</label>
+                                    <select class="form-control @error('service_id') is-invalid @enderror" id="service_id" name="service_id">
                                         <option value="">Chọn dịch vụ</option>
-                                        <option value="phau-thuat-tham-my-co-be" {{ old('service') == 'phau-thuat-tham-my-co-be' ? 'selected' : '' }}>Phẫu thuật thẩm mỹ cô bé</option>
-                                        <option value="phau-thuat-tham-my-nguc" {{ old('service') == 'phau-thuat-tham-my-nguc' ? 'selected' : '' }}>Phẫu thuật thẩm mỹ ngực</option>
-                                        <option value="phau-thuat-tham-my-mong" {{ old('service') == 'phau-thuat-tham-my-mong' ? 'selected' : '' }}>Phẫu thuật thẩm mỹ mông</option>
-                                        <option value="hut-mo-cay-mo" {{ old('service') == 'hut-mo-cay-mo' ? 'selected' : '' }}>Hút mỡ, cấy mỡ</option>
-                                        <option value="phau-thuat-tham-my-mat" {{ old('service') == 'phau-thuat-tham-my-mat' ? 'selected' : '' }}>Phẫu thuật thẩm mỹ mắt</option>
-                                        <option value="phau-thuat-tham-my-mui" {{ old('service') == 'phau-thuat-tham-my-mui' ? 'selected' : '' }}>Phẫu thuật thẩm mỹ mũi</option>
-                                        <option value="phau-thuat-tham-my-mat" {{ old('service') == 'phau-thuat-tham-my-mat' ? 'selected' : '' }}>Phẫu thuật thẩm mỹ mặt</option>
-                                        <option value="tham-my-noi-khoa" {{ old('service') == 'tham-my-noi-khoa' ? 'selected' : '' }}>Thẩm mỹ nội khoa</option>
+                                        @foreach($services as $service)
+                                            <option value="{{ $service->id }}" {{ old('service_id') == $service->id ? 'selected' : '' }}>{{ $service->name }}</option>
+                                        @endforeach
                                     </select>
-                                    @error('service')
+                                    @error('service_id')
                                         <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
                                 </div>
-                            </div>
 
-                            <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="appointment_date">Ngày hẹn *</label>
                                     <input type="date" class="form-control @error('appointment_date') is-invalid @enderror"

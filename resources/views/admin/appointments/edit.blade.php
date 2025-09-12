@@ -1,6 +1,6 @@
 @extends('layouts.admin')
 
-@section('title', 'Sửa lịch hẹn')
+@section('title', 'Chỉnh sửa Lịch hẹn')
 
 @section('content')
 <div class="container-fluid">
@@ -8,118 +8,115 @@
         <div class="col-12">
             <div class="card">
                 <div class="card-header">
-                    <h3 class="card-title">Sửa lịch hẹn</h3>
-                    <div class="card-tools">
-                        <a href="{{ route('admin.appointments.show', $appointment) }}" class="btn btn-info">
-                            <i class="fas fa-eye"></i> Xem
-                        </a>
-                        <a href="{{ route('admin.appointments.index') }}" class="btn btn-secondary">
-                            <i class="fas fa-arrow-left"></i> Quay lại
-                        </a>
-                    </div>
+                    <h3 class="card-title">Chỉnh sửa Lịch hẹn</h3>
                 </div>
                 <div class="card-body">
-                    <form action="{{ route('admin.appointments.update', $appointment) }}" method="POST">
+                    <form method="POST" action="{{ route('admin.appointments.update', $appointment) }}">
                         @csrf
                         @method('PUT')
 
                         <div class="row">
                             <div class="col-md-6">
-                                <div class="form-group">
-                                    <label for="name">Họ tên *</label>
-                                    <input type="text" class="form-control @error('name') is-invalid @enderror"
-                                           id="name" name="name" value="{{ old('name', $appointment->name) }}" required>
-                                    @error('name')
-                                        <div class="invalid-feedback">{{ $message }}</div>
-                                    @enderror
-                                </div>
-
-                                <div class="form-group">
-                                    <label for="email">Email *</label>
-                                    <input type="email" class="form-control @error('email') is-invalid @enderror"
-                                           id="email" name="email" value="{{ old('email', $appointment->email) }}" required>
-                                    @error('email')
-                                        <div class="invalid-feedback">{{ $message }}</div>
-                                    @enderror
-                                </div>
-
-                                <div class="form-group">
-                                    <label for="phone">Số điện thoại *</label>
-                                    <input type="text" class="form-control @error('phone') is-invalid @enderror"
-                                           id="phone" name="phone" value="{{ old('phone', $appointment->phone) }}" required>
-                                    @error('phone')
-                                        <div class="invalid-feedback">{{ $message }}</div>
-                                    @enderror
-                                </div>
-
-                                <div class="form-group">
-                                    <label for="service">Dịch vụ</label>
-                                    <select class="form-control @error('service') is-invalid @enderror" id="service" name="service">
-                                        <option value="">Chọn dịch vụ</option>
-                                        <option value="phau-thuat-tham-my-co-be" {{ old('service', $appointment->service) == 'phau-thuat-tham-my-co-be' ? 'selected' : '' }}>Phẫu thuật thẩm mỹ cô bé</option>
-                                        <option value="phau-thuat-tham-my-nguc" {{ old('service', $appointment->service) == 'phau-thuat-tham-my-nguc' ? 'selected' : '' }}>Phẫu thuật thẩm mỹ ngực</option>
-                                        <option value="phau-thuat-tham-my-mong" {{ old('service', $appointment->service) == 'phau-thuat-tham-my-mong' ? 'selected' : '' }}>Phẫu thuật thẩm mỹ mông</option>
-                                        <option value="hut-mo-cay-mo" {{ old('service', $appointment->service) == 'hut-mo-cay-mo' ? 'selected' : '' }}>Hút mỡ, cấy mỡ</option>
-                                        <option value="phau-thuat-tham-my-mat" {{ old('service', $appointment->service) == 'phau-thuat-tham-my-mat' ? 'selected' : '' }}>Phẫu thuật thẩm mỹ mắt</option>
-                                        <option value="phau-thuat-tham-my-mui" {{ old('service', $appointment->service) == 'phau-thuat-tham-my-mui' ? 'selected' : '' }}>Phẫu thuật thẩm mỹ mũi</option>
-                                        <option value="phau-thuat-tham-my-mat" {{ old('service', $appointment->service) == 'phau-thuat-tham-my-mat' ? 'selected' : '' }}>Phẫu thuật thẩm mỹ mặt</option>
-                                        <option value="tham-my-noi-khoa" {{ old('service', $appointment->service) == 'tham-my-noi-khoa' ? 'selected' : '' }}>Thẩm mỹ nội khoa</option>
-                                    </select>
-                                    @error('service')
+                                <div class="mb-3">
+                                    <label for="customer_name" class="form-label">Tên khách hàng <span class="text-danger">*</span></label>
+                                    <input type="text" class="form-control @error('customer_name') is-invalid @enderror" id="customer_name" name="customer_name" value="{{ old('customer_name', $appointment->customer_name) }}" required>
+                                    @error('customer_name')
                                         <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
                                 </div>
                             </div>
 
                             <div class="col-md-6">
-                                <div class="form-group">
-                                    <label for="appointment_date">Ngày hẹn *</label>
-                                    <input type="date" class="form-control @error('appointment_date') is-invalid @enderror"
-                                           id="appointment_date" name="appointment_date"
-                                           value="{{ old('appointment_date', $appointment->appointment_date ? $appointment->appointment_date->format('Y-m-d') : '') }}" required>
-                                    @error('appointment_date')
-                                        <div class="invalid-feedback">{{ $message }}</div>
-                                    @enderror
-                                </div>
-
-                                <div class="form-group">
-                                    <label for="appointment_time">Giờ hẹn *</label>
-                                    <input type="time" class="form-control @error('appointment_time') is-invalid @enderror"
-                                           id="appointment_time" name="appointment_time"
-                                           value="{{ old('appointment_time', $appointment->appointment_time ? $appointment->appointment_time->format('H:i') : '') }}" required>
-                                    @error('appointment_time')
-                                        <div class="invalid-feedback">{{ $message }}</div>
-                                    @enderror
-                                </div>
-
-                                <div class="form-group">
-                                    <label for="status">Trạng thái</label>
-                                    <select class="form-control @error('status') is-invalid @enderror" id="status" name="status">
-                                        <option value="pending" {{ old('status', $appointment->status) == 'pending' ? 'selected' : '' }}>Chờ xác nhận</option>
-                                        <option value="confirmed" {{ old('status', $appointment->status) == 'confirmed' ? 'selected' : '' }}>Đã xác nhận</option>
-                                        <option value="completed" {{ old('status', $appointment->status) == 'completed' ? 'selected' : '' }}>Hoàn thành</option>
-                                        <option value="cancelled" {{ old('status', $appointment->status) == 'cancelled' ? 'selected' : '' }}>Đã hủy</option>
-                                    </select>
-                                    @error('status')
-                                        <div class="invalid-feedback">{{ $message }}</div>
-                                    @enderror
-                                </div>
-
-                                <div class="form-group">
-                                    <label for="notes">Ghi chú</label>
-                                    <textarea class="form-control @error('notes') is-invalid @enderror"
-                                              id="notes" name="notes" rows="3">{{ old('notes', $appointment->notes) }}</textarea>
-                                    @error('notes')
+                                <div class="mb-3">
+                                    <label for="customer_email" class="form-label">Email khách hàng <span class="text-danger">*</span></label>
+                                    <input type="email" class="form-control @error('customer_email') is-invalid @enderror" id="customer_email" name="customer_email" value="{{ old('customer_email', $appointment->customer_email) }}" required>
+                                    @error('customer_email')
                                         <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
                                 </div>
                             </div>
                         </div>
 
-                        <div class="form-group">
-                            <button type="submit" class="btn btn-primary">
-                                <i class="fas fa-save"></i> Cập nhật
-                            </button>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="customer_phone" class="form-label">Số điện thoại <span class="text-danger">*</span></label>
+                                    <input type="text" class="form-control @error('customer_phone') is-invalid @enderror" id="customer_phone" name="customer_phone" value="{{ old('customer_phone', $appointment->customer_phone) }}" required>
+                                    @error('customer_phone')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="service_id" class="form-label">Dịch vụ</label>
+                                    <select class="form-select @error('service_id') is-invalid @enderror" id="service_id" name="service_id">
+                                        <option value="">Chọn dịch vụ</option>
+                                        @php
+                                            $groupedServices = $services->groupBy('category');
+                                        @endphp
+                                        @foreach($groupedServices as $category => $categoryServices)
+                                            <optgroup label="{{ $category ?: 'Chưa phân loại' }}">
+                                                @foreach($categoryServices as $service)
+                                                    <option value="{{ $service->id }}" {{ old('service_id', $appointment->service_id) == $service->id ? 'selected' : '' }}>{{ $service->name }}</option>
+                                                @endforeach
+                                            </optgroup>
+                                        @endforeach
+                                    </select>
+                                    @error('service_id')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="appointment_date" class="form-label">Ngày hẹn <span class="text-danger">*</span></label>
+                                    <input type="date" class="form-control @error('appointment_date') is-invalid @enderror" id="appointment_date" name="appointment_date" value="{{ old('appointment_date', $appointment->appointment_date->format('Y-m-d')) }}" required>
+                                    @error('appointment_date')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="appointment_time" class="form-label">Giờ hẹn <span class="text-danger">*</span></label>
+                                    <input type="time" class="form-control @error('appointment_time') is-invalid @enderror" id="appointment_time" name="appointment_time" value="{{ old('appointment_time', $appointment->appointment_time->format('H:i')) }}" required>
+                                    @error('appointment_time')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="status" class="form-label">Trạng thái <span class="text-danger">*</span></label>
+                            <select class="form-select @error('status') is-invalid @enderror" id="status" name="status" required>
+                                <option value="pending" {{ old('status', $appointment->status) == 'pending' ? 'selected' : '' }}>Chờ xử lý</option>
+                                <option value="confirmed" {{ old('status', $appointment->status) == 'confirmed' ? 'selected' : '' }}>Đã xác nhận</option>
+                                <option value="completed" {{ old('status', $appointment->status) == 'completed' ? 'selected' : '' }}>Hoàn thành</option>
+                                <option value="cancelled" {{ old('status', $appointment->status) == 'cancelled' ? 'selected' : '' }}>Đã hủy</option>
+                            </select>
+                            @error('status')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="notes" class="form-label">Ghi chú</label>
+                            <textarea class="form-control @error('notes') is-invalid @enderror" id="notes" name="notes" rows="3">{{ old('notes', $appointment->notes) }}</textarea>
+                            @error('notes')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                        </div>
+
+                        <div class="d-flex justify-content-between">
+                            <a href="{{ route('admin.appointments.index') }}" class="btn btn-secondary">Hủy</a>
+                            <button type="submit" class="btn btn-primary">Cập nhật</button>
                         </div>
                     </form>
                 </div>

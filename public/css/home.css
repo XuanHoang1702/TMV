@@ -38,7 +38,7 @@
             margin-top: 20px;
         }
 
-.cl-sec01-desc .cl-desc .cl-desc-title {   
+.cl-sec01-desc .cl-desc .cl-desc-title {
     font-family: Inter;
     font-weight: 700;
     font-size: 36px;
@@ -47,7 +47,7 @@
     vertical-align: middle;
 }
 
-.cl-sec01-desc .cl-desc p {    
+.cl-sec01-desc .cl-desc p {
     font-family: Inter;
     font-weight: 400;
     font-size: 14px;
@@ -101,7 +101,7 @@
     padding-right: 32px;
     padding-bottom: 11px;
     padding-left: 32px;
-    color: #fff; 
+    color: #fff;
     display: inline-block;
 }
 
@@ -118,7 +118,7 @@
     background: url(../images/home/bg_3_sec.png) center center no-repeat;
     background-size: revert;
 }
-}
+
 /*sec 3*/
 .cl-sec03 {
     /*background: linear-gradient(180deg, rgba(255, 234, 210, 0) 0%, #FFEAD2 44.5%, rgba(255, 234, 210, 0) 100%);*/
@@ -184,7 +184,7 @@
 
 }
     .cl-tab-head div.row {
-        margin: 0;        
+        margin: 0;
         border-bottom: 0.5px solid #ccc;
     }
     .cl-tab-head .cl-tab-head-item {
@@ -207,7 +207,7 @@
     }
 
 .cl-tab-bodys {
-    background: #FFFFFF80;    
+    background: #FFFFFF80;
     min-height: 503px;
     gap: 10px;
     border-bottom-right-radius: 24px;

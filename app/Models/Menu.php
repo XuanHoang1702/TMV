@@ -18,7 +18,6 @@ class Menu extends Model
         'type',
         'is_active',
     ];
-
     /**
      * Get the child menus for this menu.
      */
