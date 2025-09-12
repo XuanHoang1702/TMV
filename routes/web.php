@@ -36,18 +36,34 @@ Route::middleware(['auth'])->group(function () {
 });
 //Frontend Routes
 Route::get('/', function () {
-    $banners = Banner::where('is_active', true)->orderBy('order')->get();
-    $categories = Category::where('type', 'services')
+    $banners = \App\Models\Banner::where('is_active', true)->orderBy('order')->get();
+    $categories = \App\Models\Category::where('type', 'services')
         ->where('is_active', true)
         ->orderBy('order')
         ->get();
-    return view('home', compact('banners', 'categories'));
+    $services = \App\Models\Service::where('is_active', true)
+        ->orderBy('sort_order')
+        ->take(8)
+        ->get();
+    return view('home', compact('banners', 'categories', 'services'));
 })->name('home');
 
 //---------------------
+Route::get('/dich-vu', function () {
+    $services = \App\Models\Service::where('is_active', true)
+        ->orderBy('sort_order')
+        ->get();
+    return view('services.index', compact('services'));
+})->name('services.index');
+
+Route::get('/dich-vu/{slug}', function ($slug) {
+    $service = \App\Models\Service::where('slug', $slug)
+        ->where('is_active', true)
+        ->firstOrFail();
+    return view('services.show', compact('service'));
+})->name('services.detail');
+
 Route::get('/ve-dr-dat', function () {return view('about');})->name('about');
-Route::get('/dich-vu', function () {return view('services.index');})->name('services.index');
-Route::get('/dich-vu/{slug}', function ($slug) {return view('services.show', compact('slug'));})->name('services.detail');
 Route::get('/bao-gia', function () {return view('pricing');})->name('pricing');
 Route::get('/tin-tuc', function () {return view('news.index');})->name('news.index');
 Route::get('/tin-tuc/{slug}', function ($slug) {return view('news.show', compact('slug'));})->name('news.detail');

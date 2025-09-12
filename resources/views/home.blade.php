@@ -10,7 +10,7 @@
 @include('layouts.banners', ['banners' => $banners])
 <div class="cl-h-sec01">
     <div class="container">
-        @include('layouts.category-list', ['categories' => $categories])
+        @include('layouts.service-list', ['services' => $services])
 
         <!--Vững Chuyên Môn, Giàu Tâm Đức-->
         <div class="cl-sec01-desc">
