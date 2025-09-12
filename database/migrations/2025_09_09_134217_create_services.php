@@ -22,6 +22,7 @@ return new class extends Migration
             $table->string('price_range', 100)->nullable();
             $table->string('duration', 50)->nullable();
             $table->string('category_id', 100)->nullable();
+            $table->integer('parent_id')->nullable();
             $table->boolean('is_active')->default(true);
             $table->integer('sort_order')->default(0);
             $table->string('meta_title')->nullable();
