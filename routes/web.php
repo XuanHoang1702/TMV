@@ -63,8 +63,8 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::post('news/{news}/unpublish', [NewsController::class, 'unpublish'])->name('news.unpublish');
 
     // Appointments Management
-    #Route::resource('appointments', AppointmentController::class)->except(['create', 'store']);
-    Route::post('appointments', [AppointmentController::class, 'store'])->name('appointments.store');
+
+    Route::resource('appointments', AppointmentController::class);
     Route::post('appointments/{appointment}/status', [AppointmentController::class, 'updateStatus'])->name('appointments.update-status');
     Route::get('appointments-calendar', [AppointmentController::class, 'calendar'])->name('appointments.calendar');
     Route::get('appointments-export', [AppointmentController::class, 'export'])->name('appointments.export');
@@ -97,19 +97,10 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::get('profile/edit', [AuthController::class, 'editProfile'])->name('profile.edit');
     Route::put('profile/update', [AuthController::class, 'updateProfile'])->name('profile.update');
 
-
     //Menu
-<<<<<<< HEAD
-    Route::resource('menus', MenuController::class);  // Bao gồm index cho /menus (phân trang)
-Route::post('menus/{menu}/toggle-status', [MenuController::class, 'toggleStatus'])->name('menus.toggle-status');
-
-// Route động từ DB (đặt sau, và giới hạn pattern để không khớp /menus?page=2)
-Route::get('menu/{route}', [MenuController::class, 'show'])->name('menu.show')->where('route', '[a-zA-Z0-9\/_-]+');  // Pattern chỉ chữ, số, /, -, _ (không khớp ?page=2)
-=======
     Route::resource('menus', MenuController::class);
     Route::post('menus/{menu}/toggle-status', [MenuController::class, 'toggleStatus'])->name('menus.toggle-status');
     Route::get('menu/{route}', [MenuController::class, 'show'])->where('route', '.*');
->>>>>>> origin/main
 
 });
 

@@ -15,7 +15,7 @@ class CategoryController extends Controller
      */
     public function index(Request $request)
     {
-        $type = $request->get('type', 'general');
+        $type = $request->get('type', 'all');
 
         $query = Category::with('children');
 

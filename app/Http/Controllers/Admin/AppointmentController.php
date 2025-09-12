@@ -13,7 +13,7 @@ class AppointmentController extends Controller
 {
     public function index(Request $request)
     {
-        $query = Appointment::query();
+        $query = Appointment::with('service');
 
         // Filter by status
         if ($request->status) {
@@ -32,12 +32,47 @@ class AppointmentController extends Controller
             ->orderBy('appointment_time', 'desc')
             ->paginate(15);
 
+        if ($request->ajax()) {
+            return view('admin.appointments._table', compact('appointments'));
+        }
+
         return view('admin.appointments.index', compact('appointments'));
+    }
+
+    public function create()
+    {
+        $services = \App\Models\Service::all();
+        return view('admin.appointments.create', compact('services'));
+    }
+
+    public function edit(Appointment $appointment)
+    {
+        $services = \App\Models\Service::all();
+        return view('admin.appointments.edit', compact('appointment', 'services'));
     }
 
     public function show(Appointment $appointment)
     {
         return view('admin.appointments.show', compact('appointment'));
+    }
+
+    public function update(Request $request, Appointment $appointment)
+    {
+        $validated = $request->validate([
+            'status' => 'required|in:pending,confirmed,completed,cancelled',
+            'notes' => 'nullable|string'
+        ]);
+
+        $appointment->update($validated);
+
+        return redirect()->route('admin.appointments.index')->with('success', 'Lịch hẹn đã được cập nhật');
+    }
+
+    public function destroy(Appointment $appointment)
+    {
+        $appointment->delete();
+
+        return redirect()->route('admin.appointments.index')->with('success', 'Lịch hẹn đã được xóa');
     }
 
     public function updateStatus(Request $request, Appointment $appointment)
@@ -81,35 +116,20 @@ class AppointmentController extends Controller
 
     public function store(Request $request)
     {
-        $validator = Validator::make($request->all(), [
+        $validated = $request->validate([
             'customer_name'     => 'required|string|max:255',
             'customer_email'    => 'required|email|max:255',
             'customer_phone'    => 'required|string|max:20',
+            'service_id'        => 'nullable|exists:services,id',
             'appointment_date'  => 'required|date|after_or_equal:today',
             'appointment_time'  => 'required|date_format:H:i',
+            'status'            => 'required|in:pending,confirmed,completed,cancelled',
             'notes'             => 'nullable|string|max:1000',
         ]);
 
-        if ($validator->fails()) {
-            return response()->json([
-                'error' => $validator->errors()
-            ], 422);
-        } else {
-            $appointment = Appointment::create([
-                'customer_name'    => $request->customer_name,
-                'customer_email'   => $request->customer_email,
-                'customer_phone'   => $request->customer_phone,
-                'appointment_date' => $request->appointment_date,
-                'appointment_time' => $request->appointment_time,
-                'status'           => $request->status,
-                'notes'            => $request->notes,
-            ]);
+        Appointment::create($validated);
 
-            return response()->json([
-                'message' => 'Lịch hẹn đã được tạo thành công!',
-                'data'    => $appointment,
-            ], 201);
-        }
+        return redirect()->route('admin.appointments.index')->with('success', 'Lịch hẹn đã được tạo thành công!');
     }
 
 

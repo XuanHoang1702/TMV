@@ -2,9 +2,7 @@
 
 @section('title', 'Quản lý Menu')
 
-@if(session('success'))
-    <div class="alert alert-success">{{ session('success') }}</div>
-@endif
+
 @section('content')
 <div class="container-fluid">
     <div class="row">
