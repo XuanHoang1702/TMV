@@ -27,7 +27,7 @@
         <tr>
             <td>{{ $service->id }}</td>
             <td>{{ $service->name }}</td>
-            <td>{{ is_object($service->category) ? $service->category->name : $service->category }}</td>
+            <td>{{ $service->category_id ? $service->category->name : $service->category }}</td>
             <td>
                 @if($service->is_active)
                     <span class="badge bg-success">Kích hoạt</span>

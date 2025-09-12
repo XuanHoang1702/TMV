@@ -21,12 +21,12 @@ return new class extends Migration
             $table->string('icon')->nullable();
             $table->string('price_range', 100)->nullable();
             $table->string('duration', 50)->nullable();
-            $table->string('category', 100)->nullable();
+            $table->string('category_id', 100)->nullable();
             $table->boolean('is_active')->default(true);
             $table->integer('sort_order')->default(0);
             $table->string('meta_title')->nullable();
             $table->text('meta_description')->nullable();
-            $table->timestamps();;
+            $table->timestamps();
         });
     }
 
