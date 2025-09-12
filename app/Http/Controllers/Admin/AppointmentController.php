@@ -7,6 +7,7 @@ use App\Models\Appointment;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\AppointmentsExport;
+use Illuminate\Support\Facades\Validator;
 
 class AppointmentController extends Controller
 {
@@ -77,4 +78,40 @@ class AppointmentController extends Controller
 
         return Excel::download(new AppointmentsExport($appointments), 'appointments.xlsx');
     }
+
+    public function store(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'customer_name'     => 'required|string|max:255',
+            'customer_email'    => 'required|email|max:255',
+            'customer_phone'    => 'required|string|max:20',
+            'appointment_date'  => 'required|date|after_or_equal:today',
+            'appointment_time'  => 'required|date_format:H:i',
+            'notes'             => 'nullable|string|max:1000',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'error' => $validator->errors()
+            ], 422);
+        } else {
+            $appointment = Appointment::create([
+                'customer_name'    => $request->customer_name,
+                'customer_email'   => $request->customer_email,
+                'customer_phone'   => $request->customer_phone,
+                'appointment_date' => $request->appointment_date,
+                'appointment_time' => $request->appointment_time,
+                'status'           => $request->status,
+                'notes'            => $request->notes,
+            ]);
+
+            return response()->json([
+                'message' => 'Lịch hẹn đã được tạo thành công!',
+                'data'    => $appointment,
+            ], 201);
+        }
+    }
+
+
+
 }
