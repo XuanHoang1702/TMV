@@ -135,19 +135,19 @@ class AppointmentController extends Controller
     public function storeFrontend(Request $request)
     {
         $validated = $request->validate([
-            'customer_name'     => 'required|string|max:255',
-            'customer_phone'    => 'required|string|max:20',
-            'service_id'        => 'nullable|exists:services,id',
-            'appointment_date'  => 'required|date|after_or_equal:today',
-            'appointment_time'  => 'required|date_format:H:i',
+            'customer_name'  => 'required|string|min:3|max:255',
+            'customer_phone'    => 'required|digits:10',
+            'service_id'        => 'required|exists:services,id',
+            'appointment_time'  => 'required',
+            'appointment_date'  => 'required|date',
             'notes'             => 'nullable|string|max:1000',
         ]);
 
-        $validated['status'] = 'pending'; // Default status for frontend bookings
+        $validated['status'] = 'pending';
 
         Appointment::create($validated);
 
-        return back()->with('success', 'Đặt lịch hẹn thành công! Chúng tôi sẽ liên hệ với bạn sớm nhất.');
+        return redirect()->back()->with('success', 'Đặt lịch hẹn thành công, Chúng tôi sẽ liên hệ với bạn sớm nhất!');
     }
 
 
