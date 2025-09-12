@@ -60,9 +60,7 @@
                                         <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
                                 </div>
-                            </div>
 
-                            <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="appointment_date">Ngày hẹn *</label>
                                     <input type="date" class="form-control @error('appointment_date') is-invalid @enderror"

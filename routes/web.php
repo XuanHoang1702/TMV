@@ -40,6 +40,8 @@ Route::get('/tin-tuc/{slug}', function ($slug) {return view('news.show', compact
 Route::get('/tin-tuc/danh-muc/{category}', function ($category) {return view('news.category', compact('category'));})->name('news.category');
 Route::get('/lien-he', function () {return view('contact');})->name('contact');
 
+Route::post('/dat-lich', [\App\Http\Controllers\Admin\AppointmentController::class, 'storeFrontend'])->name('appointments.store');
+
 // Admin Auth Routes
 Route::get('/admin/login', [AuthController::class, 'showLoginForm'])->name('admin.login');
 Route::post('/admin/login', [AuthController::class, 'login'])->name('admin.login.post');

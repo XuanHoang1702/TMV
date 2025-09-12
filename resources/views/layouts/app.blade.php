@@ -276,54 +276,7 @@
         <!--end footer-->
     </div>
 
-    <!--Popup-->
-    <div id="booking_Popup" class="modal fade cl-bgPop" role="dialog" aria-labelledby="myModalLabel">
-        <div class="modal-dialog modal-lg" style="max-width: 35%; ">
-            <div class="modal-content">
-                <div class="modal-header" style="flex-direction:unset;">
-                    <h5 id="myModalLabel" class="modal-title" style="font-weight:bold">
-                        ĐẶT LỊCH HẸN TƯ VẤN THẨM MỸ
-                    </h5>
-                    <p>Hãy để chúng tôi giúp bạn trở nên tự tin và rạng rỡ hơn</p>
-                    <button type="button" class="btn btn-pop" data-bs-dismiss="modal" aria-label="Close" onclick="onClose_Popup()"><i class="fa fa-times"></i></button>
-                </div>
-                <div class="smart-form">
-                    <div class="row">
-                        <div class="col-12 col-sm-12">
-                            <input type="text" placeholder="Họ & tên" class="ctr-h-input" />
-                        </div>
-                        <div class="col-12 col-sm-12">
-                            <input type="text" placeholder="Số điện thoại" class="ctr-h-input" />
-                        </div>
-                        <div class="col-12 col-sm-12">
-                            <input type="text" placeholder="Dịch vụ quan tâm" class="ctr-h-input" />
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-12 col-sm-6">
-                            <input type="text" placeholder="Chọn giờ hẹn" class="ctr-h-input" />
-                        </div>
-                        <div class="col-12 col-sm-6">
-                            <input type="text" placeholder="Chọn ngày hẹn" class="ctr-h-input" />
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-12 col-sm-12">
-                            <textarea type="text" rows="3" placeholder="Ghi chú" class="ctr-h-input"></textarea>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-12 col-sm-12">
-                            <a class="cl-btn-full" href="#" onclick="onClose_Popup()">
-                                <span>Đặt lịch ngay</span>
-                                <i class="fa fa-angle-right"></i>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+    @include('layouts.booking-popup')
 
     <div id="booking_Popup_TuVan" class="modal fade cl-bgPop" role="dialog" aria-labelledby="myModalLabel">
         <div class="modal-dialog modal-lg" style="max-width: 30%; ">

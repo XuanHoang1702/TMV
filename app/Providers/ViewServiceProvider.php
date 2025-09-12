@@ -35,8 +35,12 @@ class ViewServiceProvider extends ServiceProvider
             ->with('children')
             ->get();
 
-        View::composer('layouts.app', function ($view) use ($frontendMenu) {
+        // Load services for booking popup
+        $services = \App\Models\Service::all();
+
+        View::composer('layouts.app', function ($view) use ($frontendMenu, $services) {
             $view->with('frontendMenu', $frontendMenu);
+            $view->with('services', $services);
         });
     }
 }
