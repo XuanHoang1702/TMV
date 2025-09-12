@@ -77,7 +77,6 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::post('news/{news}/unpublish', [NewsController::class, 'unpublish'])->name('news.unpublish');
 
     // Appointments Management
-
     Route::resource('appointments', AppointmentController::class);
     Route::post('appointments/{appointment}/status', [AppointmentController::class, 'updateStatus'])->name('appointments.update-status');
     Route::get('appointments-calendar', [AppointmentController::class, 'calendar'])->name('appointments.calendar');
