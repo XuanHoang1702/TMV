@@ -17,6 +17,8 @@ use App\Http\Controllers\Admin\MenuController;
 use App\Http\Controllers\Admin\BannerController;
 use App\Models\Banner;
 use App\Models\Category;
+use App\Http\Controllers\Admin\InformationController;
+
 Route::get('/', function () {
     return view('welcome');
 })->name('home');
@@ -117,6 +119,9 @@ Route::prefix('admin')->name('admin.')->group(function () {
 
     // Banners Management
     Route::resource('banners', BannerController::class);
+
+    // Information
+    Route::resource('informations', InformationController::class);
 
 });
 
