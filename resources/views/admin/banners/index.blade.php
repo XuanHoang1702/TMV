@@ -8,9 +8,7 @@
     <a href="{{ route('admin.banners.create') }}" class="btn btn-primary">Thêm banner mới</a>
 </div>
 
-@if(session('success'))
-    <div class="alert alert-success">{{ session('success') }}</div>
-@endif
+
 
 <table class="table table-bordered table-hover">
     <thead class="table-light">

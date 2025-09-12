@@ -16,7 +16,8 @@
                     </div>
                 </div>
 
-                <form action="{{ route('admin.categories.store') }}" method="POST">
+                <!-- Thêm enctype để upload file -->
+                <form action="{{ route('admin.categories.store') }}" method="POST" enctype="multipart/form-data">
                     @csrf
                     <div class="card-body">
                         <div class="row">
@@ -79,6 +80,15 @@
                                     <label for="order" class="form-label">Thứ tự</label>
                                     <input type="number" class="form-control @error('order') is-invalid @enderror" id="order" name="order" value="{{ old('order', 0) }}" min="0">
                                     @error('order')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
+
+                                <!-- Thêm upload icon -->
+                                <div class="mb-3">
+                                    <label for="icon" class="form-label">Icon (tùy chọn)</label>
+                                    <input type="file" name="icon" id="icon" class="form-control @error('icon') is-invalid @enderror">
+                                    @error('icon')
                                         <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
                                 </div>

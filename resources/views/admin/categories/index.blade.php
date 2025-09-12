@@ -30,6 +30,7 @@
                             <thead>
                                 <tr>
                                     <th>ID</th>
+                                    <th>Icon</th> <!-- Thêm cột Icon -->
                                     <th>Tên danh mục</th>
                                     <th>Slug</th>
                                     <th>Trạng thái</th>
@@ -38,7 +39,10 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @include('admin.categories.partials.children', ['categories' => $categories->whereNull('parent_id'), 'level' => 0])
+                                @include('admin.categories.partials.children', [
+                                    'categories' => $categories->whereNull('parent_id'),
+                                    'level' => 0
+                                ])
                             </tbody>
                         </table>
                     </div>

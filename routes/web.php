@@ -15,7 +15,8 @@ use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\MenuController;
 use App\Http\Controllers\Admin\BannerController;
-
+use App\Models\Banner;
+use App\Models\Category;
 Route::get('/', function () {
     return view('welcome');
 })->name('home');
@@ -32,7 +33,16 @@ Route::middleware(['auth'])->group(function () {
     Volt::route('settings/appearance', 'settings.appearance')->name('settings.appearance');
 });
 //Frontend Routes
-Route::get('/', function () {return view('home');})->name('home');
+Route::get('/', function () {
+    $banners = Banner::where('is_active', true)->orderBy('order')->get();
+    $categories = Category::where('type', 'services')
+        ->where('is_active', true)
+        ->orderBy('order')
+        ->get();
+    return view('home', compact('banners', 'categories'));
+})->name('home');
+
+//---------------------
 Route::get('/ve-dr-dat', function () {return view('about');})->name('about');
 Route::get('/dich-vu', function () {return view('services.index');})->name('services.index');
 Route::get('/dich-vu/{slug}', function ($slug) {return view('services.show', compact('slug'));})->name('services.detail');

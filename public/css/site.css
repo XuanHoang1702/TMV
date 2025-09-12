@@ -838,21 +838,21 @@ ul.ul-ribon, ul.ul-ribon ul {
     }
 
     .d-Mobile .cl-panel-body {
-         background:unset;        
+         background:unset;
         padding: 0px;
     }
 
-    .d-Mobile .cl-pl-item {        
+    .d-Mobile .cl-pl-item {
         padding: 15px 15px;
         /*margin: 10px 0;*/
     }
 
-    .d-Mobile .cl-news .cl-img-left, 
-    .d-Mobile .cl-form-left {        
+    .d-Mobile .cl-news .cl-img-left,
+    .d-Mobile .cl-form-left {
         text-align: center;
     }
 
-    .d-Mobile .cl-item-new .dv-img {        
+    .d-Mobile .cl-item-new .dv-img {
         text-align: center;
     }
 

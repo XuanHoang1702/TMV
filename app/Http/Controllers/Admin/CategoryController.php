@@ -52,34 +52,40 @@ class CategoryController extends Controller
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
-    {
-        $validated = $request->validate([
-            'name' => 'required|string|max:255',
-            'slug' => 'nullable|string|max:255|unique:categories',
-            'description' => 'nullable|string',
-            'parent_id' => 'nullable|exists:categories,id',
-            'order' => 'nullable|integer|min:0',
-            'is_active' => 'boolean',
-            'type' => 'required|string|in:general,services,news'
-        ]);
+{
+    $validated = $request->validate([
+        'name' => 'required|string|max:255',
+        'slug' => 'nullable|string|max:255|unique:categories',
+        'description' => 'nullable|string',
+        'icon' => 'nullable|image|mimes:jpg,jpeg,png,svg,gif|max:2048',
+        'parent_id' => 'nullable|exists:categories,id',
+        'order' => 'nullable|integer|min:0',
+        'is_active' => 'boolean',
+        'type' => 'required|string|in:general,services,news'
+    ]);
 
-        if (empty($validated['slug'])) {
-            $validated['slug'] = Str::slug($validated['name']);
-        }
-
-        // Ensure unique slug
-        $originalSlug = $validated['slug'];
-        $count = 1;
-        while (Category::where('slug', $validated['slug'])->exists()) {
-            $validated['slug'] = $originalSlug . '-' . $count;
-            $count++;
-        }
-
-        Category::create($validated);
-
-        return redirect()->route('admin.categories.index', ['type' => $validated['type']])
-            ->with('success', 'Danh mục đã được tạo thành công');
+    if (empty($validated['slug'])) {
+        $validated['slug'] = Str::slug($validated['name']);
     }
+
+
+    $originalSlug = $validated['slug'];
+    $count = 1;
+    while (Category::where('slug', $validated['slug'])->exists()) {
+        $validated['slug'] = $originalSlug . '-' . $count;
+        $count++;
+    }
+
+
+    if ($request->hasFile('icon')) {
+        $validated['icon'] = $request->file('icon')->store('categories/icons', 'public');
+    }
+
+    Category::create($validated);
+
+    return redirect()->route('admin.categories.index', ['type' => $validated['type']])
+        ->with('success', 'Danh mục đã được tạo thành công');
+}
 
     /**
      * Display the specified resource.
@@ -108,35 +114,45 @@ class CategoryController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Category $category)
-    {
-        $validated = $request->validate([
-            'name' => 'required|string|max:255',
-            'slug' => ['nullable', 'string', 'max:255', Rule::unique('categories')->ignore($category->id)],
-            'description' => 'nullable|string',
-            'parent_id' => ['nullable', 'exists:categories,id', Rule::notIn([$category->id])],
-            'order' => 'nullable|integer|min:0',
-            'is_active' => 'boolean',
-            'type' => 'required|string|in:general,services,news'
-        ]);
+   public function update(Request $request, Category $category)
+{
+    $validated = $request->validate([
+        'name' => 'required|string|max:255',
+        'slug' => ['nullable', 'string', 'max:255', Rule::unique('categories')->ignore($category->id)],
+        'description' => 'nullable|string',
+        'icon' => 'nullable|image|mimes:jpg,jpeg,png,svg,gif|max:2048',
+        'parent_id' => ['nullable', 'exists:categories,id', Rule::notIn([$category->id])],
+        'order' => 'nullable|integer|min:0',
+        'is_active' => 'boolean',
+        'type' => 'required|string|in:general,services,news'
+    ]);
 
-        if (empty($validated['slug'])) {
-            $validated['slug'] = Str::slug($validated['name']);
-        }
-
-        // Ensure unique slug
-        $originalSlug = $validated['slug'];
-        $count = 1;
-        while (Category::where('slug', $validated['slug'])->where('id', '!=', $category->id)->exists()) {
-            $validated['slug'] = $originalSlug . '-' . $count;
-            $count++;
-        }
-
-        $category->update($validated);
-
-        return redirect()->route('admin.categories.index', ['type' => $validated['type']])
-            ->with('success', 'Danh mục đã được cập nhật thành công');
+    if (empty($validated['slug'])) {
+        $validated['slug'] = Str::slug($validated['name']);
     }
+
+    // Ensure unique slug
+    $originalSlug = $validated['slug'];
+    $count = 1;
+    while (Category::where('slug', $validated['slug'])->where('id', '!=', $category->id)->exists()) {
+        $validated['slug'] = $originalSlug . '-' . $count;
+        $count++;
+    }
+
+
+    if ($request->hasFile('icon')) {
+        
+        if ($category->icon && \Storage::disk('public')->exists($category->icon)) {
+            \Storage::disk('public')->delete($category->icon);
+        }
+        $validated['icon'] = $request->file('icon')->store('categories/icons', 'public');
+    }
+
+    $category->update($validated);
+
+    return redirect()->route('admin.categories.index', ['type' => $validated['type']])
+        ->with('success', 'Danh mục đã được cập nhật thành công');
+}
 
     /**
      * Remove the specified resource from storage.
