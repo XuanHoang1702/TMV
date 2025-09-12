@@ -98,9 +98,11 @@ Route::prefix('admin')->name('admin.')->group(function () {
 
 
     //Menu
-    Route::resource('menus', MenuController::class);
-    Route::get('menu/{menu}', [MenuController::class, 'show'])->where('route', '.*');
-    Route::post('menus/{menu}/toggle-status', [MenuController::class, 'toggleStatus'])->name('menus.toggle-status');
+    Route::resource('menus', MenuController::class);  // Bao gồm index cho /menus (phân trang)
+Route::post('menus/{menu}/toggle-status', [MenuController::class, 'toggleStatus'])->name('menus.toggle-status');
+
+// Route động từ DB (đặt sau, và giới hạn pattern để không khớp /menus?page=2)
+Route::get('menu/{route}', [MenuController::class, 'show'])->name('menu.show')->where('route', '[a-zA-Z0-9\/_-]+');  // Pattern chỉ chữ, số, /, -, _ (không khớp ?page=2)
 
 });
 

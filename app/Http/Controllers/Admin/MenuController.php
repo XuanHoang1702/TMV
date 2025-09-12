@@ -9,16 +9,14 @@ use Illuminate\Support\Facades\Route;
 
 class MenuController extends Controller
 {
-    public function index()
-    {
-        $menus = Menu::where('type', 'admin')
-            ->whereNull('parent_id')
-            ->with('children')
-            ->orderBy('order')
-            ->paginate(10);
-
-        return view('admin.menus.index', compact('menus'));
+   public function index(Request $request)
+{
+    $menus = Menu::with('children')->paginate(10); // Điều chỉnh số lượng bản ghi mỗi trang
+    if ($request->ajax()) {
+        return view('admin.menus._table', compact('menus'));
     }
+    return view('admin.menus.index', compact('menus'));
+}
 
     public function create()
     {
