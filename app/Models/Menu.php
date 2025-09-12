@@ -18,10 +18,6 @@ class Menu extends Model
         'type',
         'is_active',
     ];
-public function getRouteKeyName()
-    {
-        return 'route';  // Bind dựa trên cột 'route' thay vì 'id'
-    }
     /**
      * Get the child menus for this menu.
      */

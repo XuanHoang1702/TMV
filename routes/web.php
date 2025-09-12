@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+
 use Livewire\Volt\Volt;
 use App\Http\Controllers\Admin\AuthController;
 use App\Http\Controllers\Admin\DashboardController;
@@ -13,6 +14,7 @@ use App\Http\Controllers\Admin\SettingController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\MenuController;
+use App\Http\Controllers\Admin\BannerController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -103,6 +105,9 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::resource('menus', MenuController::class);
     Route::post('menus/{menu}/toggle-status', [MenuController::class, 'toggleStatus'])->name('menus.toggle-status');
     Route::get('menu/{route}', [MenuController::class, 'show'])->where('route', '.*');
+
+    // Banners Management
+    Route::resource('banners', BannerController::class);
 
 });
 
