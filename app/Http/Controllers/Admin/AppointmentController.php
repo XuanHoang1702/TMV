@@ -148,12 +148,8 @@ class AppointmentController extends Controller
 
         $service = Service::find($validated['service_id']);
         $validated['estimated_price'] = $service ? $service->price_range : 0;
-
         Appointment::create($validated);
 
         return redirect()->back()->with('success', 'Đặt lịch hẹn thành công, Chúng tôi sẽ liên hệ với bạn sớm nhất!');
     }
-
-
-
 }
