@@ -77,6 +77,7 @@ class ServiceController extends Controller
             'duration' => 'nullable|string|max:50',
             'category_id' => 'required|exists:categories,id',
             'is_active' => 'boolean',
+            'allow_line_breaks' => 'boolean',
             'sort_order' => 'integer',
             'meta_title' => 'nullable|string|max:255',
             'meta_description' => 'nullable|string|max:500'

@@ -84,14 +84,7 @@
                                     @enderror
                                 </div>
 
-                                <!-- Thêm upload icon -->
-                                <div class="mb-3">
-                                    <label for="icon" class="form-label">Icon (tùy chọn)</label>
-                                    <input type="file" name="icon" id="icon" class="form-control @error('icon') is-invalid @enderror">
-                                    @error('icon')
-                                        <div class="invalid-feedback">{{ $message }}</div>
-                                    @enderror
-                                </div>
+                               
 
                                 <div class="mb-3">
                                     <div class="form-check">

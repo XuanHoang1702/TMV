@@ -62,6 +62,17 @@
                 @enderror
             </div>
 
+            <div class="mb-3">
+                <label for="section" class="form-label">Section</label>
+                <select class="form-control @error('section') is-invalid @enderror" id="section" name="section">
+                    <option value="home" {{ old('section', $banner->section) == 'home' ? 'selected' : '' }}>Home (Banner đầu trang)</option>
+                    <option value="other" {{ old('section', $banner->section) == 'other' ? 'selected' : '' }}>Other (Banner chỗ khác)</option>
+                </select>
+                @error('section')
+                    <div class="invalid-feedback">{{ $message }}</div>
+                @enderror
+            </div>
+
             <div class="form-check mb-3">
                 <input class="form-check-input" type="checkbox" id="is_active" name="is_active" value="1" {{ old('is_active', $banner->is_active) ? 'checked' : '' }}>
                 <label class="form-check-label" for="is_active">

@@ -1,15 +1,7 @@
 @foreach($categories as $category)
     <tr>
         <td>{{ $category->id }}</td>
-        <td>
-            @if($category->icon)
-                <img src="{{ asset('storage/' . $category->icon) }}"
-                     alt="{{ $category->name }}"
-                     style="height:30px; width:30px; object-fit:contain;">
-            @else
-                <span class="text-muted">—</span>
-            @endif
-        </td>
+       
         <td>
             <div style="padding-left: {{ ($depth ?? 1) * 20 }}px;">
                 @if($category->hasChildren())

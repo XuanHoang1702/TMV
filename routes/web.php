@@ -64,6 +64,7 @@ Route::get('/dich-vu/{slug}', function ($slug) {
 })->name('services.detail');
 
 Route::get('/ve-dr-dat', function () {return view('about');})->name('about');
+Route::get('/chung-chi-hanh-nghe', function () {return view('certificate');})->name('certificate');
 Route::get('/bao-gia', function () {return view('pricing');})->name('pricing');
 Route::get('/tin-tuc', function () {return view('news.index');})->name('news.index');
 Route::get('/tin-tuc/{slug}', function ($slug) {return view('news.show', compact('slug'));})->name('news.detail');
@@ -135,6 +136,9 @@ Route::prefix('admin')->name('admin.')->group(function () {
 
     // Banners Management
     Route::resource('banners', BannerController::class);
+
+    // Home Sections Management
+    Route::resource('home_sections', \App\Http\Controllers\Admin\HomeSectionController::class);
 
     // Information
     Route::resource('informations', InformationController::class);

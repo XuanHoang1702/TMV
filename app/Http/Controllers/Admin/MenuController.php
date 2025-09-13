@@ -32,7 +32,7 @@ class MenuController extends Controller
     {
         $request->validate([
             'label' => 'required|string|max:255',
-            'icon' => 'nullable|string|max:255',
+          
             'route' => 'required|string|max:255',
             'parent_id' => 'nullable|exists:menus,id',
             'order' => 'nullable|integer',

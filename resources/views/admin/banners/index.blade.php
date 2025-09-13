@@ -19,6 +19,7 @@
             <th>Liên kết</th>
             <th>Thứ tự</th>
             <th>Trạng thái</th>
+            <th>Section</th>
             <th>Hành động</th>
         </tr>
     </thead>
@@ -37,6 +38,7 @@
                     <span class="badge bg-secondary">Không kích hoạt</span>
                 @endif
             </td>
+            <td>{{ $banner->section }}</td>
             <td>
                 <a href="{{ route('admin.banners.show', $banner) }}" class="btn btn-sm btn-info">Xem</a>
                 <a href="{{ route('admin.banners.edit', $banner) }}" class="btn btn-sm btn-warning">Sửa</a>
@@ -49,7 +51,7 @@
         </tr>
         @empty
         <tr>
-            <td colspan="7" class="text-center">Không có banner nào.</td>
+            <td colspan="8" class="text-center">Không có banner nào.</td>
         </tr>
         @endforelse
     </tbody>

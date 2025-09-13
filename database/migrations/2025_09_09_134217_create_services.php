@@ -27,6 +27,7 @@ return new class extends Migration
             $table->integer('sort_order')->default(0);
             $table->string('meta_title')->nullable();
             $table->text('meta_description')->nullable();
+            $table->boolean('allow_line_breaks')->default(false)->after('is_active');
             $table->timestamps();
         });
     }

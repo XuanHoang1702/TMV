@@ -30,7 +30,7 @@
                             <thead>
                                 <tr>
                                     <th>ID</th>
-                                    <th>Icon</th> <!-- Thêm cột Icon -->
+                                  
                                     <th>Tên danh mục</th>
                                     <th>Slug</th>
                                     <th>Trạng thái</th>
