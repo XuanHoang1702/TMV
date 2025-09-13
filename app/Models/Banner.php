@@ -13,6 +13,7 @@ class Banner extends Model
     'title',
     'image_path',
     'link',
+    'page',
     'order',
     'is_active',
     'section',
