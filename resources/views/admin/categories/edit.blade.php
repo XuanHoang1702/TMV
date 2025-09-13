@@ -110,22 +110,7 @@
                                     </div>
                                 </div>
 
-                                <!-- Icon -->
-                                <div class="mb-3">
-                                    <label for="icon" class="form-label">Icon (Hình ảnh)</label>
-                                    @if($category->icon)
-                                        <div class="mb-2">
-                                            <img src="{{ asset('storage/' . $category->icon) }}"
-                                                 alt="{{ $category->name }}"
-                                                 class="img-thumbnail" width="100">
-                                        </div>
-                                    @endif
-                                    <input type="file" class="form-control @error('icon') is-invalid @enderror"
-                                           id="icon" name="icon" accept="image/*">
-                                    @error('icon')
-                                        <div class="invalid-feedback">{{ $message }}</div>
-                                    @enderror
-                                </div>
+                               
                             </div>
                         </div>
                     </div>

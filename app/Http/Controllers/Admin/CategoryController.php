@@ -57,7 +57,7 @@ class CategoryController extends Controller
         'name' => 'required|string|max:255',
         'slug' => 'nullable|string|max:255|unique:categories',
         'description' => 'nullable|string',
-        'icon' => 'nullable|image|mimes:jpg,jpeg,png,svg,gif|max:2048',
+
         'parent_id' => 'nullable|exists:categories,id',
         'order' => 'nullable|integer|min:0',
         'is_active' => 'boolean',
@@ -77,9 +77,6 @@ class CategoryController extends Controller
     }
 
 
-    if ($request->hasFile('icon')) {
-        $validated['icon'] = $request->file('icon')->store('categories/icons', 'public');
-    }
 
     Category::create($validated);
 
@@ -120,7 +117,7 @@ class CategoryController extends Controller
         'name' => 'required|string|max:255',
         'slug' => ['nullable', 'string', 'max:255', Rule::unique('categories')->ignore($category->id)],
         'description' => 'nullable|string',
-        'icon' => 'nullable|image|mimes:jpg,jpeg,png,svg,gif|max:2048',
+
         'parent_id' => ['nullable', 'exists:categories,id', Rule::notIn([$category->id])],
         'order' => 'nullable|integer|min:0',
         'is_active' => 'boolean',
@@ -140,13 +137,7 @@ class CategoryController extends Controller
     }
 
 
-    if ($request->hasFile('icon')) {
-        
-        if ($category->icon && \Storage::disk('public')->exists($category->icon)) {
-            \Storage::disk('public')->delete($category->icon);
-        }
-        $validated['icon'] = $request->file('icon')->store('categories/icons', 'public');
-    }
+  
 
     $category->update($validated);
 

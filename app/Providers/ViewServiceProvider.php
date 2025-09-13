@@ -6,6 +6,7 @@ use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\View;
 use App\Models\Menu;
 use App\Models\Service;
+use App\Models\Category;
 use Illuminate\Support\Facades\Cache;
 
 class ViewServiceProvider extends ServiceProvider
@@ -38,16 +39,23 @@ class ViewServiceProvider extends ServiceProvider
             ->get();
 
         // Load services cho booking popup và footer
-        $services = Cache::remember('frontend_services', now()->addHours(24), function () {
-            return Service::where('is_active', true)
-                ->orderBy('sort_order')
-                ->take(8) // Giới hạn 8 dịch vụ cho footer
-                ->get();
-        });
+      $services = Service::where('is_active', true)
+    ->orderBy('sort_order')
+    ->take(8)
+    ->get();
 
-        View::composer('layouts.app', function ($view) use ($frontendMenu, $services) {
-            $view->with('frontendMenu', $frontendMenu);
-            $view->with('services', $services);
+
+        // Load categories cho menu Dịch vụ và Tin tức
+       $categories = Category::whereIn('type', ['services', 'news'])
+    ->where('is_active', true)
+    ->orderBy('order')
+    ->with('children')
+    ->get();
+
+        View::composer(['layouts.app', 'm-menu'], function ($view) use ($frontendMenu, $services, $categories) {
+            $view->with('frontendMenu', $frontendMenu)
+                 ->with('services', $services)
+                 ->with('categories', $categories);
         });
     }
 }

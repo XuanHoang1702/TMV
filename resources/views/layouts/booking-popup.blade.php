@@ -30,6 +30,14 @@
                         @enderror
                     </div>
                     <div class="col-12 col-sm-12">
+                        <input type="email" name="customer_email" placeholder="Email" class="ctr-h-input"
+                            value="{{ old('customer_email') }}" required />
+                        <div class="text-danger" id="error_customer_email"></div>
+                        @error('customer_email')
+                            <div class="text-danger">{{ $message }}</div>
+                        @enderror
+                    </div>
+                    <div class="col-12 col-sm-12">
                         <select name="service_id" class="ctr-h-input" id="service_id">
                             <option value="">Chọn dịch vụ</option>
                             @foreach ($services as $service)
@@ -115,7 +123,6 @@
         });
     @endif
 
-    // Validate form frontend và hiển thị lỗi trong form
     document.querySelector('.smart-form').addEventListener('submit', function(e) {
         // Xóa lỗi cũ
         document.querySelectorAll('.text-danger[id^="error_"]').forEach(el => el.innerText = '');
@@ -123,6 +130,7 @@
         let hasError = false;
         let name = document.querySelector('[name="customer_name"]').value.trim();
         let phone = document.querySelector('[name="customer_phone"]').value.trim();
+        let email = document.querySelector('[name="customer_email"]').value.trim();
         let service = document.querySelector('[name="service_id"]').value;
         let time = document.querySelector('[name="appointment_time"]').value;
         let date = document.querySelector('[name="appointment_date"]').value;
@@ -141,12 +149,21 @@
         }
 
         // Validate số điện thoại
-        let invalidNumbers = ['0000000000','1234567890','1111111111','2222222222'];
+        let invalidNumbers = ['0000000000', '1234567890', '1111111111', '2222222222'];
         if (!phone) {
             document.getElementById('error_customer_phone').innerText = 'Số điện thoại không được để trống';
             hasError = true;
         } else if (!/^\d{10}$/.test(phone) || !/^(03|05|07|08|09)/.test(phone) || invalidNumbers.includes(phone)) {
             document.getElementById('error_customer_phone').innerText = 'Số điện thoại không hợp lệ';
+            hasError = true;
+        }
+
+        // Validate email
+        if (!email) {
+            document.getElementById('error_customer_email').innerText = 'Email không được để trống';
+            hasError = true;
+        } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+            document.getElementById('error_customer_email').innerText = 'Email không hợp lệ';
             hasError = true;
         }
 
@@ -174,6 +191,6 @@
             hasError = true;
         }
 
-        if (hasError) e.preventDefault(); // Ngăn submit nếu có lỗi
+        if (hasError) e.preventDefault();
     });
 </script>
