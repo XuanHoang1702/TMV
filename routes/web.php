@@ -19,6 +19,8 @@ use App\Models\Banner;
 use App\Models\Category;
 use App\Http\Controllers\Admin\InformationController;
 use App\Http\Controllers\Admin\SiteInfoController;
+use App\Http\Controllers\Admin\PageContentController;
+
 
 Route::get('/', function () {
     return view('welcome');
@@ -147,6 +149,9 @@ Route::prefix('admin')->name('admin.')->group(function () {
 
     //SiteInformation
     Route::resource('site_info', SiteInfoController::class);
+
+    //PageContent
+    Route::resource('page_contents', PageContentController::class);
 
 });
 
