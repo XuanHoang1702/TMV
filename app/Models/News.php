@@ -16,8 +16,8 @@ class News extends Model
         'slug',
         'summary',
         'content',
-        'image',
-        'category',
+        'images', // JSON column for multiple images
+        'category_id',
         'is_featured',
         'published_at',
         'is_active',
@@ -29,6 +29,7 @@ class News extends Model
         'is_featured' => 'boolean',
         'is_active' => 'boolean',
         'published_at' => 'datetime',
+        'images' => 'array', // cast images as array
     ];
 
     protected static function boot()
@@ -42,11 +43,16 @@ class News extends Model
         });
     }
 
+    // Relationship with Category
+    public function category()
+    {
+        return $this->belongsTo(Category::class);
+    }
+
     public function getLinkAttribute()
     {
-        return \Route::has($this->route)
+        return Route::has($this->route)
             ? route($this->route)
             : url($this->route);
     }
-
 }

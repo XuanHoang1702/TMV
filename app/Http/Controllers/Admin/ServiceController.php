@@ -12,19 +12,21 @@ use Illuminate\Support\Str;
 class ServiceController extends Controller
 {
     public function index()
-    {
-        $services = Service::with('details')
-            ->orderBy('sort_order')
-            ->paginate(15);
+{
+    $services = Service::with(['details', 'children', 'parent'])
+        ->whereNull('parent_id')
+        ->orderBy('sort_order')
+        ->paginate(15);
 
-        return view('admin.services.index', compact('services'));
-    }
+    return view('admin.services.index', compact('services'));
+}
 
-    public function create()
-    {
-        $categories = Category::orderBy('name')->get();
-        return view('admin.services.create', compact('categories'));
-    }
+  public function create()
+{
+    $categories = Category::orderBy('name')->get();
+    $parentServices = Service::whereNull('parent_id')->orderBy('name')->get();
+    return view('admin.services.create', compact('categories', 'parentServices'));
+}
 
     public function store(Request $request)
     {
@@ -38,6 +40,7 @@ class ServiceController extends Controller
             'price_range' => 'nullable|string|max:100',
             'duration' => 'nullable|string|max:50',
             'category_id' => 'required|exists:categories,id',
+            'parent_id' => 'nullable|exists:services,id',
             'is_active' => 'boolean',
             'sort_order' => 'integer',
             'meta_title' => 'nullable|string|max:255',
@@ -58,12 +61,12 @@ class ServiceController extends Controller
             ->with('success', 'Dịch vụ đã được tạo thành công');
     }
 
-    public function edit(Service $service)
-    {
-        $categories = Category::orderBy('name')->get();
-        return view('admin.services.edit', compact('service', 'categories'));
-    }
-
+   public function edit(Service $service)
+{
+    $categories = Category::orderBy('name')->get();
+    $parentServices = Service::whereNull('parent_id')->whereNot('id', $service->id)->orderBy('name')->get();
+    return view('admin.services.edit', compact('service', 'categories', 'parentServices'));
+}
     public function update(Request $request, Service $service)
     {
         $validated = $request->validate([
@@ -76,6 +79,7 @@ class ServiceController extends Controller
             'price_range' => 'nullable|string|max:100',
             'duration' => 'nullable|string|max:50',
             'category_id' => 'required|exists:categories,id',
+            'parent_id' => 'nullable|exists:services,id',
             'is_active' => 'boolean',
             'allow_line_breaks' => 'boolean',
             'sort_order' => 'integer',
@@ -118,6 +122,8 @@ class ServiceController extends Controller
 
         return redirect()->route('admin.services.index')
             ->with('success', 'Dịch vụ đã được xóa thành công');
+
+            
     }
 
     public function toggleStatus(Service $service)

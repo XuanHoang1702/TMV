@@ -1,55 +1,60 @@
+
 @extends('layouts.admin')
 
 @section('title', 'Quản lý Dịch vụ')
 
 @section('content')
-    <div class="d-flex justify-content-between align-items-center mb-3">
-        <h1>Danh sách Dịch vụ</h1>
-        <a href="{{ route('admin.services.create') }}" class="btn btn-primary">Thêm dịch vụ mới</a>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Danh sách Dịch vụ</h3>
+                    <div class="card-tools d-flex align-items-center">
+                        <a href="{{ route('admin.services.create') }}" class="btn btn-primary">
+                            <i class="fas fa-plus"></i> Thêm dịch vụ mới
+                        </a>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-striped">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Tên dịch vụ</th>
+                                    <th>Danh mục</th>
+                                    <th>Trạng thái</th>
+                                    <th>Thao tác</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @include('admin.services.partials.children', [
+                                    'services' => $services->whereNull('parent_id'),
+                                    'depth' => 0
+                                ])
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Pagination -->
+                    @if($services->hasPages())
+                        <div class="d-flex justify-content-center mt-3">
+                            {{ $services->links() }}
+                        </div>
+                    @endif
+                </div>
+            </div>
+        </div>
     </div>
+</div>
 
-
-
-    <table class="table table-bordered table-hover">
-        <thead class="table-light">
-            <tr>
-                <th>ID</th>
-                <th>Tên dịch vụ</th>
-                <th>Danh mục</th>
-                <th>Trạng thái</th>
-                <th>Hành động</th>
-            </tr>
-        </thead>
-        <tbody>
-            @forelse($services as $service)
-                <tr>
-                    <td>{{ $service->id }}</td>
-                    <td>{{ $service->name }}</td>
-                    <td>{{ $service->category_id ? $service->category->name : $service->category }}</td>
-                    <td>
-                        @if ($service->is_active)
-                            <span class="badge bg-success">Kích hoạt</span>
-                        @else
-                            <span class="badge bg-secondary">Không kích hoạt</span>
-                        @endif
-                    </td>
-                    <td>
-                        <a href="{{ route('admin.services.edit', $service) }}" class="btn btn-sm btn-warning">Sửa</a>
-                        <form action="{{ route('admin.services.destroy', $service) }}" method="POST" class="d-inline"
-                            onsubmit="return confirm('Bạn có chắc muốn xóa dịch vụ này?');">
-                            @csrf
-                            @method('DELETE')
-                            <button class="btn btn-sm btn-danger">Xóa</button>
-                        </form>
-                    </td>
-                </tr>
-            @empty
-                <tr>
-                    <td colspan="5" class="text-center">Không có dịch vụ nào.</td>
-                </tr>
-            @endforelse
-        </tbody>
-    </table>
-
-    {{ $services->links() }}
+<script>
+function confirmDelete(id, name) {
+    if (confirm(`Bạn có chắc muốn xóa dịch vụ "${name}"? Các dịch vụ con sẽ bị xóa theo.`)) {
+        document.getElementById(`delete-form-${id}`).submit();
+    }
+}
+</script>
 @endsection
+

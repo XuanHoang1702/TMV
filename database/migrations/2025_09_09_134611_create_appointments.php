@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('service_interest')->nullable();
             $table->date('appointment_date');
             $table->time('appointment_time');
+            $table->string('estimated_price');
             $table->text('notes')->nullable();
             $table->enum('status', ['pending', 'confirmed', 'completed', 'cancelled'])->default('pending');
             $table->timestamps();

@@ -94,6 +94,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::resource('news', NewsController::class);
     Route::post('news/{news}/publish', [NewsController::class, 'publish'])->name('news.publish');
     Route::post('news/{news}/unpublish', [NewsController::class, 'unpublish'])->name('news.unpublish');
+    Route::get('admin/news/{news}', [NewsController::class, 'show'])->name('admin.news.show');
 
     // Appointments Management
     Route::resource('appointments', AppointmentController::class);

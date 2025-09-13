@@ -24,7 +24,7 @@ class Appointment extends Model
     protected $casts = [
         'appointment_date' => 'date',
         'appointment_time' => 'datetime',
-        'estimated_price' => 'decimal:2',
+        'estimated_price' => 'string',
     ];
 
     public function service()

@@ -16,7 +16,7 @@ class NewsController extends Controller
 
         // Filter by category
         if ($request->category) {
-            $query->where('category', $request->category);
+            $query->where('category_id', $request->category);
         }
 
         // Filter by status
@@ -35,7 +35,8 @@ class NewsController extends Controller
 
     public function create()
     {
-        return view('admin.news.create');
+        $categories = \App\Models\Category::ofType('news')->active()->get();
+        return view('admin.news.create', compact('categories'));
     }
 
     public function store(Request $request)
@@ -45,8 +46,9 @@ class NewsController extends Controller
             'slug' => 'required|string|unique:news',
             'summary' => 'required|string|max:500',
             'content' => 'required|string',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
-            'category' => 'required|in:chuyen-mon,dao-tao,tu-thien,bao-chi',
+            'images' => 'nullable|array',
+            'images.*' => 'image|mimes:jpeg,png,jpg|max:2048',
+            'category_id' => 'required|exists:categories,id',
             'is_featured' => 'boolean',
             'published_at' => 'nullable|date',
             'is_active' => 'boolean',
@@ -54,10 +56,18 @@ class NewsController extends Controller
             'meta_description' => 'nullable|string|max:500'
         ]);
 
-        if ($request->hasFile('image')) {
-            $validated['image'] = $request->file('image')->store('news', 'public');
+        // Handle multiple images
+        if ($request->hasFile('images')) {
+            $imagePaths = [];
+            foreach ($request->file('images') as $file) {
+                $imagePaths[] = $file->store('news', 'public');
+            }
+            $validated['images'] = $imagePaths;
         }
 
+        if ($request->has('published_at')) {
+            $validated['published_at'] = \Carbon\Carbon::createFromFormat('Y-m-d\TH:i', $request->published_at)->toDateTimeString();
+        }
         // Auto-generate slug if empty
         if (empty($validated['slug'])) {
             $validated['slug'] = Str::slug($validated['title']);
@@ -71,7 +81,8 @@ class NewsController extends Controller
 
     public function edit(News $news)
     {
-        return view('admin.news.edit', compact('news'));
+        $categories = \App\Models\Category::ofType('news')->active()->get();
+        return view('admin.news.edit', compact('news', 'categories'));
     }
 
     public function update(Request $request, News $news)
@@ -81,8 +92,11 @@ class NewsController extends Controller
             'slug' => 'required|string|unique:news,slug,' . $news->id,
             'summary' => 'required|string|max:500',
             'content' => 'required|string',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
-            'category' => 'required|in:chuyen-mon,dao-tao,tu-thien,bao-chi',
+            'images' => 'nullable|array',
+            'images.*' => 'image|mimes:jpeg,png,jpg|max:2048',
+            'removed_images' => 'nullable|array',
+            'removed_images.*' => 'string',
+            'category_id' => 'required|exists:categories,id',
             'is_featured' => 'boolean',
             'published_at' => 'nullable|date',
             'is_active' => 'boolean',
@@ -90,12 +104,31 @@ class NewsController extends Controller
             'meta_description' => 'nullable|string|max:500'
         ]);
 
-        if ($request->hasFile('image')) {
-            if ($news->image) {
-                Storage::disk('public')->delete($news->image);
+        // Handle removing existing images
+        $currentImages = $news->images ?? [];
+        if ($request->has('removed_images') && is_array($request->removed_images)) {
+            foreach ($request->removed_images as $removedImage) {
+                // Remove from storage
+                if (Storage::disk('public')->exists($removedImage)) {
+                    Storage::disk('public')->delete($removedImage);
+                }
+                // Remove from current images array
+                $currentImages = array_filter($currentImages, function($image) use ($removedImage) {
+                    return $image !== $removedImage;
+                });
             }
-            $validated['image'] = $request->file('image')->store('news', 'public');
         }
+
+        // Handle multiple images - append new images to existing ones
+        if ($request->hasFile('images')) {
+            foreach ($request->file('images') as $file) {
+                if ($file) { // Check if file is not null
+                    $currentImages[] = $file->store('news', 'public');
+                }
+            }
+        }
+
+        $validated['images'] = array_values($currentImages); // Reindex array
 
         $news->update($validated);
 
@@ -105,8 +138,11 @@ class NewsController extends Controller
 
     public function destroy(News $news)
     {
-        if ($news->image) {
-            Storage::disk('public')->delete($news->image);
+        // Delete multiple images
+        if ($news->images) {
+            foreach ($news->images as $imagePath) {
+                Storage::disk('public')->delete($imagePath);
+            }
         }
 
         $news->delete();
@@ -131,4 +167,16 @@ class NewsController extends Controller
 
         return back()->with('success', 'Tin tức đã được gỡ xuất bản');
     }
+    public function show(News $news)
+{
+
+    $relatedNews = News::where('category_id', $news->category_id)
+        ->where('id', '!=', $news->id)
+        ->whereNotNull('published_at')
+        ->orderBy('published_at', 'desc')
+        ->take(4)
+        ->get();
+
+    return view('admin.news.show', compact('news', 'relatedNews'));
+}
 }
