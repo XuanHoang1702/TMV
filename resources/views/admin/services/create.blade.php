@@ -1,3 +1,4 @@
+
 @extends('layouts.admin')
 
 @section('title', 'Thêm Dịch vụ Mới')
@@ -34,6 +35,21 @@
                         <label for="name" class="form-label">Tên dịch vụ <span class="text-danger">*</span></label>
                         <input type="text" class="form-control @error('name') is-invalid @enderror" id="name" name="name" value="{{ old('name') }}" required>
                         @error('name')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="parent_id" class="form-label">Dịch vụ cha</label>
+                        <select class="form-select @error('parent_id') is-invalid @enderror" id="parent_id" name="parent_id">
+                            <option value="">Không có (Dịch vụ chính)</option>
+                            @foreach($parentServices as $parent)
+                                <option value="{{ $parent->id }}" {{ old('parent_id') == $parent->id ? 'selected' : '' }}>
+                                    {{ $parent->name }}
+                                </option>
+                            @endforeach
+                        </select>
+                        @error('parent_id')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                     </div>
@@ -177,15 +193,23 @@
 </div>
 
 <script>
-// Auto-generate slug from name
-document.getElementById('name').addEventListener('input', function() {
-    const name = this.value;
-    const slug = name.toLowerCase()
+// Hàm chuyển đổi tiếng Việt thành không dấu
+function removeVietnameseTones(str) {
+    return str.normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+        .replace(/đ/g, 'd').replace(/Đ/g, 'D')
+        .toLowerCase()
         .replace(/[^a-z0-9\s-]/g, '')
         .replace(/\s+/g, '-')
         .replace(/-+/g, '-')
         .trim('-');
+}
+
+// Auto-generate slug from name
+document.getElementById('name').addEventListener('input', function() {
+    const name = this.value;
+    const slug = removeVietnameseTones(name);
     document.getElementById('slug').value = slug;
 });
 </script>
 @endsection
+

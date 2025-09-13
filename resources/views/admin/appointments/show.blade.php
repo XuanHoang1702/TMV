@@ -64,7 +64,7 @@
                                 </tr>
                                 <tr>
                                     <th>Giá dự kiến:</th>
-                                    <td>{{ $appointment->estimated_price ? number_format($appointment->estimated_price) . ' VND' : 'N/A' }}</td>
+                                    <td>{{ $appointment->estimated_price ? $appointment->estimated_price. ' VND' : 'N/A' }}</td>
                                 </tr>
                             </table>
                         </div>

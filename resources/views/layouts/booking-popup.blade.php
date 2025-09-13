@@ -1,9 +1,9 @@
 <!-- Booking Popup Component -->
 <div id="booking_Popup" class="modal fade cl-bgPop" role="dialog" aria-labelledby="myModalLabel">
     <div class="modal-dialog modal-lg" style="max-width: 35%;">
-        <div class="modal-content">
-            <div class="modal-header" style="flex-direction:unset;">
-                <h5 id="myModalLabel" class="modal-title" style="font-weight:bold">
+        <div class="modal-content" style="border-radius: 15px; overflow: hidden;">
+            <div class="modal-header" style="flex-direction: unset;">
+                <h5 id="myModalLabel" class="modal-title" style="font-weight: bold;">
                     ĐẶT LỊCH HẸN TƯ VẤN THẨM MỸ
                 </h5>
                 <p>Hãy để chúng tôi giúp bạn trở nên tự tin và rạng rỡ hơn</p>
@@ -15,7 +15,7 @@
                 <div class="row">
                     <div class="col-12 col-sm-12">
                         <input type="text" name="customer_name" placeholder="Họ & tên" class="ctr-h-input"
-                            value="{{ old('customer_name') }}" required />
+                            style="border-radius: 8px;" value="{{ old('customer_name') }}" required />
                         <div class="text-danger" id="error_customer_name"></div>
                         @error('customer_name')
                             <div class="text-danger">{{ $message }}</div>
@@ -23,7 +23,7 @@
                     </div>
                     <div class="col-12 col-sm-12">
                         <input type="text" name="customer_phone" placeholder="Số điện thoại" class="ctr-h-input"
-                            value="{{ old('customer_phone') }}" required />
+                            style="border-radius: 8px;" value="{{ old('customer_phone') }}" required />
                         <div class="text-danger" id="error_customer_phone"></div>
                         @error('customer_phone')
                             <div class="text-danger">{{ $message }}</div>
@@ -31,20 +31,25 @@
                     </div>
                     <div class="col-12 col-sm-12">
                         <input type="email" name="customer_email" placeholder="Email" class="ctr-h-input"
-                            value="{{ old('customer_email') }}" required />
+                            style="border-radius: 8px;" value="{{ old('customer_email') }}" required />
                         <div class="text-danger" id="error_customer_email"></div>
                         @error('customer_email')
                             <div class="text-danger">{{ $message }}</div>
                         @enderror
                     </div>
                     <div class="col-12 col-sm-12">
-                        <select name="service_id" class="ctr-h-input" id="service_id">
+                        <select name="service_id" class="ctr-h-input" id="service_id" style="border-radius: 8px;">
                             <option value="">Chọn dịch vụ</option>
-                            @foreach ($services as $service)
-                                <option value="{{ $service->id }}"
-                                    {{ old('service_id') == $service->id ? 'selected' : '' }}>
-                                    {{ $service->name }}
-                                </option>
+                            @foreach ($services->whereNull('parent_id') as $parent)
+                                <optgroup label="{{ $parent->name }}">
+                                    
+                                    @foreach ($parent->children as $child)
+                                        <option value="{{ $child->id }}"
+                                            {{ old('service_id') == $child->id ? 'selected' : '' }}>
+                                            &nbsp;&nbsp;&nbsp;&nbsp;{{ $child->name }}
+                                        </option>
+                                    @endforeach
+                                </optgroup>
                             @endforeach
                         </select>
                         <div class="text-danger" id="error_service_id"></div>
@@ -57,7 +62,7 @@
                 <div class="row">
                     <div class="col-12 col-sm-6">
                         <input type="time" name="appointment_time" placeholder="Chọn giờ hẹn" class="ctr-h-input"
-                            value="{{ old('appointment_time') }}" required />
+                            style="border-radius: 8px;" value="{{ old('appointment_time') }}" required />
                         <div class="text-danger" id="error_appointment_time"></div>
                         @error('appointment_time')
                             <div class="text-danger">{{ $message }}</div>
@@ -65,7 +70,7 @@
                     </div>
                     <div class="col-12 col-sm-6">
                         <input type="date" name="appointment_date" placeholder="Chọn ngày hẹn" class="ctr-h-input"
-                            value="{{ old('appointment_date') }}" required />
+                            style="border-radius: 8px;" value="{{ old('appointment_date') }}" required />
                         <div class="text-danger" id="error_appointment_date"></div>
                         @error('appointment_date')
                             <div class="text-danger">{{ $message }}</div>
@@ -75,7 +80,8 @@
 
                 <div class="row">
                     <div class="col-12 col-sm-12">
-                        <textarea name="notes" rows="3" placeholder="Ghi chú" class="ctr-h-input">{{ old('notes') }}</textarea>
+                        <textarea name="notes" rows="3" placeholder="Ghi chú" class="ctr-h-input"
+                            style="border-radius: 8px;">{{ old('notes') }}</textarea>
                         <div class="text-danger" id="error_notes"></div>
                         @error('notes')
                             <div class="text-danger">{{ $message }}</div>
@@ -85,7 +91,7 @@
 
                 <div class="row">
                     <div class="col-12 col-sm-12">
-                        <button type="submit" class="cl-btn-full">
+                        <button type="submit" class="cl-btn-full" style="border-radius: 8px;">
                             <span>Đặt lịch ngay</span>
                             <i class="fa fa-angle-right"></i>
                         </button>
@@ -123,6 +129,7 @@
         });
     @endif
 
+    // Validation cho form
     document.querySelector('.smart-form').addEventListener('submit', function(e) {
         // Xóa lỗi cũ
         document.querySelectorAll('.text-danger[id^="error_"]').forEach(el => el.innerText = '');
@@ -192,5 +199,17 @@
         }
 
         if (hasError) e.preventDefault();
+    });
+
+    // Hiệu ứng cuộn mượt khi nhấp vào nút mở popup
+    document.querySelectorAll('.open-booking-popup').forEach(button => {
+        button.addEventListener('click', function(e) {
+            e.preventDefault();
+            const popup = document.getElementById('booking_Popup');
+            popup.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            // Mở popup bằng Bootstrap
+            const modal = new bootstrap.Modal(popup);
+            modal.show();
+        });
     });
 </script>

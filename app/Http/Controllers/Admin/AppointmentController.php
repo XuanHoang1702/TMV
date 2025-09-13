@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\AppointmentsExport;
 use Illuminate\Support\Facades\Validator;
+use App\Models\Service;
 
 class AppointmentController extends Controller
 {
@@ -144,6 +145,9 @@ class AppointmentController extends Controller
         ]);
 
         $validated['status'] = 'pending';
+
+        $service = Service::find($validated['service_id']);
+        $validated['estimated_price'] = $service ? $service->price_range : 0;
 
         Appointment::create($validated);
 

@@ -51,6 +51,21 @@
                     </div>
 
                     <div class="mb-3">
+                        <label for="parent_id" class="form-label">Dịch vụ cha</label>
+                        <select class="form-select @error('parent_id') is-invalid @enderror" id="parent_id" name="parent_id">
+                            <option value="">Không có (Dịch vụ chính)</option>
+                            @foreach($parentServices as $parent)
+                                <option value="{{ $parent->id }}" {{ old('parent_id', $service->parent_id) == $parent->id ? 'selected' : '' }}>
+                                    {{ $parent->name }}
+                                </option>
+                            @endforeach
+                        </select>
+                        @error('parent_id')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                    </div>
+
+                    <div class="mb-3">
                         <label for="slug" class="form-label">Slug <span class="text-danger">*</span></label>
                         <input type="text" class="form-control @error('slug') is-invalid @enderror" id="slug" name="slug" value="{{ old('slug', $service->slug) }}" required>
                         @error('slug')
@@ -238,6 +253,7 @@
             <div class="modal-body">
                 <div class="text-center">
                     <h5 id="previewName" class="mb-3"></h5>
+                    <p><strong>Dịch vụ cha:</strong> <span id="previewParent"></span></p>
                     <img id="previewIcon" src="{{ $service->icon ? asset('storage/' . $service->icon) : asset('images/home/default_icon.png') }}" class="img-fluid mb-3" style="max-height: 50px;" alt="Service Icon">
                     <img id="previewImage" src="{{ $service->image ? asset('storage/' . $service->image) : '' }}" class="img-fluid mb-3" style="max-height: 150px;" alt="Service Image">
                     <p><strong>Danh mục:</strong> <span id="previewCategory"></span></p>
@@ -258,6 +274,17 @@
 </div>
 
 <script>
+// Hàm chuyển đổi tiếng Việt thành không dấu
+function removeVietnameseTones(str) {
+    return str.normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+        .replace(/đ/g, 'd').replace(/Đ/g, 'D')
+        .toLowerCase()
+        .replace(/[^a-z0-9\s-]/g, '')
+        .replace(/\s+/g, '-')
+        .replace(/-+/g, '-')
+        .trim('-');
+}
+
 // Khởi tạo biến để theo dõi vị trí và dấu phân cách được chọn
 let selectedPosition = null;
 let selectedSeparator = null;
@@ -266,13 +293,11 @@ let currentName = ''; // Lưu trữ giá trị name hiện tại khi mở modal
 // Tạo slug tự động từ tên
 document.getElementById('name').addEventListener('input', function() {
     const name = this.value;
-    let slug = name.toLowerCase()
-        .replace(/[|;]/g, ' ') // Thay | hoặc ; bằng khoảng trắng
-        .replace(/[^a-z0-9\s-]/g, '')
-        .replace(/\s+/g, '-')
-        .replace(/-+/g, '-')
-        .trim('-');
-    document.getElementById('slug').value = slug;
+    let slug = name;
+    if (document.getElementById('allow_line_breaks').checked) {
+        slug = slug.replace(/[|;]/g, ' '); // Thay | hoặc ; bằng khoảng trắng nếu allow_line_breaks được chọn
+    }
+    document.getElementById('slug').value = removeVietnameseTones(slug);
 });
 
 // Hiển thị modal xuống dòng khi chọn allow_line_breaks
@@ -359,6 +384,8 @@ document.getElementById('lineBreakModal').addEventListener('hidden.bs.modal', ()
 document.getElementById('previewModal').addEventListener('show.bs.modal', function() {
     const name = document.getElementById('name').value || 'Không có tên';
     const allowLineBreaks = document.getElementById('allow_line_breaks').checked;
+    const parentSelect = document.getElementById('parent_id');
+    const parent = parentSelect.selectedIndex > 0 ? parentSelect.options[parentSelect.selectedIndex].text : 'Không có';
     const categorySelect = document.getElementById('category_id');
     const category = categorySelect.selectedIndex > 0 ? categorySelect.options[categorySelect.selectedIndex].text : 'Chưa chọn danh mục';
     const description = document.getElementById('description').value;
@@ -375,6 +402,7 @@ document.getElementById('previewModal').addEventListener('show.bs.modal', functi
         displayName = name.replace(/[|;]/g, '<br>');
     }
     document.getElementById('previewName').innerHTML = displayName;
+    document.getElementById('previewParent').textContent = parent;
 
     // Xử lý xem trước icon
     if (iconInput.files && iconInput.files[0]) {

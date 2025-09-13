@@ -27,6 +27,10 @@
                                     <td>{{ $service->name }}</td>
                                 </tr>
                                 <tr>
+                                    <th>Dịch vụ cha</th>
+                                    <td>{{ $service->parent ? $service->parent->name : 'Không có' }}</td>
+                                </tr>
+                                <tr>
                                     <th>Slug</th>
                                     <td>{{ $service->slug }}</td>
                                 </tr>
@@ -40,7 +44,7 @@
                                 </tr>
                                 <tr>
                                     <th>Danh mục</th>
-                                    <td>{{ is_object($service->category) ? $service->category->name : $service->category }}</td>
+                                    <td>{{ is_object($service->category) ? $service->category->name : 'N/A' }}</td>
                                 </tr>
                                 <tr>
                                     <th>Giá khoảng</th>
@@ -79,6 +83,45 @@
                                     <td>{{ $service->updated_at->format('d/m/Y H:i') }}</td>
                                 </tr>
                             </table>
+
+                            @if($service->children->count() > 0)
+                                <h4 class="mt-4">Dịch vụ con</h4>
+                                <table class="table table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th>ID</th>
+                                            <th>Tên dịch vụ</th>
+                                            <th>Danh mục</th>
+                                            <th>Trạng thái</th>
+                                            <th>Hành động</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach($service->children as $child)
+                                            <tr>
+                                                <td>{{ $child->id }}</td>
+                                                <td>{{ $child->name }}</td>
+                                                <td>{{ $child->category ? $child->category->name : 'N/A' }}</td>
+                                                <td>
+                                                    <span class="badge {{ $child->is_active ? 'badge-success' : 'badge-danger' }}">
+                                                        {{ $child->is_active ? 'Hoạt động' : 'Không hoạt động' }}
+                                                    </span>
+                                                </td>
+                                                <td>
+                                                    <a href="{{ route('admin.services.show', $child) }}" class="btn btn-sm btn-info">Xem</a>
+                                                    <a href="{{ route('admin.services.edit', $child) }}" class="btn btn-sm btn-warning">Sửa</a>
+                                                    <form action="{{ route('admin.services.destroy', $child) }}" method="POST" class="d-inline"
+                                                        onsubmit="return confirm('Bạn có chắc muốn xóa dịch vụ con này?');">
+                                                        @csrf
+                                                        @method('DELETE')
+                                                        <button class="btn btn-sm btn-danger">Xóa</button>
+                                                    </form>
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            @endif
                         </div>
                         <div class="col-md-4">
                             @if($service->image)

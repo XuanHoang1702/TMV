@@ -38,25 +38,24 @@ class ViewServiceProvider extends ServiceProvider
             ->with('children')
             ->get();
 
-        // Load services cho booking popup và footer
-      $services = Service::where('is_active', true)
-    ->orderBy('sort_order')
-    ->take(8)
-    ->get();
-
+        // Load services cho booking popup, footer, và bang-gia/pricing
+        $services = Service::where('is_active', true)
+            ->whereNull('parent_id') // Chỉ lấy dịch vụ cha
+            ->with(['children', 'category']) // Tải quan hệ con và danh mục
+            ->orderBy('sort_order')
+            ->get();
 
         // Load categories cho menu Dịch vụ và Tin tức
-       $categories = Category::whereIn('type', ['services', 'news'])
-    ->where('is_active', true)
-    ->orderBy('order')
-    ->with('children')
-    ->get();
+        $categories = Category::whereIn('type', ['services', 'news'])
+            ->where('is_active', true)
+            ->orderBy('order')
+            ->with('children')
+            ->get();
 
-        View::composer(['layouts.app', 'm-menu'], function ($view) use ($frontendMenu, $services, $categories) {
+        View::composer(['layouts.app', 'm-menu', 'bang-gia', 'pricing'], function ($view) use ($frontendMenu, $services, $categories) {
             $view->with('frontendMenu', $frontendMenu)
                  ->with('services', $services)
                  ->with('categories', $categories);
         });
     }
-
 }

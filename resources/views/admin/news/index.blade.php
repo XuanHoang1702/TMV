@@ -1,53 +1,78 @@
 @extends('layouts.admin')
 
-@section('title', 'Quản lý Tin tức')
+@section('title', 'Danh sách Tin tức')
 
 @section('content')
-    <div class="d-flex justify-content-between align-items-center mb-3">
-        <h1>Danh sách Tin tức</h1>
-        <a href="{{ route('admin.news.create') }}" class="btn btn-primary">Thêm tin tức mới</a>
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h1>Danh sách Tin tức</h1>
+    <a href="{{ route('admin.news.create') }}" class="btn btn-primary">
+        <i class="fas fa-plus"></i> Thêm tin tức
+    </a>
+</div>
+
+<form method="GET" action="{{ route('admin.news.index') }}" class="mb-3">
+    <div class="row">
+        <div class="col-md-3">
+            <select name="category" class="form-select">
+                <option value="">Tất cả danh mục</option>
+                <option value="chuyen-mon" {{ request('category') == 'chuyen-mon' ? 'selected' : '' }}>Chuyên môn</option>
+                <option value="dao-tao" {{ request('category') == 'dao-tao' ? 'selected' : '' }}>Đào tạo</option>
+                <option value="tu-thien" {{ request('category') == 'tu-thien' ? 'selected' : '' }}>Từ thiện</option>
+                <option value="bao-chi" {{ request('category') == 'bao-chi' ? 'selected' : '' }}>Báo chí - Truyền thông</option>
+            </select>
+        </div>
+        <div class="col-md-3">
+            <select name="status" class="form-select">
+                <option value="">Tất cả trạng thái</option>
+                <option value="published" {{ request('status') == 'published' ? 'selected' : '' }}>Đã xuất bản</option>
+                <option value="draft" {{ request('status') == 'draft' ? 'selected' : '' }}>Bản nháp</option>
+            </select>
+        </div>
+        <div class="col-md-2">
+            <button type="submit" class="btn btn-primary">Lọc</button>
+        </div>
     </div>
+</form>
 
-
-
-    <table class="table table-bordered table-hover">
-        <thead class="table-light">
-            <tr>
-                <th>ID</th>
-                <th>Tiêu đề</th>
-                <th>Trạng thái</th>
-                <th>Hành động</th>
-            </tr>
-        </thead>
-        <tbody>
-            @forelse($news as $item)
-                <tr>
-                    <td>{{ $item->id }}</td>
-                    <td>{{ $item->title }}</td>
-                    <td>
-                        @if ($item->is_published)
-                            <span class="badge bg-success">Đã xuất bản</span>
-                        @else
-                            <span class="badge bg-secondary">Chưa xuất bản</span>
-                        @endif
-                    </td>
-                    <td>
+<div class="row">
+    @foreach($news as $item)
+    <div class="col-md-4">
+        <div class="card mb-3">
+            @if($item->images && count($item->images) > 0)
+            <img src="{{ asset('storage/' . $item->images[0]) }}" class="card-img-top" alt="{{ $item->title }}">
+            @endif
+            <div class="card-body">
+                <h5 class="card-title">{{ $item->title }}</h5>
+                <p class="card-text">{{ Str::limit($item->summary, 100) }}</p>
+                <p class="card-text">
+                        <small class="text-muted">
+                        {{ $item->published_at ? $item->published_at->format('H:i, d/m/Y') : 'Bản nháp' }} |
+                        {{ $item->category ? $item->category->name : 'Không có danh mục' }}
+                    </small>
+                </p>
+                <div class="d-flex justify-content-between">
+                    <a href="{{ route('admin.news.show', $item) }}" class="btn btn-primary btn-sm">Xem thêm</a>
+                    <div>
                         <a href="{{ route('admin.news.edit', $item) }}" class="btn btn-sm btn-warning">Sửa</a>
-                        <form action="{{ route('admin.news.destroy', $item) }}" method="POST" class="d-inline"
-                            onsubmit="return confirm('Bạn có chắc muốn xóa tin tức này?');">
+                        <form action="{{ route('admin.news.destroy', $item) }}" method="POST" style="display:inline;">
                             @csrf
                             @method('DELETE')
-                            <button class="btn btn-sm btn-danger">Xóa</button>
+                            <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Bạn có chắc muốn xóa?')">Xóa</button>
                         </form>
-                    </td>
-                </tr>
-            @empty
-                <tr>
-                    <td colspan="4" class="text-center">Không có tin tức nào.</td>
-                </tr>
-            @endforelse
-        </tbody>
-    </table>
+                        @if($item->published_at)
+                            <a href="{{ route('admin.news.unpublish', $item) }}" class="btn btn-sm btn-secondary">Gỡ xuất bản</a>
+                        @else
+                            <a href="{{ route('admin.news.publish', $item) }}" class="btn btn-sm btn-success">Xuất bản</a>
+                        @endif
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    @endforeach
+</div>
 
-    {{ $news->links() }}
+<div class="d-flex justify-content-center">
+    {{ $news->links('pagination::bootstrap-4') }}
+</div>
 @endsection
