@@ -18,6 +18,7 @@ use App\Http\Controllers\Admin\BannerController;
 use App\Models\Banner;
 use App\Models\Category;
 use App\Http\Controllers\Admin\InformationController;
+use App\Http\Controllers\Admin\SiteInfoController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -143,6 +144,9 @@ Route::prefix('admin')->name('admin.')->group(function () {
 
     // Information
     Route::resource('informations', InformationController::class);
+
+    //SiteInformation
+    Route::resource('site_info', SiteInfoController::class);
 
 });
 
