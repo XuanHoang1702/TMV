@@ -20,6 +20,7 @@ use App\Models\Category;
 use App\Http\Controllers\Admin\InformationController;
 use App\Http\Controllers\Admin\SiteInfoController;
 use App\Http\Controllers\Admin\PageContentController;
+use App\Http\Controllers\Admin\HopitalImageController;
 
 
 Route::get('/', function () {
@@ -147,11 +148,14 @@ Route::prefix('admin')->name('admin.')->group(function () {
     // Information
     Route::resource('informations', InformationController::class);
 
-    //SiteInformation
+    //Site Information
     Route::resource('site_info', SiteInfoController::class);
 
-    //PageContent
+    //Page Content
     Route::resource('page_contents', PageContentController::class);
+
+    // Hopital Image
+    Route::resource('hopital_image', HopitalImageController::class);
 
 });
 
