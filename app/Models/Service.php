@@ -10,7 +10,7 @@ class Service extends Model
     protected $fillable = [
         'name', 'slug', 'description', 'content', 'image',
         'icon', 'price_range', 'duration', 'category_id',
-        'is_active', 'sort_order', 'meta_title', 'meta_description'
+        'is_active','allow_line_breaks', 'sort_order', 'meta_title', 'meta_description'
     ];
 
     public function details()

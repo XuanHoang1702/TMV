@@ -136,6 +136,9 @@ Route::prefix('admin')->name('admin.')->group(function () {
     // Banners Management
     Route::resource('banners', BannerController::class);
 
+    // Home Sections Management
+    Route::resource('home_sections', \App\Http\Controllers\Admin\HomeSectionController::class);
+
     // Information
     Route::resource('informations', InformationController::class);
 

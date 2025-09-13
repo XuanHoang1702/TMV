@@ -58,4 +58,5 @@ class ViewServiceProvider extends ServiceProvider
                  ->with('categories', $categories);
         });
     }
+
 }
