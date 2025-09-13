@@ -64,6 +64,7 @@ Route::get('/dich-vu/{slug}', function ($slug) {
 })->name('services.detail');
 
 Route::get('/ve-dr-dat', function () {return view('about');})->name('about');
+Route::get('/chung-chi-hanh-nghe', function () {return view('certificate');})->name('certificate');
 Route::get('/bao-gia', function () {return view('pricing');})->name('pricing');
 Route::get('/tin-tuc', function () {return view('news.index');})->name('news.index');
 Route::get('/tin-tuc/{slug}', function ($slug) {return view('news.show', compact('slug'));})->name('news.detail');

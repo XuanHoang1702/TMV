@@ -41,7 +41,7 @@ class HomeSectionController extends Controller
             'list_titles.*' => 'nullable|string|max:255',
             'list_descriptions' => 'nullable|array|max:3',
             'list_descriptions.*' => 'nullable|string',
-            'position' => 'required|string|max:255|unique:home_sections',
+            'position' => 'required|in:1,2|unique:home_sections',
             'order' => 'nullable|integer',
             'is_active' => 'nullable|boolean',
         ]);

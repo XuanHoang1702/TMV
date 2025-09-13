@@ -152,7 +152,11 @@
 
             <div class="mb-3">
                 <label for="position" class="form-label">Position</label>
-                <input type="text" class="form-control @error('position') is-invalid @enderror" id="position" name="position" value="{{ old('position') }}" required>
+                <select class="form-control @error('position') is-invalid @enderror" id="position" name="position" required>
+                    <option value="">Select Position</option>
+                    <option value="1" {{ old('position') == '1' ? 'selected' : '' }}>Section 1</option>
+                    <option value="2" {{ old('position') == '2' ? 'selected' : '' }}>Section 2</option>
+                </select>
                 @error('position')
                     <div class="invalid-feedback">{{ $message }}</div>
                 @enderror

@@ -1,4 +1,4 @@
-```blade
+
 @extends('layouts.admin')
 
 @section('title', 'Chỉnh sửa Dịch vụ')
@@ -216,7 +216,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <p>Nhấp vào vị trí bạn muốn thêm dấu | để xuống dòng:</p>
+                <p>Nhấp vào dấu | để chọn vị trí xuống dòng:</p>
                 <div id="nameSegments" class="d-flex flex-wrap gap-2"></div>
             </div>
             <div class="modal-footer">
@@ -261,7 +261,7 @@
 // Khởi tạo biến để theo dõi vị trí và dấu phân cách được chọn
 let selectedPosition = null;
 let selectedSeparator = null;
-let currentName = ''; // Lưu trữ giá trị name hiện tại để đảm bảo không bị thay đổi ngoài ý muốn
+let currentName = ''; // Lưu trữ giá trị name hiện tại khi mở modal
 
 // Tạo slug tự động từ tên
 document.getElementById('name').addEventListener('input', function() {
@@ -305,6 +305,7 @@ document.getElementById('allow_line_breaks').addEventListener('change', function
                 separator.textContent = '|';
                 separator.className = 'text-primary cursor-pointer me-1';
                 separator.style.textDecoration = 'underline';
+                separator.dataset.index = currentIndex + part.length; // Lưu vị trí chèn
                 separator.addEventListener('click', () => {
                     // Bỏ highlight dấu phân cách trước đó
                     if (selectedSeparator) {
@@ -315,7 +316,7 @@ document.getElementById('allow_line_breaks').addEventListener('change', function
                     separator.className = 'text-success cursor-pointer me-1';
                     separator.style.textDecoration = 'none';
                     selectedSeparator = separator;
-                    selectedPosition = currentIndex + part.length; // Lưu vị trí chèn
+                    selectedPosition = parseInt(separator.dataset.index); // Lưu vị trí từ dataset
                 });
                 nameSegmentsDiv.appendChild(separator);
             }
@@ -340,11 +341,10 @@ document.getElementById('confirmLineBreak').addEventListener('click', () => {
     if (selectedPosition !== null && currentName) {
         // Chèn | vào vị trí đã chọn
         nameInput.value = currentName.slice(0, selectedPosition) + '|' + currentName.slice(selectedPosition);
+        currentName = nameInput.value; // Cập nhật currentName
         nameInput.dispatchEvent(new Event('input')); // Cập nhật slug
     }
     lineBreakModal.hide(); // Đóng modal
-    selectedPosition = null; // Reset vị trí chọn
-    selectedSeparator = null; // Reset dấu phân cách chọn
 });
 
 // Reset lựa chọn khi modal đóng
@@ -399,4 +399,3 @@ document.getElementById('previewModal').addEventListener('show.bs.modal', functi
 });
 </script>
 @endsection
-```
