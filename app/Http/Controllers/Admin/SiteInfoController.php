@@ -34,14 +34,23 @@ class SiteInfoController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'logo'   => 'required|string',
+            'logo'   => 'required|string|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'slogan' => 'required|string|max:255',
         ]);
 
         if ($validator->fails()) {
             return redirect()->back()->withErrors($validator)->withInput();
         }
-        SiteInfo::create($validator->validated());
+
+        $imagePath = null;
+        if ($request->hasFile('logo')) {
+            $imagePath = $request->file('logo')->store('logo', 'public');
+        }
+
+        SiteInfo::create([
+            'logo' => $imagePath,
+            'slogan' => $request->slogan
+        ]);
         return redirect()->route('site_info.index')->with('success', 'Thêm site info thành công');
     }
 
@@ -77,7 +86,16 @@ class SiteInfoController extends Controller
             return redirect()->back()->withErrors($validator)->withInput();
         }
         $siteInfo = SiteInfo::findOrFail($id);
-        $siteInfo->update($validator->validated());
+        
+        $imagePath = null;
+        if ($request->hasFile('logo')) {
+            $imagePath = $request->file('logo')->store('logo', 'public');
+        }
+        
+        SiteInfo::create([
+            'logo' => $imagePath,
+            'slogan' => $request->slogan
+        ]);;
 
         return redirect()->route('site_info.index')->with('success', 'Cập nhật site info thành công');
 
