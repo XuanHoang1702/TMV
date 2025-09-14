@@ -38,18 +38,30 @@
             </div>
 
             <div class="mb-3">
-                <label for="image_path" class="form-label">Đường dẫn hình ảnh <span class="text-danger">*</span></label>
-                <input type="text" class="form-control @error('image_path') is-invalid @enderror" id="image_path" name="image_path" value="{{ old('image_path', $banner->image_path) }}" required>
-                @error('image_path')
+                <label for="image" class="form-label">Hình ảnh banner <span class="text-danger">*</span></label>
+                <input type="file" class="form-control @error('image') is-invalid @enderror" id="image" name="image" accept="image/*">
+                @error('image')
                     <div class="invalid-feedback">{{ $message }}</div>
                 @enderror
-                <div class="form-text">Ví dụ: images/banners/banner_1.png</div>
+                @if($banner->image_path)
+                <div class="mt-2">
+                    <img src="{{ asset('storage/' . $banner->image_path) }}" alt="{{ $banner->title }}" style="width: 150px;">
+                </div>
+                @endif
             </div>
 
             <div class="mb-3">
                 <label for="link" class="form-label">Liên kết</label>
                 <input type="text" class="form-control @error('link') is-invalid @enderror" id="link" name="link" value="{{ old('link', $banner->link) }}">
                 @error('link')
+                    <div class="invalid-feedback">{{ $message }}</div>
+                @enderror
+            </div>
+
+            <div class="mb-3">
+                <label for="page" class="form-label">Page</label>
+                <input type="text" class="form-control @error('page') is-invalid @enderror" id="page" name="page" value="{{ old('page', $banner->page) }}">
+                @error('page')
                     <div class="invalid-feedback">{{ $message }}</div>
                 @enderror
             </div>
@@ -65,8 +77,8 @@
             <div class="mb-3">
                 <label for="section" class="form-label">Section</label>
                 <select class="form-control @error('section') is-invalid @enderror" id="section" name="section">
-                    <option value="home" {{ old('section', $banner->section) == 'home' ? 'selected' : '' }}>Home (Banner đầu trang)</option>
-                    <option value="other" {{ old('section', $banner->section) == 'other' ? 'selected' : '' }}>Other (Banner chỗ khác)</option>
+                    <option value="1" {{ old('section', $banner->section) == '1' ? 'selected' : '' }}>1</option>
+                    <option value="2" {{ old('section', $banner->section) == '2' ? 'selected' : '' }}>2</option>
                 </select>
                 @error('section')
                     <div class="invalid-feedback">{{ $message }}</div>

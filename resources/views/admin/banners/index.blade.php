@@ -20,6 +20,7 @@
             <th>Thứ tự</th>
             <th>Trạng thái</th>
             <th>Section</th>
+            <th>Page</th>
             <th>Hành động</th>
         </tr>
     </thead>
@@ -39,6 +40,7 @@
                 @endif
             </td>
             <td>{{ $banner->section }}</td>
+            <td>{{ $banner->page }}</td>
             <td>
                 <a href="{{ route('admin.banners.show', $banner) }}" class="btn btn-sm btn-info">Xem</a>
                 <a href="{{ route('admin.banners.edit', $banner) }}" class="btn btn-sm btn-warning">Sửa</a>
@@ -51,7 +53,7 @@
         </tr>
         @empty
         <tr>
-            <td colspan="8" class="text-center">Không có banner nào.</td>
+            <td colspan="9" class="text-center">Không có banner nào.</td>
         </tr>
         @endforelse
     </tbody>

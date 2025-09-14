@@ -42,7 +42,7 @@
                             <option value="">Chọn dịch vụ</option>
                             @foreach ($services->whereNull('parent_id') as $parent)
                                 <optgroup label="{{ $parent->name }}">
-                                    
+
                                     @foreach ($parent->children as $child)
                                         <option value="{{ $child->id }}"
                                             {{ old('service_id') == $child->id ? 'selected' : '' }}>
@@ -62,7 +62,7 @@
                 <div class="row">
                     <div class="col-12 col-sm-6">
                         <input type="time" name="appointment_time" placeholder="Chọn giờ hẹn" class="ctr-h-input"
-                            style="border-radius: 8px;" value="{{ old('appointment_time') }}" required />
+                            style="border-radius: 8px;" value="{{ old('appointment_time', now()->setTimezone('Asia/Ho_Chi_Minh')->format('H:i')) }}" required />
                         <div class="text-danger" id="error_appointment_time"></div>
                         @error('appointment_time')
                             <div class="text-danger">{{ $message }}</div>
@@ -70,7 +70,7 @@
                     </div>
                     <div class="col-12 col-sm-6">
                         <input type="date" name="appointment_date" placeholder="Chọn ngày hẹn" class="ctr-h-input"
-                            style="border-radius: 8px;" value="{{ old('appointment_date') }}" required />
+                            style="border-radius: 8px;" value="{{ old('appointment_date', now()->setTimezone('Asia/Ho_Chi_Minh')->format('Y-m-d')) }}" required />
                         <div class="text-danger" id="error_appointment_date"></div>
                         @error('appointment_date')
                             <div class="text-danger">{{ $message }}</div>

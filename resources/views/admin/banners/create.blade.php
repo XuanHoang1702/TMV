@@ -54,6 +54,14 @@
             </div>
 
             <div class="mb-3">
+                <label for="page" class="form-label">Page</label>
+                <input type="text" class="form-control @error('page') is-invalid @enderror" id="page" name="page" value="{{ old('page') }}">
+                @error('page')
+                    <div class="invalid-feedback">{{ $message }}</div>
+                @enderror
+            </div>
+
+            <div class="mb-3">
                 <label for="order" class="form-label">Thứ tự</label>
                 <input type="number" class="form-control @error('order') is-invalid @enderror" id="order" name="order" value="{{ old('order', 0) }}" min="0">
                 @error('order')
@@ -64,8 +72,8 @@
             <div class="mb-3">
                 <label for="section" class="form-label">Section</label>
                 <select class="form-control @error('section') is-invalid @enderror" id="section" name="section">
-                    <option value="home" {{ old('section', 'home') == 'home' ? 'selected' : '' }}>Home (Banner đầu trang)</option>
-                    <option value="other" {{ old('section', 'home') == 'other' ? 'selected' : '' }}>Other (Banner chỗ khác)</option>
+                    <option value="1" {{ old('section', '1') == '1' ? 'selected' : '' }}>1</option>
+                    <option value="2" {{ old('section', '1') == '2' ? 'selected' : '' }}>2</option>
                 </select>
                 @error('section')
                     <div class="invalid-feedback">{{ $message }}</div>

@@ -39,26 +39,34 @@ Route::middleware(['auth'])->group(function () {
     Volt::route('settings/appearance', 'settings.appearance')->name('settings.appearance');
 });
 //Frontend Routes
+// Home route
 Route::get('/', function () {
-    $banners = \App\Models\Banner::where('is_active', true)->orderBy('order')->get();
+    $currentPage = Route::currentRouteName() ?: 'home';
+    $banners = \App\Models\Banner::where('section', '1')
+        ->where('page', $currentPage)
+        ->where('is_active', true)
+        ->orderBy('order')
+        ->get();
     $categories = \App\Models\Category::where('type', 'services')
         ->where('is_active', true)
         ->orderBy('order')
         ->get();
     $services = \App\Models\Service::where('is_active', true)
+        ->whereNull('parent_id')
+        ->with(['children', 'category'])
         ->orderBy('sort_order')
-        ->take(8)
         ->get();
-    return view('home', compact('banners', 'categories', 'services'));
+    $certificates = \App\Models\Certificate::orderBy('order')
+        ->get();
+
+    return view('home', compact('banners', 'categories', 'services', 'certificates'));
 })->name('home');
 
-//---------------------
+// Trang /dich-vu
 Route::get('/dich-vu', function () {
-    $services = \App\Models\Service::where('is_active', true)
-        ->orderBy('sort_order')
-        ->get();
-    return view('services.index', compact('services'));
+    return view('services.index');
 })->name('services.index');
+
 
 Route::get('/dich-vu/{slug}', function ($slug) {
     $service = \App\Models\Service::where('slug', $slug)
@@ -68,7 +76,7 @@ Route::get('/dich-vu/{slug}', function ($slug) {
 })->name('services.detail');
 
 Route::get('/ve-dr-dat', function () {return view('about');})->name('about');
-Route::get('/chung-chi-hanh-nghe', function () {return view('certificate');})->name('certificate');
+
 Route::get('/bao-gia', function () {return view('pricing');})->name('pricing');
 Route::get('/tin-tuc', function () {return view('news.index');})->name('news.index');
 Route::get('/tin-tuc/{slug}', function ($slug) {return view('news.show', compact('slug'));})->name('news.detail');
@@ -147,7 +155,9 @@ Route::prefix('admin')->name('admin.')->group(function () {
 
     // Information
     Route::resource('informations', InformationController::class);
-
+  
+    // Certificates Management
+    Route::resource('certificates', \App\Http\Controllers\Admin\CertificateController::class);
     //Site Information
     Route::resource('site_info', SiteInfoController::class);
 
@@ -156,6 +166,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
 
     // Hopital Image
     Route::resource('hopital_image', HopitalImageController::class);
+
 
 });
 
