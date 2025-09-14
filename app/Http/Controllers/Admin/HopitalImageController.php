@@ -47,21 +47,28 @@ class HopitalImageController extends Controller
         }
 
         $validator = Validator::make($request->all(), [
-            'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'images' => 'required|array|min:1|max:5',
+            'images.*' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
+            'title' => 'required|string|max:255',
         ]);
 
         if ($validator->fails()) {
             return redirect()->back()->withErrors($validator)->withInput();
         }
 
-        $imagePath = null;
-        if ($request->hasFile('image')) {
-            $imagePath = $request->file('image')->store('hospital_images', 'public');
+        $images = [];
+        if ($request->hasFile('images')) {
+            foreach ($request->file('images') as $file) {
+                $images[] = $file->store('hospital_images', 'public');
+            }
         }
 
-        HopitalImage::create([
-            'image' => $imagePath,
-        ]);
+        foreach ($images as $imagePath) {
+            HopitalImage::create([
+                'image' => $imagePath,
+                'title' => $request->title,
+            ]);
+        }
 
         return redirect()->route('admin.hospital_images.index')->with('success', 'Image uploaded successfully.');
     }
@@ -93,6 +100,7 @@ class HopitalImageController extends Controller
 
         $validator = Validator::make($request->all(), [
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'title' => 'nullable|string|max:255',
         ]);
 
         if ($validator->fails()) {
@@ -107,6 +115,10 @@ class HopitalImageController extends Controller
 
             $imagePath = $request->file('image')->store('hospital_images', 'public');
             $image->update(['image' => $imagePath]);
+        }
+
+        if ($request->filled('title')) {
+            HopitalImage::query()->update(['title' => $request->title]);
         }
 
         return redirect()->route('admin.hospital_images.index')->with('success', 'Image updated successfully.');

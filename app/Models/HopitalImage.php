@@ -9,6 +9,7 @@ class HopitalImage extends Model
     use HasFactory;
     protected $table = 'hopital_image';
     protected $fillable = [
-        'image'
+        'image',
+        'title'
     ];
 }

@@ -17,6 +17,11 @@
         </div>
 
         <div class="form-group mb-3">
+            <label for="title">Tiêu đề</label>
+            <input type="text" class="form-control" id="title" name="title" value="{{ old('title', $image->title) }}" placeholder="Nhập tiêu đề ảnh">
+        </div>
+
+        <div class="form-group mb-3">
             <label for="image">Chọn ảnh mới (nếu muốn thay)</label>
             <input type="file" class="form-control" id="image" name="image">
         </div>

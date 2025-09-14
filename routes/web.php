@@ -81,7 +81,10 @@ Route::get('/bao-gia', function () {return view('pricing');})->name('pricing');
 Route::get('/tin-tuc', function () {return view('news.index');})->name('news.index');
 Route::get('/tin-tuc/{slug}', function ($slug) {return view('news.show', compact('slug'));})->name('news.detail');
 Route::get('/tin-tuc/danh-muc/{category}', function ($category) {return view('news.category', compact('category'));})->name('news.category');
-Route::get('/lien-he', function () {return view('contact');})->name('contact');
+Route::get('/lien-he', function () {
+    $hospitalImages = \App\Models\HopitalImage::latest()->take(5)->get();
+    return view('contact', compact('hospitalImages'));
+})->name('contact');
 
 Route::post('/dat-lich', [\App\Http\Controllers\Admin\AppointmentController::class, 'storeFrontend'])->name('appointments.store');
 
