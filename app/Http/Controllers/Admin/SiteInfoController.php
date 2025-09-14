@@ -24,6 +24,10 @@ class SiteInfoController extends Controller
      */
     public function create()
     {
+        $count = SiteInfo::count();
+        if ($count > 0) {
+            return redirect()->route('admin.siteInfo.index')->with('error', 'Chỉ được thêm 1 logo và 1 slogan duy nhất.');
+        }
         return view('admin.siteInfo.create');
     }
 
@@ -33,7 +37,7 @@ class SiteInfoController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'logo'   => 'required|string|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'logo' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'slogan' => 'required|string|max:255',
         ]);
 
@@ -41,15 +45,13 @@ class SiteInfoController extends Controller
             return redirect()->back()->withErrors($validator)->withInput();
         }
 
-        $imagePath = null;
-        if ($request->hasFile('logo')) {
-            $imagePath = $request->file('logo')->store('logo', 'public');
-        }
+        $imagePath = $request->file('logo')->store('logo', 'public');
 
         SiteInfo::create([
             'logo' => $imagePath,
             'slogan' => $request->slogan
         ]);
+
         return redirect()->route('admin.siteInfo.index')->with('success', 'Thêm site info thành công');
     }
 

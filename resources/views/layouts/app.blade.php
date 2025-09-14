@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -21,9 +22,12 @@
     <!--Fonts inter-->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap"
+        rel="stylesheet">
     @yield('fonts')
 </head>
+
 <body>
     <div class="body-content">
         <!--head-->
@@ -32,8 +36,11 @@
                 <div class="container">
                     <div class="row">
                         <div class="col-md-7">
-                            <h3 class="head-h3">Bác Sĩ Thẩm Mỹ Tận Tâm - Dr.Đạt Luôn Đồng Hành Cùng Bạn</h3>
+                            <h3 class="head-h3">
+                                {{ $siteInfo->slogan}}
+                            </h3>
                         </div>
+
                         <div class="col-md-3">
                             <div class="head-seach">
                                 <div class="head-input-g">
@@ -54,16 +61,20 @@
                                         <ul class="m-ul-sub" style="width:180px; top:30px; left:-15px;">
                                             <li class="active">
                                                 <a href="#">
-                                                    <img class="icon-flag" src="{{ asset('images/icon/icon_flag_vn.png') }}" />
+                                                    <img class="icon-flag"
+                                                        src="{{ asset('images/icon/icon_flag_vn.png') }}" />
                                                     <span>Tiếng Việt</span>
-                                                    <img class="icon-check" src="{{ asset('images/icon/icon_lang_check.png') }}" />
+                                                    <img class="icon-check"
+                                                        src="{{ asset('images/icon/icon_lang_check.png') }}" />
                                                 </a>
                                             </li>
                                             <li>
                                                 <a href="#">
-                                                    <img class="icon-flag" src="{{ asset('images/icon/icon_flag_en.png') }}" />
+                                                    <img class="icon-flag"
+                                                        src="{{ asset('images/icon/icon_flag_en.png') }}" />
                                                     <span>Tiếng Anh</span>
-                                                    <img class="icon-check" src="{{ asset('images/icon/icon_lang_check.png') }}" />
+                                                    <img class="icon-check"
+                                                        src="{{ asset('images/icon/icon_lang_check.png') }}" />
                                                 </a>
                                             </li>
                                         </ul>
@@ -75,7 +86,7 @@
                 </div>
             </div>
             <!--menu-->
-             @include('layouts.menu')
+            @include('layouts.menu')
             <!--end menu-->
         </div>
         <!--end head-->
@@ -83,14 +94,14 @@
         @yield('content')
 
         <!--footer-->
-         @include('layouts.footer')
+        @include('layouts.footer')
         <!--end footer-->
     </div>
 
     @include('layouts.booking.booking-popup')
 
 
-@include('layouts.booking.booking_Popup_TuVan')
+    @include('layouts.booking.booking_Popup_TuVan')
     <!--ribon fix-->
     <div class="cl-ribon">
         <ul class="ul-ribon">
@@ -127,4 +138,5 @@
 
     @yield('scripts')
 </body>
+
 </html>

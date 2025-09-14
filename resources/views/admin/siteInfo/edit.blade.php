@@ -17,8 +17,8 @@
             <label>Logo hiện tại</label><br>
             <img src="{{ asset('storage/' . $siteInfo->logo) }}" width="100"><br><br>
             <label>Chọn logo mới</label>
-            <input type="file" name="image" class="form-control">
-            @error('image') <small class="text-danger">{{ $message }}</small> @enderror
+            <input type="file" name="logo" class="form-control">
+            @error('logo') <small class="text-danger">{{ $message }}</small> @enderror
         </div>
 
         <button type="submit" class="btn btn-success">Cập nhật</button>
