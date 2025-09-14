@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -86,12 +86,12 @@ class SiteInfoController extends Controller
             return redirect()->back()->withErrors($validator)->withInput();
         }
         $siteInfo = SiteInfo::findOrFail($id);
-        
+
         $imagePath = null;
         if ($request->hasFile('logo')) {
             $imagePath = $request->file('logo')->store('logo', 'public');
         }
-        
+
         SiteInfo::create([
             'logo' => $imagePath,
             'slogan' => $request->slogan
