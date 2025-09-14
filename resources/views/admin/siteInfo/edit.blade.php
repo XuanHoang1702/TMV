@@ -14,11 +14,23 @@
         </div>
 
         <div class="mb-3">
-            <label>Logo hiện tại</label><br>
-            <img src="{{ asset('storage/' . $siteInfo->logo) }}" width="100"><br><br>
-            <label>Chọn logo mới</label>
-            <input type="file" name="logo" class="form-control">
-            @error('logo') <small class="text-danger">{{ $message }}</small> @enderror
+            <label>Header Logo hiện tại</label><br>
+            @if($siteInfo->header_logo)
+                <img src="{{ asset('storage/' . $siteInfo->header_logo) }}" width="100"><br><br>
+            @endif
+            <label>Chọn header logo mới</label>
+            <input type="file" name="header_logo" class="form-control">
+            @error('header_logo') <small class="text-danger">{{ $message }}</small> @enderror
+        </div>
+
+        <div class="mb-3">
+            <label>Footer Logo hiện tại</label><br>
+            @if($siteInfo->footer_logo)
+                <img src="{{ asset('storage/' . $siteInfo->footer_logo) }}" width="100"><br><br>
+            @endif
+            <label>Chọn footer logo mới</label>
+            <input type="file" name="footer_logo" class="form-control">
+            @error('footer_logo') <small class="text-danger">{{ $message }}</small> @enderror
         </div>
 
         <button type="submit" class="btn btn-success">Cập nhật</button>

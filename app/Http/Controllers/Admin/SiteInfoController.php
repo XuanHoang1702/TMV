@@ -37,7 +37,8 @@ class SiteInfoController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'logo' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'header_logo' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'footer_logo' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'slogan' => 'required|string|max:255',
         ]);
 
@@ -45,12 +46,16 @@ class SiteInfoController extends Controller
             return redirect()->back()->withErrors($validator)->withInput();
         }
 
-        $imagePath = $request->file('logo')->store('logo', 'public');
+        $data = ['slogan' => $request->slogan];
 
-        SiteInfo::create([
-            'logo' => $imagePath,
-            'slogan' => $request->slogan
-        ]);
+        if ($request->hasFile('header_logo')) {
+            $data['header_logo'] = $request->file('header_logo')->store('logo', 'public');
+        }
+        if ($request->hasFile('footer_logo')) {
+            $data['footer_logo'] = $request->file('footer_logo')->store('logo', 'public');
+        }
+
+        SiteInfo::create($data);
 
         return redirect()->route('admin.siteInfo.index')->with('success', 'Thêm site info thành công');
     }
@@ -78,7 +83,8 @@ class SiteInfoController extends Controller
     public function update(Request $request, string $id)
     {
         $validator = Validator::make($request->all(), [
-            'logo'   => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'header_logo' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'footer_logo' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'slogan' => 'required|string|max:255',
         ]);
 
@@ -90,9 +96,11 @@ class SiteInfoController extends Controller
 
         $data = ['slogan' => $request->slogan];
 
-        if ($request->hasFile('logo')) {
-            $imagePath = $request->file('logo')->store('logo', 'public');
-            $data['logo'] = $imagePath;
+        if ($request->hasFile('header_logo')) {
+            $data['header_logo'] = $request->file('header_logo')->store('logo', 'public');
+        }
+        if ($request->hasFile('footer_logo')) {
+            $data['footer_logo'] = $request->file('footer_logo')->store('logo', 'public');
         }
 
         $siteInfo->update($data);

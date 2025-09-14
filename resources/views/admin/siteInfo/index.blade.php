@@ -23,7 +23,7 @@
                     </div>
                     <div class="card-body">
                         <div class="row">
-                            <div class="col-md-6">
+                            <div class="col-md-3">
                                 <h6>Logo</h6>
                                 @if($siteInfo->first()->logo)
                                     <img src="{{ asset('storage/' . $siteInfo->first()->logo) }}" class="img-fluid mb-3" style="max-width: 200px;">
@@ -31,7 +31,23 @@
                                     <p class="text-muted">Chưa có logo</p>
                                 @endif
                             </div>
-                            <div class="col-md-6">
+                            <div class="col-md-3">
+                                <h6>Header Logo</h6>
+                                @if($siteInfo->first()->header_logo)
+                                    <img src="{{ asset('storage/' . $siteInfo->first()->header_logo) }}" class="img-fluid mb-3" style="max-width: 200px;">
+                                @else
+                                    <p class="text-muted">Chưa có header logo</p>
+                                @endif
+                            </div>
+                            <div class="col-md-3">
+                                <h6>Footer Logo</h6>
+                                @if($siteInfo->first()->footer_logo)
+                                    <img src="{{ asset('storage/' . $siteInfo->first()->footer_logo) }}" class="img-fluid mb-3" style="max-width: 200px;">
+                                @else
+                                    <p class="text-muted">Chưa có footer logo</p>
+                                @endif
+                            </div>
+                            <div class="col-md-3">
                                 <h6>Slogan</h6>
                                 <p class="lead">{{ $siteInfo->first()->slogan ?: 'Chưa có slogan' }}</p>
                             </div>

@@ -18,10 +18,17 @@
                         @csrf
 
                         <div class="mb-3">
-                            <label for="logo" class="form-label">Logo <span class="text-danger">*</span></label>
-                            <input type="file" name="logo" id="logo" class="form-control" accept="image/*">
-                            <div class="form-text">Chọn file ảnh cho logo (JPEG, PNG, JPG, GIF, SVG, tối đa 2MB)</div>
-                            @error('logo') <small class="text-danger">{{ $message }}</small> @enderror
+                            <label for="header_logo" class="form-label">Header Logo</label>
+                            <input type="file" name="header_logo" id="header_logo" class="form-control" accept="image/*">
+                            <div class="form-text">Chọn file ảnh cho header logo (JPEG, PNG, JPG, GIF, SVG, tối đa 2MB)</div>
+                            @error('header_logo') <small class="text-danger">{{ $message }}</small> @enderror
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="footer_logo" class="form-label">Footer Logo</label>
+                            <input type="file" name="footer_logo" id="footer_logo" class="form-control" accept="image/*">
+                            <div class="form-text">Chọn file ảnh cho footer logo (JPEG, PNG, JPG, GIF, SVG, tối đa 2MB)</div>
+                            @error('footer_logo') <small class="text-danger">{{ $message }}</small> @enderror
                         </div>
 
                         <div class="mb-3">

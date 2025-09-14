@@ -37,8 +37,13 @@
                     <div class="row">
                         <div class="col-md-7">
                             <h3 class="head-h3">
-                                {{ $siteInfo->slogan}}
+                                {{ $siteInfo->slogan }}
                             </h3>
+                        </div>
+                        <div class="col-md-2">
+                            @if($siteInfo && $siteInfo->header_logo)
+                                <img src="{{ asset('storage/' . $siteInfo->header_logo) }}" alt="Header Logo" style="max-height: 50px;">
+                            @endif
                         </div>
 
                         <div class="col-md-3">

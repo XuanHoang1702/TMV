@@ -10,7 +10,8 @@ class SiteInfo extends Model
     protected $table = 'site_info';
     protected $fillable = [
         'id',
-        'logo',
+        'header_logo',
+        'footer_logo',
         'slogan'
     ];
 }
