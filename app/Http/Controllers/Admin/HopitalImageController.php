@@ -1,8 +1,9 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
-use App\Models\HospitalImage;
+use App\Http\Controllers\Controller;
+use App\Models\HopitalImage;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
@@ -15,8 +16,9 @@ class HopitalImageController extends Controller
      */
     public function index()
     {
-        $images = HospitalImage::latest()->take(5)->get();
-        return view('admin.hospital_images.index', compact('images'));
+        $images = HopitalImage::latest()->take(5)->get();
+        $total = HopitalImage::count();
+        return view('admin.hospital_images.index', compact('images', 'total'));
     }
 
     /**
@@ -24,7 +26,13 @@ class HopitalImageController extends Controller
      */
     public function create()
     {
-        return view('admin.hospital_images.create');
+        $total = HopitalImage::count();
+
+        if ($total >= 5) {
+            return redirect()->route('admin.hospital_images.index')->with('warning', 'Số lượng ảnh tối đa là 5. Bạn không thể thêm ảnh mới. Hãy xóa bớt hoặc cập nhật lại ảnh nếu muốn thêm ảnh mới.');
+        }
+
+        return view('admin.hospital_images.create', compact('total'));
     }
 
     /**
@@ -32,6 +40,12 @@ class HopitalImageController extends Controller
      */
     public function store(Request $request)
     {
+        $total = HopitalImage::count();
+
+        if ($total >= 5) {
+            return redirect()->back()->withErrors(['error' => 'Không thể tạo thêm ảnh vì số lượng ảnh tối đa là 5.']);
+        }
+
         $validator = Validator::make($request->all(), [
             'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
@@ -45,11 +59,11 @@ class HopitalImageController extends Controller
             $imagePath = $request->file('image')->store('hospital_images', 'public');
         }
 
-        HospitalImage::create([
-            'image_path' => $imagePath,
+        HopitalImage::create([
+            'image' => $imagePath,
         ]);
 
-        return redirect()->route('hospital_images.index')->with('success', 'Image uploaded successfully.');
+        return redirect()->route('admin.hospital_images.index')->with('success', 'Image uploaded successfully.');
     }
 
     /**
@@ -57,7 +71,7 @@ class HopitalImageController extends Controller
      */
     public function show(string $id)
     {
-        $image = HospitalImage::findOrFail($id);
+        $image = HopitalImage::findOrFail($id);
         return view('admin.hospital_images.show', compact('image'));
     }
 
@@ -66,7 +80,7 @@ class HopitalImageController extends Controller
      */
     public function edit(string $id)
     {
-        $image = HospitalImage::findOrFail($id);
+        $image = HopitalImage::findOrFail($id);
         return view('admin.hospital_images.edit', compact('image'));
     }
 
@@ -75,7 +89,7 @@ class HopitalImageController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        $image = HospitalImage::findOrFail($id);
+        $image = HopitalImage::findOrFail($id);
 
         $validator = Validator::make($request->all(), [
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
@@ -87,15 +101,15 @@ class HopitalImageController extends Controller
 
         if ($request->hasFile('image')) {
             // Xóa ảnh cũ
-            if ($image->image_path && Storage::disk('public')->exists($image->image_path)) {
-                Storage::disk('public')->delete($image->image_path);
+            if ($image->image && Storage::disk('public')->exists($image->image)) {
+                Storage::disk('public')->delete($image->image);
             }
 
             $imagePath = $request->file('image')->store('hospital_images', 'public');
-            $image->update(['image_path' => $imagePath]);
+            $image->update(['image' => $imagePath]);
         }
 
-        return redirect()->route('hospital_images.index')->with('success', 'Image updated successfully.');
+        return redirect()->route('admin.hospital_images.index')->with('success', 'Image updated successfully.');
     }
 
     /**
@@ -103,20 +117,20 @@ class HopitalImageController extends Controller
      */
     public function destroy(string $id)
     {
-        $total = HospitalImage::count();
+        $total = HopitalImage::count();
 
         if ($total <= 5) {
             return redirect()->back()->withErrors(['error' => 'Không thể xóa vì số lượng ảnh tối thiểu là 5.']);
         }
 
-        $image = HospitalImage::findOrFail($id);
+        $image = HopitalImage::findOrFail($id);
 
-        if ($image->image_path && Storage::disk('public')->exists($image->image_path)) {
-            Storage::disk('public')->delete($image->image_path);
+        if ($image->image && Storage::disk('public')->exists($image->image)) {
+            Storage::disk('public')->delete($image->image);
         }
 
         $image->delete();
 
-        return redirect()->route('hospital_images.index')->with('success', 'Image deleted successfully.');
+        return redirect()->route('admin.hospital_images.index')->with('success', 'Image deleted successfully.');
     }
 }

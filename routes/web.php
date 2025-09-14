@@ -155,7 +155,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
 
     // Information
     Route::resource('informations', InformationController::class);
-  
+
     // Certificates Management
     Route::resource('certificates', \App\Http\Controllers\Admin\CertificateController::class);
     //Site Information
@@ -165,7 +165,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::resource('page_contents', PageContentController::class);
 
     // Hopital Image
-    Route::resource('hopital_image', HopitalImageController::class);
+    Route::resource('hospital_images', HopitalImageController::class);
 
 
 });
