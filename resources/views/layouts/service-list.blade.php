@@ -13,16 +13,17 @@
                                 @endif
                                 <label>
                                     @if ($service->allow_line_breaks)
-                                        {!! str_replace(['|', ';'], '<br>', $service->name) !!}
+                                        {!! str_replace('|', '<br>', $service->name) !!}
                                     @else
                                         {{ $service->name }}
                                     @endif
-                                </label>
 
+                                </label>
                             </a>
                         </div>
                     </div>
                 @endforeach
+
             </div>
         </div>
     </div>

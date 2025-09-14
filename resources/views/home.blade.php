@@ -7,49 +7,65 @@
 @endsection
 
 @section('content')
-    @include('layouts.banners', ['banners' => $banners])
+    <!-- Banners -->
+    @if(isset($banners) && $banners->isNotEmpty())
+        @include('layouts.banners', ['banners' => $banners])
+    @else
+        <!-- Fallback nếu không có banners -->
+        <p>Không có banner để hiển thị.</p>
+    @endif
+
     <div class="cl-h-sec01">
         <div class="container">
-            @include('layouts.service-list', ['services' => $services])
+            <!-- Service List -->
+            @php
+                $services = isset($services) ? $services : \App\Models\Service::where('is_active', true)->whereNull('parent_id')->with(['children', 'category'])->orderBy('sort_order')->get();
+            @endphp
+            @if(isset($services) && $services->isNotEmpty())
+                @include('layouts.service-list', ['services' => $services])
+            @else
+                <p>Không có dịch vụ để hiển thị.</p>
+            @endif
 
-            <!--Vững Chuyên Môn, Giàu Tâm Đức-->
+            <!-- Vững Chuyên Môn, Giàu Tâm Đức -->
             @include('home.section1')
         </div>
     </div>
+
+    <!-- Section Banner 2 -->
     @php
-        $sec02Banner = \App\Models\Banner::where('section', 'other')
+        $sec02Banner = \App\Models\Banner::where('section', '2')
+            ->where('page', 'home')
             ->where('is_active', true)
             ->orderBy('order')
             ->first();
     @endphp
-    @include('layouts.section_banner', ['sec02Banner' => $sec02Banner])
+    @if($sec02Banner)
+        @include('layouts.section_banner', ['sec02Banner' => $sec02Banner])
+    @else
+        <p>Không có banner cho section 2.</p>
+    @endif
+
     <div class="cl-bg-g1">
-        <!--Secion 3-->
+        <!-- Section 3 -->
         <div class="cl-sec03">
             <div class="container">
-
                 <div class="cl-sec01-desc">
                     <div class="row">
-
-
-
-                                @include('home.section2')
-
-                        
-
+                        @include('home.section2')
                     </div>
                 </div>
-                <!--chung chi hanh nghe-->
-
-
-                             @include('layouts.certificate')
-
-
-
-
+                <!-- Chung chi hanh nghe -->
+                @if(isset($certificates) && $certificates->isNotEmpty())
+                    @include('layouts.certificate', ['certificates' => $certificates])
+                @else
+                    <p>Không có chứng chỉ để hiển thị.</p>
+                @endif
+                <!-- End chung chi hanh nghe -->
             </div>
         </div>
-        <!--Sec 4 - dat lich kham ngay-->
+
+        <!-- Section 4 - Dat lich kham ngay -->
         <div class="cl-sec04">
             <div class="container">
                 <div class="row">
@@ -83,6 +99,7 @@
                 </div>
             </div>
         </div>
+
         <div class="cl-sec5">
             <div class="container" data-aos="zoom-in" data-aos-duration="2000">
                 <div class="row">
@@ -104,7 +121,7 @@
                                     <div class="col-12 col-sm-3 cl-tab-head-item" onclick="onChangeTab(this,'tab3')">
                                         <a href="javascript:void(0)">Từ thiện</a>
                                     </div>
-                                    <div class=" col-12 col-sm-3 cl-tab-head-item" onclick="onChangeTab(this,'tab4')">
+                                    <div class="col-12 col-sm-3 cl-tab-head-item" onclick="onChangeTab(this,'tab4')">
                                         <a href="javascript:void(0)">Báo chí, Truyền thông</a>
                                     </div>
                                 </div>
@@ -123,8 +140,7 @@
                                                         <p class="cl-date">13.12.2024</p>
                                                         <h2>Cắt mí có ảnh hưởng đến chức năng thị lực?</h2>
                                                         <div class="dv-button">
-                                                            <a class="cl-btn-full-2" href="tin-tuc/tin-tuc-chit-tiet.html"
-                                                                style="width:90%;">
+                                                            <a class="cl-btn-full-2" href="tin-tuc/tin-tuc-chit-tiet.html" style="width:90%;">
                                                                 <span>Xem thêm</span>
                                                                 <i class="fa fa-angle-right"></i>
                                                             </a>
@@ -137,8 +153,7 @@
                                                         <p class="cl-date">13.12.2024</p>
                                                         <h2>Phẫu Thuật Thẩm Mỹ: Làm Đẹp Hay Đánh Mất Chính Mình?</h2>
                                                         <div class="dv-button">
-                                                            <a class="cl-btn-full-2" href="tin-tuc/tin-tuc-chit-tiet.html"
-                                                                style="width:90%;">
+                                                            <a class="cl-btn-full-2" href="tin-tuc/tin-tuc-chit-tiet.html" style="width:90%;">
                                                                 <span>Xem thêm</span>
                                                                 <i class="fa fa-angle-right"></i>
                                                             </a>
@@ -151,23 +166,7 @@
                                                         <p class="cl-date">13.12.2024</p>
                                                         <h2>Phẫu Thuật Thẩm Mỹ: Làm Đẹp Hay Đánh Mất Chính Mình?</h2>
                                                         <div class="dv-button">
-                                                            <a class="cl-btn-full-2" href="tin-tuc/tin-tuc-chit-tiet.html"
-                                                                style="width:90%;">
-                                                                <span>Xem thêm</span>
-                                                                <i class="fa fa-angle-right"></i>
-                                                            </a>
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                                <div class="slide nl-sx-item-slide">
-                                                    <div class="item-news">
-                                                        <img src="images/home/new_3.png" />
-                                                        <p class="cl-date">13.12.2024</p>
-                                                        <h2>Phẫu Thuật Thẩm Mỹ: Làm Đẹp Hay Đánh Mất Chính Mình?</h2>
-                                                        <div class="dv-button">
-                                                            <a class="cl-btn-full-2" href="tin-tuc/tin-tuc-chit-tiet.html"
-                                                                style="width:90%;">
+                                                            <a class="cl-btn-full-2" href="tin-tuc/tin-tuc-chit-tiet.html" style="width:90%;">
                                                                 <span>Xem thêm</span>
                                                                 <i class="fa fa-angle-right"></i>
                                                             </a>
@@ -180,8 +179,20 @@
                                                         <p class="cl-date">13.12.2024</p>
                                                         <h2>Phẫu Thuật Thẩm Mỹ: Làm Đẹp Hay Đánh Mất Chính Mình?</h2>
                                                         <div class="dv-button">
-                                                            <a class="cl-btn-full-2" href="tin-tuc/tin-tuc-chit-tiet.html"
-                                                                style="width:90%;">
+                                                            <a class="cl-btn-full-2" href="tin-tuc/tin-tuc-chit-tiet.html" style="width:90%;">
+                                                                <span>Xem thêm</span>
+                                                                <i class="fa fa-angle-right"></i>
+                                                            </a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="slide nl-sx-item-slide">
+                                                    <div class="item-news">
+                                                        <img src="images/home/new_3.png" />
+                                                        <p class="cl-date">13.12.2024</p>
+                                                        <h2>Phẫu Thuật Thẩm Mỹ: Làm Đẹp Hay Đánh Mất Chính Mình?</h2>
+                                                        <div class="dv-button">
+                                                            <a class="cl-btn-full-2" href="tin-tuc/tin-tuc-chit-tiet.html" style="width:90%;">
                                                                 <span>Xem thêm</span>
                                                                 <i class="fa fa-angle-right"></i>
                                                             </a>
@@ -191,21 +202,11 @@
                                             </section>
                                         </div>
                                     </div>
-                                    <!--<div class="row">
-                                                    <div class="col-12 col-sm-12">
-                                                        <div class="list-button">
-                                                            <span class="active"></span>
-                                                            <span></span>
-                                                            <span></span>
-                                                        </div>
-                                                    </div>
-                                                </div>-->
-
                                     <div class="btn-right">
                                         <a href="javascript:void(0)"><img src="images/icon/icon_right.png" /> </a>
                                     </div>
                                 </div>
-                                <!--Tab 2-->
+                                <!-- Tab 2 -->
                                 <div class="cl-content-news" id="tab2">
                                     <div class="row">
                                         <div class="col-12 col-sm-12">
@@ -213,7 +214,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <!--Tab 3-->
+                                <!-- Tab 3 -->
                                 <div class="cl-content-news" id="tab3">
                                     <div class="row">
                                         <div class="col-12 col-sm-12">
@@ -221,7 +222,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <!--Tab 4-->
+                                <!-- Tab 4 -->
                                 <div class="cl-content-news" id="tab4">
                                     <div class="row">
                                         <div class="col-12 col-sm-12">
@@ -229,7 +230,6 @@
                                         </div>
                                     </div>
                                 </div>
-
                             </div>
                         </div>
                     </div>

@@ -28,7 +28,7 @@ class BannerController extends Controller
             'page' => 'string|max:255',
             'order' => 'nullable|integer',
             'is_active' => 'nullable|boolean',
-            'section' => 'nullable|string|in:home,other',
+            'section' => 'nullable|string|in:1,2',
         ]);
 
         $imagePath = null;
@@ -43,7 +43,7 @@ class BannerController extends Controller
             'page' => $request->page,
             'order' => $request->order ?? 0,
             'is_active' => $request->has('is_active') ? $request->is_active : true,
-            'section' => $request->section ?? 'home',
+            'section' => $request->section ?? '1',
         ]);
 
         return redirect()->route('admin.banners.index')->with('success', 'Banner created successfully.');
@@ -68,7 +68,7 @@ class BannerController extends Controller
             'page' => 'string|max:255',
             'order' => 'nullable|integer',
             'is_active' => 'nullable|boolean',
-            'section' => 'nullable|string|in:home,other',
+            'section' => 'nullable|string|in:1,2',
         ]);
 
         $imagePath = $banner->image_path;
@@ -87,7 +87,7 @@ class BannerController extends Controller
             'page' => $request->page,
             'order' => $request->order ?? 0,
             'is_active' => $request->has('is_active') ? $request->is_active : true,
-            'section' => $request->section ?? 'home',
+            'section' => $request->section ?? '1',
         ]);
 
         return redirect()->route('admin.banners.index')->with('success', 'Banner updated successfully.');

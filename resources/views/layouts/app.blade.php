@@ -87,48 +87,10 @@
         <!--end footer-->
     </div>
 
-    @include('layouts.booking-popup')
+    @include('layouts.booking.booking-popup')
 
-    <div id="booking_Popup_TuVan" class="modal fade cl-bgPop" role="dialog" aria-labelledby="myModalLabel">
-        <div class="modal-dialog modal-lg" style="max-width: 30%; ">
-            <div class="modal-content">
-                <div class="modal-header" style="flex-direction:unset;">
-                    <h5 id="myModalLabel" class="modal-title" style="font-weight:bold">
-                        BẠN CẦN TƯ VẤN?
-                    </h5>
-                    <p>Để lại thông tin cho chúng tôi</p>
-                    <button type="button" class="btn btn-pop" data-bs-dismiss="modal" aria-label="Close" onclick="onClose_Popup2()"><i class="fa fa-times"></i></button>
-                </div>
-                <div class="smart-form">
-                    <div class="row">
-                        <div class="col-12 col-sm-12">
-                            <input type="text" placeholder="Họ & tên" class="ctr-h-input" />
-                        </div>
-                        <div class="col-12 col-sm-12">
-                            <input type="text" placeholder="Email" class="ctr-h-input" />
-                        </div>
-                        <div class="col-12 col-sm-12">
-                            <input type="text" placeholder="Số điện thoại" class="ctr-h-input" />
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-12 col-sm-12">
-                            <textarea type="text" rows="3" placeholder="Nội dung" class="ctr-h-input"></textarea>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-12 col-sm-12">
-                            <a class="cl-btn-full" href="#" onclick="onClose_Popup2()">
-                                <span>Gửi thông tin</span>
-                                <i class="fa fa-angle-right"></i>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
 
+@include('layouts.booking.booking_Popup_TuVan')
     <!--ribon fix-->
     <div class="cl-ribon">
         <ul class="ul-ribon">

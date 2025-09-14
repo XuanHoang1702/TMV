@@ -53,7 +53,7 @@
                 </ul>
                 @endif
 
-                @include('layouts.booking-button')
+                @include('layouts.booking.booking-button')
             </div>
         </div>
     </div>
