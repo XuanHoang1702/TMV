@@ -31,6 +31,16 @@ class BannerController extends Controller
             'section' => 'nullable|string|in:1,2',
         ]);
 
+        $count = Banner::where('page', $request->page)->count();
+
+        if ($request->page === 've-doctor-Dat' && $count >= 1) {
+            return redirect()->back()->withErrors(['page' => "Trang '{$request->page}' chỉ được phép có 1 banner."])->withInput();
+        }
+
+        if ($request->page !== 've-doctor-Dat' && $count >= 2) {
+            return redirect()->back()->withErrors(['page' => "Trang '{$request->page}' chỉ được phép có tối đa 2 banner."])->withInput();
+        }
+
         $imagePath = null;
         if ($request->hasFile('image')) {
             $imagePath = $request->file('image')->store('banners', 'public');

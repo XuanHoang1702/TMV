@@ -1,0 +1,28 @@
+@extends('layouts.admin')
+
+@section('content')
+<div class="container">
+    <h1>Edit Hospital Image</h1>
+
+    @if($errors->any())
+        <div class="alert alert-danger">{{ $errors->first() }}</div>
+    @endif
+
+    <form action="{{ route('hospital_images.update', $image->id) }}" method="POST" enctype="multipart/form-data">
+        @csrf
+        @method('PUT')
+
+        <div class="mb-3">
+            <img src="{{ asset('storage/' . $image->image_path) }}" alt="Hospital Image" width="200" class="mb-3">
+        </div>
+
+        <div class="form-group mb-3">
+            <label for="image">Chọn ảnh mới (nếu muốn thay)</label>
+            <input type="file" class="form-control" id="image" name="image">
+        </div>
+
+        <button type="submit" class="btn btn-primary">Cập nhật</button>
+        <a href="{{ route('hospital_images.index') }}" class="btn btn-secondary">Back</a>
+    </form>
+</div>
+@endsection

@@ -18,6 +18,10 @@ use App\Http\Controllers\Admin\BannerController;
 use App\Models\Banner;
 use App\Models\Category;
 use App\Http\Controllers\Admin\InformationController;
+use App\Http\Controllers\Admin\SiteInfoController;
+use App\Http\Controllers\Admin\PageContentController;
+use App\Http\Controllers\Admin\HopitalImageController;
+
 
 Route::get('/', function () {
     return view('welcome');
@@ -151,9 +155,18 @@ Route::prefix('admin')->name('admin.')->group(function () {
 
     // Information
     Route::resource('informations', InformationController::class);
-
+  
     // Certificates Management
     Route::resource('certificates', \App\Http\Controllers\Admin\CertificateController::class);
+    //Site Information
+    Route::resource('site_info', SiteInfoController::class);
+
+    //Page Content
+    Route::resource('page_contents', PageContentController::class);
+
+    // Hopital Image
+    Route::resource('hopital_image', HopitalImageController::class);
+
 
 });
 
