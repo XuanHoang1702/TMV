@@ -5,10 +5,9 @@
             <div class="col-md-1 col-logo">
                 <div class="menu-logo">
                     <a href="{{ route('home') }}">
-                        @if (!empty($siteInfo?->logo))
-                            <img src="{{ asset('storage/' . $siteInfo->logo) }}" alt="Logo" />
-                        @else
-                            <img src="{{ asset('images/logo_Dr_Dat.png') }}" alt="Logo mặc định" />
+                        @if (!empty($siteInfo?->header_logo))
+                            <img src="{{ asset('storage/' . $siteInfo->header_logo) }}" alt="Logo" />
+
                         @endif
                     </a>
 

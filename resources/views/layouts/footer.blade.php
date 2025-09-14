@@ -2,10 +2,8 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col-12 col-sm-2">
-                @if (!empty($siteInfo?->footer_logo))
+                @if($siteInfo && $siteInfo->footer_logo)
                     <img src="{{ asset('storage/' . $siteInfo->footer_logo) }}" alt="Footer Logo" />
-                @else
-                    <img src="{{ asset('images/footer_logo.png') }}" alt="Footer Logo mặc định" />
                 @endif
             </div>
 

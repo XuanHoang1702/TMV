@@ -40,11 +40,7 @@
                                 {{ $siteInfo->slogan }}
                             </h3>
                         </div>
-                        <div class="col-md-2">
-                            @if($siteInfo && $siteInfo->header_logo)
-                                <img src="{{ asset('storage/' . $siteInfo->header_logo) }}" alt="Header Logo" style="max-height: 50px;">
-                            @endif
-                        </div>
+
 
                         <div class="col-md-3">
                             <div class="head-seach">

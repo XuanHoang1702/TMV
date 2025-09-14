@@ -163,6 +163,9 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::resource('certificates', \App\Http\Controllers\Admin\CertificateController::class);
     //Site Information
     Route::resource('siteInfo', SiteInfoController::class);
+    Route::delete('siteInfo/delete-header-logo/{id}', [SiteInfoController::class, 'deleteHeaderLogo'])->name('siteInfo.deleteHeaderLogo');
+    Route::delete('siteInfo/delete-footer-logo/{id}', [SiteInfoController::class, 'deleteFooterLogo'])->name('siteInfo.deleteFooterLogo');
+    Route::delete('siteInfo/delete-slogan/{id}', [SiteInfoController::class, 'deleteSlogan'])->name('siteInfo.deleteSlogan');
 
     //Page Content
     Route::resource('page_contents', PageContentController::class);
