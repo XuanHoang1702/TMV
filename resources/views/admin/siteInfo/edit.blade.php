@@ -1,9 +1,9 @@
-@extends('layouts.app')
+@extends('layouts.admin')
 
 @section('content')
 <div class="container">
     <h1>Chỉnh sửa Site Info</h1>
-    <form action="{{ route('site_info.update', $siteInfo->id) }}" method="POST" enctype="multipart/form-data">
+    <form action="{{ route('admin.siteInfo.update', $siteInfo->id) }}" method="POST" enctype="multipart/form-data">
         @csrf
         @method('PUT')
 
@@ -22,7 +22,7 @@
         </div>
 
         <button type="submit" class="btn btn-success">Cập nhật</button>
-        <a href="{{ route('site_info.index') }}" class="btn btn-secondary">Quay lại</a>
+        <a href="{{ route('admin.siteInfo.index') }}" class="btn btn-secondary">Quay lại</a>
     </form>
 </div>
 @endsection

@@ -162,7 +162,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
     // Certificates Management
     Route::resource('certificates', \App\Http\Controllers\Admin\CertificateController::class);
     //Site Information
-    Route::resource('site_info', SiteInfoController::class);
+    Route::resource('siteInfo', SiteInfoController::class);
 
     //Page Content
     Route::resource('page_contents', PageContentController::class);

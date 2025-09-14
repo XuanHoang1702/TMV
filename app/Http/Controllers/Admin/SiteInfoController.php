@@ -16,7 +16,7 @@ class SiteInfoController extends Controller
     public function index()
     {
         $siteInfo = SiteInfo::all();
-        return view('admin.site_info.index', compact('siteInfo'));
+        return view('admin.siteInfo.index', compact('siteInfo'));
     }
 
     /**
@@ -24,8 +24,7 @@ class SiteInfoController extends Controller
      */
     public function create()
     {
-        $siteInfo = SiteInfo::getAll();
-        return view('admin.site_info.create', compact('siteInfo'));
+        return view('admin.siteInfo.create');
     }
 
     /**
@@ -51,7 +50,7 @@ class SiteInfoController extends Controller
             'logo' => $imagePath,
             'slogan' => $request->slogan
         ]);
-        return redirect()->route('site_info.index')->with('success', 'Thêm site info thành công');
+        return redirect()->route('admin.siteInfo.index')->with('success', 'Thêm site info thành công');
     }
 
     /**
@@ -68,7 +67,7 @@ class SiteInfoController extends Controller
     public function edit(string $id)
     {
         $siteInfo = SiteInfo::findOrFail($id);
-        return view('admin.site_info.edit',compact('site_info'));
+        return view('admin.siteInfo.edit',compact('siteInfo'));
     }
 
     /**
@@ -76,29 +75,27 @@ class SiteInfoController extends Controller
      */
     public function update(Request $request, string $id)
     {
-
         $validator = Validator::make($request->all(), [
-            'logo'   => 'required|string',
+            'logo'   => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'slogan' => 'required|string|max:255',
         ]);
 
         if ($validator->fails()) {
             return redirect()->back()->withErrors($validator)->withInput();
         }
+
         $siteInfo = SiteInfo::findOrFail($id);
 
-        $imagePath = null;
+        $data = ['slogan' => $request->slogan];
+
         if ($request->hasFile('logo')) {
             $imagePath = $request->file('logo')->store('logo', 'public');
+            $data['logo'] = $imagePath;
         }
 
-        SiteInfo::create([
-            'logo' => $imagePath,
-            'slogan' => $request->slogan
-        ]);;
+        $siteInfo->update($data);
 
-        return redirect()->route('site_info.index')->with('success', 'Cập nhật site info thành công');
-
+        return redirect()->route('admin.siteInfo.index')->with('success', 'Cập nhật site info thành công');
     }
 
     /**
@@ -108,6 +105,6 @@ class SiteInfoController extends Controller
     {
         $siteInfo = SiteInfo::findOrFail($id);
         $siteInfo->delete();
-        return redirect()->route('site_info.index')->with('success', 'Xóa SiteInfo thành công!');
+        return redirect()->route('admin.siteInfo.index')->with('success', 'Xóa SiteInfo thành công!');
     }
 }
