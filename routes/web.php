@@ -23,7 +23,7 @@ use App\Http\Controllers\Admin\PageContentController;
 use App\Http\Controllers\Admin\HopitalImageController;
 use App\Http\Controllers\FrontendServiceController;
 use App\Http\Controllers\AdvertisementController;
-
+use App\Http\Controllers\ProcessController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -177,6 +177,9 @@ Route::prefix('admin')->name('admin.')->group(function () {
 
     // Advertisement
     Route::resource('advertisement', AdvertisementController::class);
+
+    //Process
+    Route::resource('process', ProcessController::class);
 
 
 });
