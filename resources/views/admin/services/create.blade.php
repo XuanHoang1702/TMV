@@ -169,10 +169,19 @@
                                 <div class="form-text">Định dạng: JPG, PNG. Kích thước tối đa: 2MB</div>
                             </div>
 
-                            <div class="mb-3">
-                                <label for="icon" class="form-label">Icon</label>
-                                <input type="file" class="form-control @error('icon') is-invalid @enderror" id="icon" name="icon" accept="image/png">
-                                @error('icon')
+                            <div class="mb-3" id="icon_home_container" style="display: {{ old('parent_id') ? 'none' : 'block' }};">
+                                <label for="icon_page_home" class="form-label">Icon trang chủ</label>
+                                <input type="file" class="form-control @error('icon_page_home') is-invalid @enderror" id="icon_page_home" name="icon_page_home" accept="image/png">
+                                @error('icon_page_home')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                                <div class="form-text">Định dạng: PNG. Kích thước tối đa: 1MB</div>
+                            </div>
+
+                            <div class="mb-3" id="icon_service_container" style="display: {{ old('parent_id') ? 'block' : 'none' }};">
+                                <label for="icon_page_service" class="form-label">Icon trang dịch vụ</label>
+                                <input type="file" class="form-control @error('icon_page_service') is-invalid @enderror" id="icon_page_service" name="icon_page_service" accept="image/png">
+                                @error('icon_page_service')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
                                 <div class="form-text">Định dạng: PNG. Kích thước tối đa: 1MB</div>
@@ -209,6 +218,22 @@ document.getElementById('name').addEventListener('input', function() {
     const name = this.value;
     const slug = removeVietnameseTones(name);
     document.getElementById('slug').value = slug;
+});
+
+// Toggle icon inputs based on parent_id
+document.getElementById('parent_id').addEventListener('change', function() {
+    const parentId = this.value;
+    const iconHomeContainer = document.getElementById('icon_home_container');
+    const iconServiceContainer = document.getElementById('icon_service_container');
+    if (parentId) {
+        // Child service
+        iconHomeContainer.style.display = 'none';
+        iconServiceContainer.style.display = 'block';
+    } else {
+        // Parent service
+        iconHomeContainer.style.display = 'block';
+        iconServiceContainer.style.display = 'none';
+    }
 });
 </script>
 @endsection

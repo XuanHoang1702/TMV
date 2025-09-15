@@ -6,8 +6,8 @@
                     <div class="col-12 col-sm-3">
                         <div class="col-item">
                             <a href="{{ route('services.detail', $service->slug) }}" class="a-cate-item">
-                                @if ($service->icon)
-                                    <img src="{{ asset('storage/' . $service->icon) }}" alt="{{ $service->name }}">
+                                @if ($service->icon_page_home)
+                                    <img src="{{ asset('storage/' . $service->icon_page_home) }}" alt="{{ $service->name }}">
                                 @else
                                     <img src="{{ asset('images/home/default_icon.png') }}" alt="{{ $service->name }}">
                                 @endif

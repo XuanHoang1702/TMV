@@ -212,25 +212,45 @@
                                     <div class="form-text">Định dạng: JPG, PNG. Kích thước tối đa: 2MB</div>
                                 </div>
 
-                                @if ($service->icon)
+                                @if ($service->icon_page_home)
                                     <div class="mb-3">
-                                        <label class="form-label">Icon hiện tại:</label>
+                                        <label class="form-label">Icon trang chủ hiện tại:</label>
                                         <div>
-                                            <img src="{{ asset('storage/' . $service->icon) }}" class="img-fluid mb-2"
-                                                style="max-height: 50px;" alt="Current icon">
+                                            <img src="{{ asset('storage/' . $service->icon_page_home) }}" class="img-fluid mb-2"
+                                                style="max-height: 50px;" alt="Current home icon">
                                         </div>
                                     </div>
                                 @endif
 
+                        <div class="mb-3" id="icon_home_container" style="display: {{ $service->parent_id ? 'none' : 'block' }};">
+                            <label for="icon_page_home" class="form-label">Icon trang chủ mới</label>
+                            <input type="file" class="form-control @error('icon_page_home') is-invalid @enderror"
+                                id="icon_page_home" name="icon_page_home" accept="image/png">
+                            @error('icon_page_home')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                            <div class="form-text">Định dạng: PNG. Kích thước tối đa: 1MB</div>
+                        </div>
+
+                        <div class="mb-3" id="icon_service_container" style="display: {{ $service->parent_id ? 'block' : 'none' }};">
+                            @if ($service->icon_page_service)
                                 <div class="mb-3">
-                                    <label for="icon" class="form-label">Icon mới</label>
-                                    <input type="file" class="form-control @error('icon') is-invalid @enderror"
-                                        id="icon" name="icon" accept="image/png">
-                                    @error('icon')
-                                        <div class="invalid-feedback">{{ $message }}</div>
-                                    @enderror
-                                    <div class="form-text">Định dạng: PNG. Kích thước tối đa: 1MB</div>
+                                    <label class="form-label">Icon trang dịch vụ hiện tại:</label>
+                                    <div>
+                                        <img src="{{ asset('storage/' . $service->icon_page_service) }}" class="img-fluid mb-2"
+                                            style="max-height: 50px;" alt="Current service icon">
+                                    </div>
                                 </div>
+                            @endif
+
+                            <label for="icon_page_service" class="form-label">Icon trang dịch vụ mới</label>
+                            <input type="file" class="form-control @error('icon_page_service') is-invalid @enderror"
+                                id="icon_page_service" name="icon_page_service" accept="image/png">
+                            @error('icon_page_service')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                            <div class="form-text">Định dạng: PNG. Kích thước tối đa: 1MB</div>
+                        </div>
                             </div>
                         </div>
                     </div>
@@ -281,9 +301,18 @@
                     <div class="text-center">
                         <h5 id="previewName" class="mb-3"></h5>
                         <p><strong>Dịch vụ cha:</strong> <span id="previewParent"></span></p>
-                        <img id="previewIcon"
-                            src="{{ $service->icon ? asset('storage/' . $service->icon) : asset('images/home/default_icon.png') }}"
-                            class="img-fluid mb-3" style="max-height: 50px;" alt="Service Icon">
+                        <div class="mb-3">
+                            <strong>Icon trang chủ:</strong><br>
+                            <img id="previewIconHome"
+                                src="{{ $service->icon_page_home ? asset('storage/' . $service->icon_page_home) : asset('images/home/default_icon.png') }}"
+                                class="img-fluid mb-2" style="max-height: 50px;" alt="Home Icon">
+                        </div>
+                        <div class="mb-3">
+                            <strong>Icon trang dịch vụ:</strong><br>
+                            <img id="previewIconService"
+                                src="{{ $service->icon_page_service ? asset('storage/' . $service->icon_page_service) : asset('images/home/default_icon.png') }}"
+                                class="img-fluid mb-2" style="max-height: 50px;" alt="Service Icon">
+                        </div>
                         <img id="previewImage" src="{{ $service->image ? asset('storage/' . $service->image) : '' }}"
                             class="img-fluid mb-3" style="max-height: 150px;" alt="Service Image">
                         <p><strong>Danh mục:</strong> <span id="previewCategory"></span></p>
@@ -434,24 +463,46 @@
             const priceRange = document.getElementById('price_range').value;
             const duration = document.getElementById('duration').value;
             const isActive = document.getElementById('is_active').checked;
-            const iconInput = document.getElementById('icon');
+            const iconHomeInput = document.getElementById('icon_page_home');
+            const iconServiceInput = document.getElementById('icon_page_service');
             const imageInput = document.getElementById('image');
 
-            // Xử lý xuống dòng trong tên cho xem trước
-            let displayName = name;
-            if (allowLineBreaks) {
-                displayName = name.replace(/[|;]/g, '<br>');
-            }
-            document.getElementById('previewName').innerHTML = displayName;
+        // Xử lý xuống dòng trong tên cho xem trước
+        let displayName = name;
+        if (allowLineBreaks) {
+            displayName = name.replace(/[|;]/g, '<br>');
+        }
+        document.getElementById('previewName').innerHTML = displayName;
 
-            document.getElementById('previewParent').textContent = parent;
+        document.getElementById('previewParent').textContent = parent;
 
-            // Xử lý xem trước icon
-            if (iconInput.files && iconInput.files[0]) {
-                document.getElementById('previewIcon').src = URL.createObjectURL(iconInput.files[0]);
+        // Toggle icon inputs based on parent_id
+        const iconHomeContainer = document.getElementById('icon_home_container');
+        const iconServiceContainer = document.getElementById('icon_service_container');
+        if (parent) {
+            // Child service
+            iconHomeContainer.style.display = 'none';
+            iconServiceContainer.style.display = 'block';
+        } else {
+            // Parent service
+            iconHomeContainer.style.display = 'block';
+            iconServiceContainer.style.display = 'none';
+        }
+
+            // Xử lý xem trước icon trang chủ
+            if (iconHomeInput.files && iconHomeInput.files[0]) {
+                document.getElementById('previewIconHome').src = URL.createObjectURL(iconHomeInput.files[0]);
             } else {
-                document.getElementById('previewIcon').src =
-                    '{{ $service->icon ? asset('storage/' . $service->icon) : asset('images/home/default_icon.png') }}';
+                document.getElementById('previewIconHome').src =
+                    '{{ $service->icon_page_home ? asset('storage/' . $service->icon_page_home) : asset('images/home/default_icon.png') }}';
+            }
+
+            // Xử lý xem trước icon trang dịch vụ
+            if (iconServiceInput.files && iconServiceInput.files[0]) {
+                document.getElementById('previewIconService').src = URL.createObjectURL(iconServiceInput.files[0]);
+            } else {
+                document.getElementById('previewIconService').src =
+                    '{{ $service->icon_page_service ? asset('storage/' . $service->icon_page_service) : asset('images/home/default_icon.png') }}';
             }
 
             // Xử lý xem trước ảnh

@@ -24,6 +24,7 @@
                                     <th>ID</th>
                                     <th>Tên dịch vụ</th>
                                     <th>Danh mục</th>
+                                    <th>Icon</th>
                                     <th>Trạng thái</th>
                                     <th>Thao tác</th>
                                 </tr>
