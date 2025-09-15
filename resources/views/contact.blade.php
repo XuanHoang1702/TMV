@@ -2,6 +2,17 @@
 
 @section('title', 'Liên hệ - Thẩm mỹ Dr.DAT')
 
+@section('meta')
+    <meta name="description" content="Liên hệ với Thẩm mỹ Dr.DAT để được tư vấn và hỗ trợ tốt nhất. Địa chỉ, số điện thoại và email liên hệ.">
+    <meta name="keywords" content="liên hệ, thẩm mỹ, Dr.DAT, tư vấn, hỗ trợ, địa chỉ, hotline, email">
+    <meta property="og:title" content="Liên hệ - Thẩm mỹ Dr.DAT" />
+    <meta property="og:description" content="Liên hệ với Thẩm mỹ Dr.DAT để được tư vấn và hỗ trợ tốt nhất." />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="{{ url()->current() }}" />
+    <meta property="og:image" content="{{ asset('images/logo_Dr_Dat.png') }}" />
+    <meta name="twitter:card" content="summary_large_image" />
+@endsection
+
 @section('styles')
     <link rel="stylesheet" href="{{ asset('css/lienhe.css') }}">
 @endsection
@@ -30,33 +41,60 @@
                 <div class="cl-panel-body">
                     <div class="row">
                         <div class="col-12 col-sm-6" data-aos="fade-right" data-aos-duration="3000">
-                            <img src="{{ asset('images/lienhe/lien_he_map.png') }}" />
+                            <img
+                                src="{{ $information && $information->images_address ? asset('storage/' . $information->images_address) : asset('images/lienhe/lien_he_map.png') }}" />
                         </div>
                         <div class="col-12 col-sm-6 cl-ct-info" data-aos="fade-left" data-aos-duration="3000">
                             <div class="cl-info">
-                                <h4>BỆNH VIỆN LÊ VĂN THỊNH</h4>
+                                @if ($information)
+                                    <h4>{{ $information->name }}</h4>
 
-                                <p><i class="fa fa-phone"></i> Hotline: <b>0705 242 999</b></p>
-                                <p><i class="fa fa-map-marker"></i> Địa chỉ: <b>130 Lê Văn Thịnh, P. Bình Trưng Tây, TP. Thủ
-                                        Đức</b></p>
-                                <p><i class="fa fa-clock-o"></i> Thời gian làm việc:</p>
-                                <ul class="ul-info">
-                                    <li>
-                                        <span>Thứ Hai - Thứ Sáu:</span>
-                                        <b> 8:00 AM - 6:00 PM</b>
-                                    </li>
-                                    <li>
-                                        <span> Thứ Bảy:</span>
-                                        <b> 8:00 AM - 12:00 PM</b>
-                                    </li>
-                                    <li>
-                                        <span>Chủ Nhật:</span>
-                                        <b> Nghỉ</b>
-                                    </li>
-                                </ul>
+                                    @if ($information->hotline)
+                                        <p><i class="fa fa-phone"></i> Hotline: <b>{{ $information->hotline }}</b></p>
+                                    @endif
 
-                                <p><i class="fa fa-envelope-o"></i> Email:</p>
-                                <p><i class="fa fa-globe"></i> Website:</p>
+                                    @if ($information->address)
+                                        <p><i class="fa fa-map-marker"></i> Địa chỉ: <b>{{ $information->address }}</b></p>
+                                    @endif
+
+                                    @if ($information->working_time)
+                                        @php $workingTime = json_decode($information->working_time, true); @endphp
+                                        <p><i class="fa fa-clock-o"></i> Thời gian làm việc:</p>
+                                        <ul class="ul-info">
+                                            @if (isset($workingTime['monday_friday']))
+                                                <li>
+                                                    <span>Thứ Hai - Thứ Sáu:</span>
+                                                    <b>{{ $workingTime['monday_friday']['start'] ?? '' }} -
+                                                        {{ $workingTime['monday_friday']['end'] ?? '' }}</b>
+                                                </li>
+                                            @endif
+                                            @if (isset($workingTime['saturday']))
+                                                <li>
+                                                    <span>Thứ Bảy:</span>
+                                                    <b>{{ $workingTime['saturday']['start'] ?? '' }} -
+                                                        {{ $workingTime['saturday']['end'] ?? '' }}</b>
+                                                </li>
+                                            @endif
+                                            <li>
+                                                <span>Chủ Nhật:</span>
+                                                <b>
+                                                    {{ isset($workingTime['sunday_closed']) && $workingTime['sunday_closed'] == '1'
+                                                        ? 'Nghỉ'
+                                                        : ($workingTime['sunday']['start'] ?? '') . ' - ' . ($workingTime['sunday']['end'] ?? '') }}
+                                                </b>
+                                            </li>
+                                        </ul>
+                                    @endif
+
+
+                                    @if ($information->email)
+                                        <p><i class="fa fa-envelope-o"></i> Email: {{ $information->email }}</p>
+                                    @endif
+
+                                    @if ($information->website)
+                                        <p><i class="fa fa-globe"></i> Website: {{ $information->website }}</p>
+                                    @endif
+                                @endif
                             </div>
                         </div>
                     </div>
@@ -93,37 +131,5 @@
     </div>
 
     <!--Sec 4 - dat lich kham ngay-->
-    <div class="cl-sec04">
-        <div class="container">
-            <div class="row">
-                <div class="col-12 col-sm-6">
-                    <div class="h-sec4-info">
-                        <h4>ĐẶT LỊCH KHÁM NGAY!</h4>
-                        <p>Để được tư vấn trực tiếp bởi Dr. Đạt, hãy để lại thông tin của bạn ngay tại đây nhé!</p>
-                    </div>
-                </div>
-                <div class="col-12 col-sm-6 h-sec4-form">
-                    <div class="row">
-                        <div class="col-12 col-sm-4">
-                            <input type="text" placeholder="Họ & tên" class="ctr-h-input" />
-                        </div>
-                        <div class="col-12 col-sm-4">
-                            <input type="text" placeholder="Email" class="ctr-h-input" />
-                        </div>
-                        <div class="col-12 col-sm-4">
-                            <input type="text" placeholder="Số điện thoại" class="ctr-h-input" />
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-12 col-sm-12">
-                            <a class="cl-btn-full" href="#">
-                                <span>Gọi lại cho tôi</span>
-                                <i class="fa fa-angle-right"></i>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+     @include('layouts.booking.booking_Popup_DatLichKham')
 @endsection

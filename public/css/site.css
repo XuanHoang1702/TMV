@@ -398,27 +398,24 @@ div.body-scrolling .menu-logo {
 
 .cl-btn-full {
     background: linear-gradient(180deg, #BC8B49 0%, #966F3A 100%);
-    gap: 2px;
     border-radius: 40px;
-    padding: 11px 0;
+    padding: 12px 0;            /* không padding ngang để full width */
     color: #fff;
     margin: 8px 0;
+    display: block;             /* để nó full width */
     text-align: center;
-    align-items: center;
-    display: flex;
-    justify-content: center;
-    /*background: linear-gradient(180deg, #BC8B49 0%, #966F3A 100%);
-    gap: 2px;
-    border-radius: 40px;
-    padding-top: 11px;
-    padding-right: 32px;
-    padding-bottom: 11px;
-    padding-left: 32px;
-    color: #fff;
-    margin: 8px 0;
-    display: block;
-    text-align: center;*/
+    text-decoration: none;
+    font-size: 16px;
+    font-weight: 500;
+    width: 100%;                /* dài bằng input */
+    transition: all 0.3s ease;
 }
+
+
+.cl-btn-full:hover {
+    opacity: 0.9;             /* hiệu ứng hover nhẹ */
+}
+
 
     .cl-btn-full i, .cl-btn-full-2 {
         margin: 0 5px
@@ -449,6 +446,9 @@ div.body-scrolling .menu-logo {
         border: 1px solid #A97D42;
         background: #FFFFFF;*/
 }
+
+
+
 
 .ctr-h-input, .ctr-h-input-left {
     display: block;

@@ -62,6 +62,14 @@ Route::get('/', function () {
     return view('home', compact('banners', 'categories', 'services', 'certificates'));
 })->name('home');
 
+// Sitemap route
+use App\Http\Controllers\SitemapController;
+Route::get('/sitemap.xml', [SitemapController::class, 'index'])->name('sitemap.index');
+
+// RSS Feed route
+use App\Http\Controllers\RssController;
+Route::get('/feed.xml', [RssController::class, 'index'])->name('rss.feed');
+
 // Trang /dich-vu
 Route::get('/dich-vu', function () {
     return view('services.index');
@@ -83,7 +91,8 @@ Route::get('/tin-tuc/{slug}', function ($slug) {return view('news.show', compact
 Route::get('/tin-tuc/danh-muc/{category}', function ($category) {return view('news.category', compact('category'));})->name('news.category');
 Route::get('/lien-he', function () {
     $hospitalImages = \App\Models\HopitalImage::latest()->take(5)->get();
-    return view('contact', compact('hospitalImages'));
+    $information = \App\Models\Information::first();
+    return view('contact', compact('hospitalImages', 'information'));
 })->name('contact');
 
 Route::post('/dat-lich', [\App\Http\Controllers\Admin\AppointmentController::class, 'storeFrontend'])->name('appointments.store');

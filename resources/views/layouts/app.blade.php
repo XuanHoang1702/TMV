@@ -4,8 +4,22 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="{{ $meta_description ?? 'Thẩm mỹ Dr.DAT - Dịch vụ thẩm mỹ chuyên nghiệp với đội ngũ bác sĩ giàu kinh nghiệm.' }}">
+    <meta name="keywords" content="{{ $meta_keywords ?? 'thẩm mỹ, dr dat, phẫu thuật thẩm mỹ, làm đẹp, spa, clinic' }}">
+    <meta name="author" content="Thẩm mỹ Dr.DAT">
+    <!-- Open Graph -->
+    <meta property="og:title" content="{{ $og_title ?? $title ?? 'Thẩm mỹ Dr.DAT' }}">
+    <meta property="og:description" content="{{ $og_description ?? $meta_description ?? 'Thẩm mỹ Dr.DAT - Dịch vụ thẩm mỹ chuyên nghiệp.' }}">
+    <meta property="og:image" content="{{ $og_image ?? asset('images/logo_Dr_Dat.png') }}">
+    <meta property="og:url" content="{{ url()->current() }}">
+    <meta property="og:type" content="website">
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="{{ $og_title ?? $title ?? 'Thẩm mỹ Dr.DAT' }}">
+    <meta name="twitter:description" content="{{ $og_description ?? $meta_description ?? 'Thẩm mỹ Dr.DAT - Dịch vụ thẩm mỹ chuyên nghiệp.' }}">
+    <meta name="twitter:image" content="{{ $og_image ?? asset('images/logo_Dr_Dat.png') }}">
     <!--Lib-->
-    <title>@yield('title', 'Thẩm mỹ Dr.DAT')</title>
+    <title>{{ $title ?? 'Thẩm mỹ Dr.DAT' }}</title>
     <link rel="stylesheet" href="{{ asset('css/lib/bootstrap.min.css') }}">
     <link rel="stylesheet" href="{{ asset('css/font-awesome.min.css') }}">
     <link rel="stylesheet" href="{{ asset('css/lib/aos.css') }}" />
@@ -18,13 +32,10 @@
     <script src="{{ asset('js/lib/aos.js') }}"></script>
     <script src="{{ asset('js/_jquery.js') }}"></script>
     <script src="{{ asset('js/lib/slide-slick.js') }}"></script>
-    <!--End lib-->
     <!--Fonts inter-->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap"
-        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
     @yield('fonts')
 </head>
 

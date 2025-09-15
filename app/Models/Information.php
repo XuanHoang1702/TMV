@@ -12,6 +12,9 @@ class Information extends Model
         'name',
         'address',
         'working_time',
-        'email'
+        'email',
+        'images_address',
+        'hotline',
+        'website'
     ];
 }

@@ -56,8 +56,7 @@ class ViewServiceProvider extends ServiceProvider
         // SITE INFO
         $siteInfo = SiteInfo::first();
 
-        // CERTIFICATES
-
+       
 
         // SHARE TO SPECIFIC VIEWS (include home & services pages, excluding certificates from unnecessary views)
         View::composer(

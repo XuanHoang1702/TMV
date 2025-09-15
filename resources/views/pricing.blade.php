@@ -2,6 +2,17 @@
 
 @section('title', 'Bảng giá - Thẩm mỹ Dr.DAT')
 
+@section('meta')
+    <meta name="description" content="Bảng giá dịch vụ tạo hình thẩm mỹ tại Dr. Đạt với mức giá hợp lý, an toàn và hiệu quả. Tham khảo chi tiết các dịch vụ thẩm mỹ của chúng tôi.">
+    <meta name="keywords" content="bảng giá, dịch vụ thẩm mỹ, tạo hình thẩm mỹ, Dr. Đạt, giá dịch vụ, thẩm mỹ an toàn">
+    <meta property="og:title" content="Bảng giá - Thẩm mỹ Dr.DAT" />
+    <meta property="og:description" content="Bảng giá dịch vụ tạo hình thẩm mỹ tại Dr. Đạt với mức giá hợp lý, an toàn và hiệu quả." />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="{{ url()->current() }}" />
+    <meta property="og:image" content="{{ asset('images/logo_Dr_Dat.png') }}" />
+    <meta name="twitter:card" content="summary_large_image" />
+@endsection
+
 @section('styles')
     <link rel="stylesheet" href="css/lib/bootstrap.min.css">
     <link rel="stylesheet" href="css/font-awesome.min.css">
@@ -150,6 +161,6 @@
         </div>
 
         <!--footer-->
-       
+
     </div>
 @endsection

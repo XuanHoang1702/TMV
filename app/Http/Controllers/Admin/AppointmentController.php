@@ -134,41 +134,63 @@ class AppointmentController extends Controller
     }
 
     public function storeFrontend(Request $request)
-    {
-        if ($request->has('service_id')) {
-            // Booking appointment
-            $validated = $request->validate([
-                'customer_name'  => 'required|string|min:3|max:255',
-                'customer_phone' => 'required|digits:10',
-                'customer_email' => 'required|email|max:255',
-                'service_id'     => 'required|exists:services,id',
-                'appointment_time' => 'required',
-                'appointment_date' => 'required|date',
-                'notes'          => 'nullable|string|max:1000',
-            ]);
+{
+    if ($request->has('service_id')) {
+        // Booking dịch vụ
+        $validated = $request->validate([
+            'customer_name'     => 'required|string|min:3|max:255',
+            'customer_phone'    => 'required|digits:10',
+            'customer_email'    => 'required|email|max:255',
+            'service_id'        => 'required|exists:services,id',
+            'appointment_time'  => 'required',
+            'appointment_date'  => 'required|date',
+            'notes'             => 'nullable|string|max:1000',
+        ]);
 
-            $service = Service::find($validated['service_id']);
-            $validated['estimated_price'] = $service ? $service->price_range : 0;
-        } else {
-            // Tư vấn
-            $validated = $request->validate([
-                'customer_name'  => 'required|string|min:3|max:255',
-                'customer_email' => 'required|email|max:255',
-                'customer_phone' => 'required|digits:10',
-                'notes'          => 'required|string|max:1000',
-            ]);
+        $service = Service::find($validated['service_id']);
+        $validated['estimated_price'] = $service ? $service->price_range : 0;
 
-            $validated['service_id'] = null;
-            $validated['appointment_time'] = now()->format('H:i');
-            $validated['appointment_date'] = now()->format('Y-m-d');
-            $validated['estimated_price'] = 0;
-        }
+    } elseif ($request->has('datlichkham')) {
+        // Đặt lịch khám nhanh (chỉ cần họ tên, email, SĐT)
+        $validated = $request->validate([
+            'customer_name'  => 'required|string|min:3|max:255',
+            'customer_email' => 'required|email|max:255',
+            'customer_phone' => 'required|digits:10',
+        ]);
 
-        $validated['status'] = 'pending';
+        $validated['service_id']       = null;
+        $validated['appointment_time'] = now()->format('H:i');
+        $validated['appointment_date'] = now()->format('Y-m-d');
+        $validated['estimated_price']  = 0;
 
-        Appointment::create($validated);
+    } else {
+        // Tư vấn
+        $validated = $request->validate([
+            'customer_name'  => 'required|string|min:3|max:255',
+            'customer_email' => 'required|email|max:255',
+            'customer_phone' => 'required|digits:10',
+            'notes'          => 'required|string|max:1000',
+        ]);
 
-        $message = $request->has('service_id') ? 'Đặt lịch hẹn thành công, Chúng tôi sẽ liên hệ với bạn sớm nhất!' : 'Gửi thông tin tư vấn thành công, Chúng tôi sẽ liên hệ với bạn sớm nhất!';
-        return redirect()->back()->with('success', $message);
+        $validated['service_id']       = null;
+        $validated['appointment_time'] = now()->format('H:i');
+        $validated['appointment_date'] = now()->format('Y-m-d');
+        $validated['estimated_price']  = 0;
     }
+
+    $validated['status'] = 'pending';
+
+    Appointment::create($validated);
+
+    if ($request->has('service_id')) {
+        $message = 'Đặt lịch hẹn thành công, Chúng tôi sẽ liên hệ với bạn sớm nhất!';
+    } elseif ($request->has('datlichkham')) {
+        $message = 'Đặt lịch khám thành công, Chúng tôi sẽ liên hệ với bạn sớm nhất!';
+    } else {
+        $message = 'Gửi thông tin tư vấn thành công, Chúng tôi sẽ liên hệ với bạn sớm nhất!';
+    }
+
+    return redirect()->back()->with('success', $message);
+}
+
 }

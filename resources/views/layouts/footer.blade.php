@@ -2,7 +2,7 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col-12 col-sm-2">
-                @if($siteInfo && $siteInfo->footer_logo)
+                @if ($siteInfo && $siteInfo->footer_logo)
                     <img src="{{ asset('storage/' . $siteInfo->footer_logo) }}" alt="Footer Logo" />
                 @endif
             </div>
@@ -30,9 +30,9 @@
                 @endforeach
             </div>
         </div>
-        <div class="row">
-            <div class="col-12">
-                <p class="cl-copyright">Copyright © 2024 Aeste - All Rights Reserved.</p>
+        <div class="row mt-3">
+            <div class="col-12 text-center">
+                <small>&copy; {{ date('Y') }} Thẩm mỹ Dr.DAT. All rights reserved.</small>
             </div>
         </div>
     </div>
