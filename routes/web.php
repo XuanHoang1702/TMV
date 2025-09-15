@@ -22,6 +22,8 @@ use App\Http\Controllers\Admin\SiteInfoController;
 use App\Http\Controllers\Admin\PageContentController;
 use App\Http\Controllers\Admin\HopitalImageController;
 use App\Http\Controllers\FrontendServiceController;
+use App\Http\Controllers\AdvertisementController;
+
 
 Route::get('/', function () {
     return view('welcome');
@@ -172,6 +174,9 @@ Route::prefix('admin')->name('admin.')->group(function () {
 
     // Hopital Image
     Route::resource('hospital_images', HopitalImageController::class);
+
+    // Advertisement
+    Route::resource('advertisement', AdvertisementController::class);
 
 
 });
