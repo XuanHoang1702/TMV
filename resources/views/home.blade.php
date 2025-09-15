@@ -2,6 +2,16 @@
 
 @section('title', 'Trang chủ - Thẩm mỹ Dr.DAT')
 
+@section('meta_description', 'Thẩm mỹ Dr.DAT - Trung tâm thẩm mỹ hàng đầu với dịch vụ phẫu thuật thẩm mỹ chuyên nghiệp, đội ngũ bác sĩ giàu kinh nghiệm. Tư vấn miễn phí 24/7.')
+
+@section('meta_keywords', 'thẩm mỹ dr dat, phẫu thuật thẩm mỹ, làm đẹp, spa thẩm mỹ, cắt mí, nâng mũi, hút mỡ, trẻ hóa da')
+
+@section('og_title', 'Trang chủ - Thẩm mỹ Dr.DAT')
+
+@section('og_description', 'Thẩm mỹ Dr.DAT - Trung tâm thẩm mỹ hàng đầu với dịch vụ phẫu thuật thẩm mỹ chuyên nghiệp, đội ngũ bác sĩ giàu kinh nghiệm. Tư vấn miễn phí 24/7.')
+
+@section('og_image', asset('images/logo_Dr_Dat.png'))
+
 @section('styles')
     <link rel="stylesheet" href="{{ asset('css/home.css') }}">
 @endsection

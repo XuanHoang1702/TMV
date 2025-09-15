@@ -8,6 +8,7 @@ use App\Models\Menu;
 use App\Models\Service;
 use App\Models\Category;
 use App\Models\Certificate;
+use App\Models\SiteInfo;
 
 class ViewServiceProvider extends ServiceProvider
 {
@@ -52,16 +53,19 @@ class ViewServiceProvider extends ServiceProvider
             ->with('children')
             ->get();
 
-        // CERTIFICATES
+        // SITE INFO
+        $siteInfo = SiteInfo::first();
 
+       
 
         // SHARE TO SPECIFIC VIEWS (include home & services pages, excluding certificates from unnecessary views)
         View::composer(
             ['layouts.app', 'm-menu', 'bang-gia', 'pricing', 'home', 'services.index', 'services.show'],
-            function ($view) use ($frontendMenu, $parentServices, $categories) {
+            function ($view) use ($frontendMenu, $parentServices, $categories, $siteInfo) {
                 $view->with('frontendMenu', $frontendMenu)
                      ->with('services', $parentServices)
-                     ->with('categories', $categories);
+                     ->with('categories', $categories)
+                     ->with('siteInfo', $siteInfo);
 
             }
         );

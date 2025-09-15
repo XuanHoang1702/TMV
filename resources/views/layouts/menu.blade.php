@@ -5,13 +5,17 @@
             <div class="col-md-1 col-logo">
                 <div class="menu-logo">
                     <a href="{{ route('home') }}">
-                        <img src="{{ asset('images/logo_Dr_Dat.png') }}" />
+                        @if (!empty($siteInfo?->header_logo))
+                            <img src="{{ asset('storage/' . $siteInfo->header_logo) }}" alt="Logo" />
+
+                        @endif
                     </a>
+
                 </div>
             </div>
             <div class="col-md-8 col-center-item">
                 <ul class="main-menu">
-                    @foreach($frontendMenu as $menuItem)
+                    @foreach ($frontendMenu as $menuItem)
                         <li class="{{ request()->routeIs($menuItem['route']) ? 'active' : '' }}">
                             <a href="{{ route($menuItem['route']) }}"><span>{{ $menuItem['label'] }}</span></a>
                         </li>
@@ -20,18 +24,20 @@
                     <li class="li-group {{ request()->routeIs('services.*') ? 'active' : '' }}">
                         <a href="{{ route('services.index') }}"><span>Dịch vụ</span><i class="fa fa-angle-down"></i></a>
                         <ul class="m-ul-sub">
-                            @if(isset($categories))
-                                @foreach($categories->where('type', 'services')->where('parent_id', null) as $parentCategory)
+                            @if (isset($categories))
+                                @foreach ($categories->where('type', 'services')->where('parent_id', null) as $parentCategory)
                                     <li>
-                                        <a href="{{ route('services.detail', $parentCategory->slug ?? '#') }}"><span>{{ $parentCategory->name }}</span></a>
+                                        <a
+                                            href="{{ route('services.detail', $parentCategory->slug ?? '#') }}"><span>{{ $parentCategory->name }}</span></a>
                                         @php
                                             $childCategories = $categories->where('parent_id', $parentCategory->id);
                                         @endphp
-                                        @if($childCategories->count() > 0)
+                                        @if ($childCategories->count() > 0)
                                             <ul class="m-ul-sub-child">
-                                                @foreach($childCategories as $childCategory)
+                                                @foreach ($childCategories as $childCategory)
                                                     <li>
-                                                        <a href="{{ route('services.detail', $childCategory->slug ?? '#') }}"><span>{{ $childCategory->name }}</span></a>
+                                                        <a
+                                                            href="{{ route('services.detail', $childCategory->slug ?? '#') }}"><span>{{ $childCategory->name }}</span></a>
                                                     </li>
                                                 @endforeach
                                             </ul>
@@ -45,10 +51,11 @@
                     <li class="li-group {{ request()->routeIs('news.*') ? 'active' : '' }}">
                         <a href="{{ route('news.index') }}"><span>Tin tức</span><i class="fa fa-angle-down"></i></a>
                         <ul class="m-ul-sub">
-                            @if(isset($categories))
-                                @foreach($categories->where('type', 'news')->where('parent_id', null) as $category)
+                            @if (isset($categories))
+                                @foreach ($categories->where('type', 'news')->where('parent_id', null) as $category)
                                     <li>
-                                        <a href="{{ route('news.category', $category->slug ?? '#') }}"><span>{{ $category->name }}</span></a>
+                                        <a
+                                            href="{{ route('news.category', $category->slug ?? '#') }}"><span>{{ $category->name }}</span></a>
                                     </li>
                                 @endforeach
                             @endif

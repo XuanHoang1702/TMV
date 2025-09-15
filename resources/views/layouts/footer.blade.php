@@ -2,8 +2,11 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col-12 col-sm-2">
-                <img src="{{ asset('images/footer_logo.png') }}" />
+                @if ($siteInfo && $siteInfo->footer_logo)
+                    <img src="{{ asset('storage/' . $siteInfo->footer_logo) }}" alt="Footer Logo" />
+                @endif
             </div>
+
             <div class="col-12 col-sm-3">
                 <h4>BỆNH VIỆN LÊ VĂN THỊNH</h4>
                 <p><i class="fa fa-phone"></i>0705 242 999</p>
@@ -16,19 +19,20 @@
                     <a class="cl-btn-full-2" href="#"><span>Địa chỉ email của bạn</span></a>
                 </div>
                 <div>
-                    <a class="cl-btn-full" href="javascript:void(0)" onclick="onOpen_Popup()"><span>ĐĂNG KÝ NGAY</span></a>
+                    <a class="cl-btn-full" href="javascript:void(0)" onclick="onOpen_Popup()"><span>ĐĂNG KÝ
+                            NGAY</span></a>
                 </div>
             </div>
             <div class="col-12 col-sm-4">
                 <h4>CÁC DỊCH VỤ THẨM MỸ TẠI THẨM MỸ TẬN TÂM DR. ĐẠT</h4>
-                @foreach($services as $service)
+                @foreach ($services as $service)
                     <p><a href="{{ route('services.detail', $service->slug) }}">{{ $service->name }}</a></p>
                 @endforeach
             </div>
         </div>
-        <div class="row">
-            <div class="col-12">
-                <p class="cl-copyright">Copyright © 2024 Aeste - All Rights Reserved.</p>
+        <div class="row mt-3">
+            <div class="col-12 text-center">
+                <small>&copy; {{ date('Y') }} Thẩm mỹ Dr.DAT. All rights reserved.</small>
             </div>
         </div>
     </div>

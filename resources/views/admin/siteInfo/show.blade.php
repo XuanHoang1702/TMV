@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.admin')
 
 @section('content')
 <div class="container">
@@ -10,6 +10,6 @@
     <img src="{{ asset('storage/' . $siteInfo->logo) }}" width="120">
 
     <br><br>
-    <a href="{{ route('site_info.index') }}" class="btn btn-secondary">Quay lại</a>
+    <a href="{{ route('admin.siteInfo.index') }}" class="btn btn-secondary">Quay lại</a>
 </div>
 @endsection

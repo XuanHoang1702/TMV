@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Models;
-
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Information extends Model
@@ -12,6 +12,9 @@ class Information extends Model
         'name',
         'address',
         'working_time',
-        'email'
+        'email',
+        'images_address',
+        'hotline',
+        'website'
     ];
 }

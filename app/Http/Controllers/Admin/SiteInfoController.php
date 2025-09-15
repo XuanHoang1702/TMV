@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\SiteInfo;
 use Illuminate\Support\Facades\Validator;
-
+use Illuminate\Support\Facades\Storage;
 
 class SiteInfoController extends Controller
 {
@@ -16,7 +16,42 @@ class SiteInfoController extends Controller
     public function index()
     {
         $siteInfo = SiteInfo::all();
-        return view('admin.site_info.index', compact('siteInfo'));
+        return view('admin.siteInfo.index', compact('siteInfo'));
+    }
+
+
+
+    public function deleteHeaderLogo($id)
+    {
+        $siteInfo = SiteInfo::findOrFail($id);
+        if ($siteInfo->header_logo) {
+            Storage::disk('public')->delete($siteInfo->header_logo);
+        }
+        $siteInfo->header_logo = null;
+        $siteInfo->save();
+
+        return redirect()->route('admin.siteInfo.index')->with('success', 'Header logo đã được xóa thành công');
+    }
+
+    public function deleteFooterLogo($id)
+    {
+        $siteInfo = SiteInfo::findOrFail($id);
+        if ($siteInfo->footer_logo) {
+            Storage::disk('public')->delete($siteInfo->footer_logo);
+        }
+        $siteInfo->footer_logo = null;
+        $siteInfo->save();
+
+        return redirect()->route('admin.siteInfo.index')->with('success', 'Footer logo đã được xóa thành công');
+    }
+
+    public function deleteSlogan($id)
+    {
+        $siteInfo = SiteInfo::findOrFail($id);
+        $siteInfo->slogan = null;
+        $siteInfo->save();
+
+        return redirect()->route('admin.siteInfo.index')->with('success', 'Slogan đã được xóa thành công');
     }
 
     /**
@@ -24,8 +59,11 @@ class SiteInfoController extends Controller
      */
     public function create()
     {
-        $siteInfo = SiteInfo::getAll();
-        return view('admin.site_info.create', compact('siteInfo'));
+        $count = SiteInfo::count();
+        if ($count > 0) {
+            return redirect()->route('admin.siteInfo.index')->with('error', 'Chỉ được thêm 1 site info duy nhất.');
+        }
+        return view('admin.siteInfo.create');
     }
 
     /**
@@ -34,7 +72,8 @@ class SiteInfoController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'logo'   => 'required|string|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'header_logo' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'footer_logo' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'slogan' => 'required|string|max:255',
         ]);
 
@@ -42,16 +81,18 @@ class SiteInfoController extends Controller
             return redirect()->back()->withErrors($validator)->withInput();
         }
 
-        $imagePath = null;
-        if ($request->hasFile('logo')) {
-            $imagePath = $request->file('logo')->store('logo', 'public');
+        $data = ['slogan' => $request->slogan];
+
+        if ($request->hasFile('header_logo')) {
+            $data['header_logo'] = $request->file('header_logo')->store('logo', 'public');
+        }
+        if ($request->hasFile('footer_logo')) {
+            $data['footer_logo'] = $request->file('footer_logo')->store('logo', 'public');
         }
 
-        SiteInfo::create([
-            'logo' => $imagePath,
-            'slogan' => $request->slogan
-        ]);
-        return redirect()->route('site_info.index')->with('success', 'Thêm site info thành công');
+        SiteInfo::create($data);
+
+        return redirect()->route('admin.siteInfo.index')->with('success', 'Thêm site info thành công');
     }
 
     /**
@@ -68,7 +109,7 @@ class SiteInfoController extends Controller
     public function edit(string $id)
     {
         $siteInfo = SiteInfo::findOrFail($id);
-        return view('admin.site_info.edit',compact('site_info'));
+        return view('admin.siteInfo.edit',compact('siteInfo'));
     }
 
     /**
@@ -76,29 +117,36 @@ class SiteInfoController extends Controller
      */
     public function update(Request $request, string $id)
     {
-
         $validator = Validator::make($request->all(), [
-            'logo'   => 'required|string',
+            'header_logo' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'footer_logo' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'slogan' => 'required|string|max:255',
         ]);
 
         if ($validator->fails()) {
             return redirect()->back()->withErrors($validator)->withInput();
         }
+
         $siteInfo = SiteInfo::findOrFail($id);
-        
-        $imagePath = null;
-        if ($request->hasFile('logo')) {
-            $imagePath = $request->file('logo')->store('logo', 'public');
+
+        $data = ['slogan' => $request->slogan];
+
+        if ($request->hasFile('header_logo')) {
+            if ($siteInfo->header_logo) {
+                Storage::disk('public')->delete($siteInfo->header_logo);
+            }
+            $data['header_logo'] = $request->file('header_logo')->store('logo', 'public');
         }
-        
-        SiteInfo::create([
-            'logo' => $imagePath,
-            'slogan' => $request->slogan
-        ]);;
+        if ($request->hasFile('footer_logo')) {
+            if ($siteInfo->footer_logo) {
+                Storage::disk('public')->delete($siteInfo->footer_logo);
+            }
+            $data['footer_logo'] = $request->file('footer_logo')->store('logo', 'public');
+        }
 
-        return redirect()->route('site_info.index')->with('success', 'Cập nhật site info thành công');
+        $siteInfo->update($data);
 
+        return redirect()->route('admin.siteInfo.index')->with('success', 'Cập nhật site info thành công');
     }
 
     /**
@@ -107,7 +155,13 @@ class SiteInfoController extends Controller
     public function destroy(string $id)
     {
         $siteInfo = SiteInfo::findOrFail($id);
+        if ($siteInfo->header_logo) {
+            Storage::disk('public')->delete($siteInfo->header_logo);
+        }
+        if ($siteInfo->footer_logo) {
+            Storage::disk('public')->delete($siteInfo->footer_logo);
+        }
         $siteInfo->delete();
-        return redirect()->route('site_info.index')->with('success', 'Xóa SiteInfo thành công!');
+        return redirect()->route('admin.siteInfo.index')->with('success', 'Xóa SiteInfo thành công!');
     }
 }

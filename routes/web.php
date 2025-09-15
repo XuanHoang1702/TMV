@@ -62,6 +62,14 @@ Route::get('/', function () {
     return view('home', compact('banners', 'categories', 'services', 'certificates'));
 })->name('home');
 
+// Sitemap route
+use App\Http\Controllers\SitemapController;
+Route::get('/sitemap.xml', [SitemapController::class, 'index'])->name('sitemap.index');
+
+// RSS Feed route
+use App\Http\Controllers\RssController;
+Route::get('/feed.xml', [RssController::class, 'index'])->name('rss.feed');
+
 // Trang /dich-vu
 Route::get('/dich-vu', function () {
     return view('services.index');
@@ -81,7 +89,11 @@ Route::get('/bao-gia', function () {return view('pricing');})->name('pricing');
 Route::get('/tin-tuc', function () {return view('news.index');})->name('news.index');
 Route::get('/tin-tuc/{slug}', function ($slug) {return view('news.show', compact('slug'));})->name('news.detail');
 Route::get('/tin-tuc/danh-muc/{category}', function ($category) {return view('news.category', compact('category'));})->name('news.category');
-Route::get('/lien-he', function () {return view('contact');})->name('contact');
+Route::get('/lien-he', function () {
+    $hospitalImages = \App\Models\HopitalImage::latest()->take(5)->get();
+    $information = \App\Models\Information::first();
+    return view('contact', compact('hospitalImages', 'information'));
+})->name('contact');
 
 Route::post('/dat-lich', [\App\Http\Controllers\Admin\AppointmentController::class, 'storeFrontend'])->name('appointments.store');
 
@@ -155,17 +167,20 @@ Route::prefix('admin')->name('admin.')->group(function () {
 
     // Information
     Route::resource('informations', InformationController::class);
-  
+
     // Certificates Management
     Route::resource('certificates', \App\Http\Controllers\Admin\CertificateController::class);
     //Site Information
-    Route::resource('site_info', SiteInfoController::class);
+    Route::resource('siteInfo', SiteInfoController::class);
+    Route::delete('siteInfo/delete-header-logo/{id}', [SiteInfoController::class, 'deleteHeaderLogo'])->name('siteInfo.deleteHeaderLogo');
+    Route::delete('siteInfo/delete-footer-logo/{id}', [SiteInfoController::class, 'deleteFooterLogo'])->name('siteInfo.deleteFooterLogo');
+    Route::delete('siteInfo/delete-slogan/{id}', [SiteInfoController::class, 'deleteSlogan'])->name('siteInfo.deleteSlogan');
 
     //Page Content
     Route::resource('page_contents', PageContentController::class);
 
     // Hopital Image
-    Route::resource('hopital_image', HopitalImageController::class);
+    Route::resource('hospital_images', HopitalImageController::class);
 
 
 });

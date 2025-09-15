@@ -8,12 +8,17 @@
         <div class="alert alert-danger">{{ $errors->first() }}</div>
     @endif
 
-    <form action="{{ route('hospital_images.update', $image->id) }}" method="POST" enctype="multipart/form-data">
+    <form action="{{ route('admin.hospital_images.update', $image->id) }}" method="POST" enctype="multipart/form-data">
         @csrf
         @method('PUT')
 
         <div class="mb-3">
-            <img src="{{ asset('storage/' . $image->image_path) }}" alt="Hospital Image" width="200" class="mb-3">
+            <img src="{{ asset('storage/' . $image->image) }}" alt="Hospital Image" width="200" class="mb-3">
+        </div>
+
+        <div class="form-group mb-3">
+            <label for="title">Tiêu đề</label>
+            <input type="text" class="form-control" id="title" name="title" value="{{ old('title', $image->title) }}" placeholder="Nhập tiêu đề ảnh">
         </div>
 
         <div class="form-group mb-3">
@@ -22,7 +27,7 @@
         </div>
 
         <button type="submit" class="btn btn-primary">Cập nhật</button>
-        <a href="{{ route('hospital_images.index') }}" class="btn btn-secondary">Back</a>
+        <a href="{{ route('admin.hospital_images.index') }}" class="btn btn-secondary">Back</a>
     </form>
 </div>
 @endsection

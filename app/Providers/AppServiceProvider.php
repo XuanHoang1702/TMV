@@ -27,6 +27,13 @@ class AppServiceProvider extends ServiceProvider
             ->where('is_active', true)
             ->orderBy('order')
             ->get());
+
+
+
+    // if (!app()->environment('local')) {
+    //     \URL::forceScheme('https');
+    // }
+
     }
 
 }
