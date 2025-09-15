@@ -21,7 +21,7 @@ use App\Http\Controllers\Admin\InformationController;
 use App\Http\Controllers\Admin\SiteInfoController;
 use App\Http\Controllers\Admin\PageContentController;
 use App\Http\Controllers\Admin\HopitalImageController;
-
+use App\Http\Controllers\FrontendServiceController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -71,17 +71,8 @@ use App\Http\Controllers\RssController;
 Route::get('/feed.xml', [RssController::class, 'index'])->name('rss.feed');
 
 // Trang /dich-vu
-Route::get('/dich-vu', function () {
-    return view('services.index');
-})->name('services.index');
-
-
-Route::get('/dich-vu/{slug}', function ($slug) {
-    $service = \App\Models\Service::where('slug', $slug)
-        ->where('is_active', true)
-        ->firstOrFail();
-    return view('services.show', compact('service'));
-})->name('services.detail');
+Route::get('/dich-vu', [FrontendServiceController::class, 'index'])->name('services.index');
+Route::get('/service-detail/{slug}', [FrontendServiceController::class, 'show'])->name('services.detail');
 
 Route::get('/ve-dr-dat', function () {return view('about');})->name('about');
 

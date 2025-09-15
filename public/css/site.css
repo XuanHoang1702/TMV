@@ -411,6 +411,9 @@ div.body-scrolling .menu-logo {
     transition: all 0.3s ease;
 }
 
+.badge-black-text {
+    color: black !important;
+}
 
 .cl-btn-full:hover {
     opacity: 0.9;             /* hiệu ứng hover nhẹ */

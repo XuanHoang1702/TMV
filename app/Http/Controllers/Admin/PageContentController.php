@@ -1,7 +1,7 @@
 <?php
 
-namespace App\Http\Controllers;
-
+namespace App\Http\Controllers\Admin;
+use App\Http\Controllers\Controller;
 use App\Models\PageContent;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -42,7 +42,7 @@ class PageContentController extends Controller
 
         PageContent::create($validator->validated());
 
-        return redirect()->route('page_contents.index')->with('success', 'Page content created successfully.');
+        return redirect()->route('admin.page_contents.index')->with('success', 'Page content created successfully.');
     }
 
     /**
@@ -82,7 +82,7 @@ class PageContentController extends Controller
 
         $pageContent->update($validator->validated());
 
-        return redirect()->route('page_contents.index')->with('success', 'Page content updated successfully.');
+        return redirect()->route('admin.page_contents.index')->with('success', 'Page content updated successfully.');
     }
 
     /**
@@ -93,6 +93,6 @@ class PageContentController extends Controller
         $pageContent = PageContent::findOrFail($id);
         $pageContent->delete();
 
-        return redirect()->route('page_contents.index')->with('success', 'Page content deleted successfully.');
+        return redirect()->route('admin.page_contents.index')->with('success', 'Page content deleted successfully.');
     }
 }

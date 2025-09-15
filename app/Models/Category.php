@@ -46,4 +46,10 @@ class Category extends Model
     {
         return $query->where('is_active', true);
     }
+  public function services()
+{
+    return $this->hasMany(Service::class, 'category_id');
+}
+
+
 }

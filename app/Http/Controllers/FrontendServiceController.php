@@ -1,0 +1,44 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Models\Service;
+use App\Models\Category;
+
+class FrontendServiceController extends Controller
+{
+    public function index()
+    {
+        $services = Service::where('is_active', true)
+            ->whereNull('parent_id')
+            ->with(['children', 'category'])
+            ->orderBy('sort_order')
+            ->get();
+
+        return view('layouts.services.index', compact('services'));
+    }
+
+    public function show($slug)
+    {
+        // Try to find a service first
+        $service = Service::where('slug', $slug)
+            ->where('is_active', true)
+            ->with(['children', 'category'])
+            ->first();
+
+        // If no service, try to find a category
+        if (!$service) {
+            $category = Category::where('slug', $slug)
+                ->where('type', 'services')
+                ->where('is_active', true)
+                ->with(['children', 'services' => function ($query) {
+                    $query->where('is_active', true)->with('children');
+                }])
+                ->firstOrFail();
+
+            return view('layouts.services.show', compact('category'));
+        }
+
+        return view('layouts.services.show', compact('service'));
+    }
+}

@@ -7,7 +7,6 @@
                     <a href="{{ route('home') }}">
                         @if (!empty($siteInfo?->header_logo))
                             <img src="{{ asset('storage/' . $siteInfo->header_logo) }}" alt="Logo" />
-
                         @endif
                     </a>
 
