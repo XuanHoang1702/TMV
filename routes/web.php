@@ -85,9 +85,19 @@ Route::get('/bao-gia', function () {
 Route::get('/tin-tuc', function (){
     $newsBanner = \App\Models\PageContent::where('page', 'news_banner')->first();
     $newsCategories = \App\Models\Category::where('type', 'news')->where('is_active', true)->orderBy('order')->get();
-    return view('news.index', compact('newsBanner', 'newsCategories'));
+    $newsList = \App\Models\News::where('is_active', true)->orderBy('published_at', 'desc')->paginate(12);
+    return view('news.index', compact('newsBanner', 'newsCategories', 'newsList'));
 })->name('news.index');
-Route::get('/tin-tuc/{slug}', function ($slug) {return view('news.show', compact('slug'));})->name('news.detail');
+Route::get('/tin-tuc/{slug}', function ($slug) {
+    $news = \App\Models\News::where('slug', $slug)->where('is_active', true)->firstOrFail();
+    $relatedNews = \App\Models\News::where('category_id', $news->category_id)
+        ->where('id', '!=', $news->id)
+        ->where('is_active', true)
+        ->orderBy('created_at', 'desc')
+        ->take(4)
+        ->get();
+    return view('news.show_detail', compact('news', 'relatedNews'));
+})->name('news.detail');
 Route::get('/tin-tuc/danh-muc/{category}', function ($category) {
     $newsCategories = \App\Models\Category::where('type', 'news')->where('is_active', true)->orderBy('order')->get();
     return view('news.category', compact('category', 'newsCategories'));

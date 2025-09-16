@@ -180,65 +180,62 @@
                     .trim('-');
                 document.getElementById('slug').value = slug;
             });
+
+            document.addEventListener('DOMContentLoaded', function() {
+                let imageCount = {{ $news->images ? count($news->images) : 0 }};
+                if(imageCount === 0) imageCount = 1;
+
+                // Add new image input
+                document.getElementById('add-image').addEventListener('click', function() {
+                    imageCount++;
+                    const container = document.getElementById('images-container');
+                    const newImageItem = document.createElement('div');
+                    newImageItem.className = 'image-item mb-3 border p-3';
+                    newImageItem.innerHTML = `
+                        <h6>Ảnh mới ${imageCount}</h6>
+                        <input type="file" class="form-control" name="images[]" accept="image/*">
+                        <button type="button" class="btn btn-danger btn-sm remove-image mt-2">Xóa</button>
+                    `;
+                    container.appendChild(newImageItem);
+                });
+
+                // Remove new image input
+                document.addEventListener('click', function(e) {
+                    if (e.target.classList.contains('remove-image')) {
+                        const imageItems = document.querySelectorAll('#images-container .image-item');
+                        if (imageItems.length > 1) {
+                            e.target.closest('.image-item').remove();
+                            // Renumber remaining new images
+                            document.querySelectorAll('#images-container .image-item h6').forEach((title, index) => {
+                                title.textContent = `Ảnh mới ${index + 1}`;
+                            });
+                            imageCount = imageItems.length - 1;
+                        }
+                    }
+                });
+
+                // Handle removing existing images
+                document.addEventListener('click', function(e) {
+                    if (e.target.classList.contains('remove-existing-image')) {
+                        const imagePath = e.target.getAttribute('data-image-path');
+                        if (confirm('Bạn có chắc muốn xóa ảnh này?')) {
+                            // Add to removed images list
+                            let removedImagesInput = document.getElementById('removed_images');
+                            if (!removedImagesInput) {
+                                removedImagesInput = document.createElement('input');
+                                removedImagesInput.type = 'hidden';
+                                removedImagesInput.name = 'removed_images[]';
+                                removedImagesInput.id = 'removed_images';
+                                document.querySelector('form').appendChild(removedImagesInput);
+                            }
+                            removedImagesInput.value += (removedImagesInput.value ? ',' : '') + imagePath;
+
+                            // Remove from display
+                            e.target.closest('.col-md-3').remove();
+                        }
+                    }
+                });
+            });
         </script>
     @endpush
-@endsection
-
-@section('scripts')
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    let imageCount = 1;
-
-    // Add new image input
-    document.getElementById('add-image').addEventListener('click', function() {
-        imageCount++;
-        const container = document.getElementById('images-container');
-        const newImageItem = document.createElement('div');
-        newImageItem.className = 'image-item mb-3 border p-3';
-        newImageItem.innerHTML = `
-            <h6>Ảnh mới ${imageCount}</h6>
-            <input type="file" class="form-control" name="images[]" accept="image/*">
-            <button type="button" class="btn btn-danger btn-sm remove-image mt-2">Xóa</button>
-        `;
-        container.appendChild(newImageItem);
-    });
-
-    // Remove new image input
-    document.addEventListener('click', function(e) {
-        if (e.target.classList.contains('remove-image')) {
-            const imageItems = document.querySelectorAll('#images-container .image-item');
-            if (imageItems.length > 1) {
-                e.target.closest('.image-item').remove();
-                // Renumber remaining new images
-                document.querySelectorAll('#images-container .image-item h6').forEach((title, index) => {
-                    title.textContent = `Ảnh mới ${index + 1}`;
-                });
-                imageCount = imageItems.length - 1;
-            }
-        }
-    });
-
-    // Handle removing existing images
-    document.addEventListener('click', function(e) {
-        if (e.target.classList.contains('remove-existing-image')) {
-            const imagePath = e.target.getAttribute('data-image-path');
-            if (confirm('Bạn có chắc muốn xóa ảnh này?')) {
-                // Add to removed images list
-                let removedImagesInput = document.getElementById('removed_images');
-                if (!removedImagesInput) {
-                    removedImagesInput = document.createElement('input');
-                    removedImagesInput.type = 'hidden';
-                    removedImagesInput.name = 'removed_images[]';
-                    removedImagesInput.id = 'removed_images';
-                    document.querySelector('form').appendChild(removedImagesInput);
-                }
-                removedImagesInput.value += (removedImagesInput.value ? ',' : '') + imagePath;
-
-                // Remove from display
-                e.target.closest('.col-md-3').remove();
-            }
-        }
-    });
-});
-</script>
 @endsection
