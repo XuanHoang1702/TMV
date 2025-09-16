@@ -24,6 +24,7 @@ use App\Http\Controllers\Admin\HopitalImageController;
 use App\Http\Controllers\FrontendServiceController;
 use App\Http\Controllers\AdvertisementController;
 use App\Http\Controllers\ProcessController;
+use App\Http\Controllers\EmailNotificationController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -98,6 +99,10 @@ Route::get('/lien-he', function () {
     $contactBanner = \App\Models\PageContent::where('page', 'contact')->first();
     return view('contact', compact('hospitalImages', 'information', 'contactBanner'));
 })->name('contact');
+
+// Email Notification
+Route::resource('email_notification', EmailNotificationController::class);
+
 
 Route::post('/dat-lich', [\App\Http\Controllers\Admin\AppointmentController::class, 'storeFrontend'])->name('appointments.store');
 
@@ -194,7 +199,6 @@ Route::prefix('admin')->name('admin.')->group(function () {
 
     // About Management
     Route::resource('abouts', \App\Http\Controllers\Admin\AboutController::class);
-
 
 });
 
