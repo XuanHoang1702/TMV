@@ -24,6 +24,8 @@ use App\Http\Controllers\Admin\HopitalImageController;
 use App\Http\Controllers\FrontendServiceController;
 use App\Http\Controllers\AdvertisementController;
 use App\Http\Controllers\ProcessController;
+use App\Models\News;
+use App\Models\PageContent;
 
 Route::get('/', function () {
     return view('welcome');
@@ -83,21 +85,36 @@ Route::get('/bao-gia', function () {
     return view('pricing', compact('pricingBanner'));
 })->name('pricing');
 Route::get('/tin-tuc', function (){
+
     $newsBanner = \App\Models\PageContent::where('page', 'news_banner')->first();
     $newsCategories = \App\Models\Category::where('type', 'news')->where('is_active', true)->orderBy('order')->get();
-    $newsList = \App\Models\News::where('is_active', true)->orderBy('published_at', 'desc')->paginate(12);
+     $newsList = News::where('is_active', true)
+        ->whereNotNull('published_at')  // chỉ lấy bài đã xuất bản
+        ->orderBy('published_at', 'desc')
+        ->paginate(12);
     return view('news.index', compact('newsBanner', 'newsCategories', 'newsList'));
 })->name('news.index');
+
+
 Route::get('/tin-tuc/{slug}', function ($slug) {
-    $news = \App\Models\News::where('slug', $slug)->where('is_active', true)->firstOrFail();
-    $relatedNews = \App\Models\News::where('category_id', $news->category_id)
+$news = \App\Models\News::with('category')
+        ->where('slug', $slug)
+        ->where('is_active', true)
+        ->whereNotNull('published_at') // bài chưa xuất bản sẽ trả 404
+        ->firstOrFail();
+
+    $newsBanner = PageContent::where('page', 'news_banner')->first();
+     $relatedNews = \App\Models\News::where('category_id', $news->category_id)
         ->where('id', '!=', $news->id)
         ->where('is_active', true)
+        ->whereNotNull('published_at') // chỉ lấy bài đã xuất bản
         ->orderBy('created_at', 'desc')
         ->take(4)
         ->get();
-    return view('news.show_detail', compact('news', 'relatedNews'));
+
+    return view('news.show_detail', compact('news', 'newsBanner', 'relatedNews'));
 })->name('news.detail');
+
 Route::get('/tin-tuc/danh-muc/{category}', function ($category) {
     $newsCategories = \App\Models\Category::where('type', 'news')->where('is_active', true)->orderBy('order')->get();
     return view('news.category', compact('category', 'newsCategories'));
@@ -130,9 +147,14 @@ Route::prefix('admin')->name('admin.')->group(function () {
 
     // News Management
     Route::resource('news', NewsController::class);
+    // Xuất bản tin tức
     Route::post('news/{news}/publish', [NewsController::class, 'publish'])->name('news.publish');
+
+    // Gỡ xuất bản tin tức
     Route::post('news/{news}/unpublish', [NewsController::class, 'unpublish'])->name('news.unpublish');
-    Route::get('admin/news/{news}', [NewsController::class, 'show'])->name('admin.news.show');
+
+    Route::delete('news/{news}/remove-image', [NewsController::class, 'removeImage'])->name('news.removeImage');
+
 
     // Appointments Management
     Route::resource('appointments', AppointmentController::class);
