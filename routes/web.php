@@ -76,16 +76,27 @@ Route::get('/feed.xml', [RssController::class, 'index'])->name('rss.feed');
 Route::get('/dich-vu', [FrontendServiceController::class, 'index'])->name('services.index');
 Route::get('/service-detail/{slug}', [FrontendServiceController::class, 'show'])->name('services.detail');
 
-Route::get('/ve-dr-dat', function () {return view('about');})->name('about');
+Route::get('/abouts', [FrontendServiceController::class, 'about'])->name('abouts');
 
-Route::get('/bao-gia', function () {return view('pricing');})->name('pricing');
-Route::get('/tin-tuc', function () {return view('news.index');})->name('news.index');
+Route::get('/bao-gia', function () {
+    $pricingBanner = \App\Models\PageContent::where('page', 'pricing_banner')->first();
+    return view('pricing', compact('pricingBanner'));
+})->name('pricing');
+Route::get('/tin-tuc', function (){
+    $newsBanner = \App\Models\PageContent::where('page', 'news_banner')->first();
+    $newsCategories = \App\Models\Category::where('type', 'news')->where('is_active', true)->orderBy('order')->get();
+    return view('news.index', compact('newsBanner', 'newsCategories'));
+})->name('news.index');
 Route::get('/tin-tuc/{slug}', function ($slug) {return view('news.show', compact('slug'));})->name('news.detail');
-Route::get('/tin-tuc/danh-muc/{category}', function ($category) {return view('news.category', compact('category'));})->name('news.category');
+Route::get('/tin-tuc/danh-muc/{category}', function ($category) {
+    $newsCategories = \App\Models\Category::where('type', 'news')->where('is_active', true)->orderBy('order')->get();
+    return view('news.category', compact('category', 'newsCategories'));
+})->name('news.category');
 Route::get('/lien-he', function () {
     $hospitalImages = \App\Models\HopitalImage::latest()->take(5)->get();
     $information = \App\Models\Information::first();
-    return view('contact', compact('hospitalImages', 'information'));
+    $contactBanner = \App\Models\PageContent::where('page', 'contact')->first();
+    return view('contact', compact('hospitalImages', 'information', 'contactBanner'));
 })->name('contact');
 
 Route::post('/dat-lich', [\App\Http\Controllers\Admin\AppointmentController::class, 'storeFrontend'])->name('appointments.store');
@@ -180,6 +191,9 @@ Route::prefix('admin')->name('admin.')->group(function () {
 
     //Process
     Route::resource('process', ProcessController::class);
+
+    // About Management
+    Route::resource('abouts', \App\Http\Controllers\Admin\AboutController::class);
 
 
 });

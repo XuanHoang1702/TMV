@@ -17,6 +17,7 @@
             <th>Khách hàng</th>
             <th>Dịch vụ</th>
             <th>Ngày hẹn</th>
+            <th>Giờ hẹn</th>    
             <th>Trạng thái</th>
             <th>Hành động</th>
         </tr>
@@ -27,7 +28,9 @@
             <td>{{ $appointment->id }}</td>
             <td>{{ $appointment->customer_name }}</td>
             <td>{{ $appointment->service->name ?? '' }}</td>
-            <td>{{ $appointment->appointment_date->format('d/m/Y H:i') }}</td>
+            <td>{{ $appointment->appointment_date->format('d/m/Y') }}</td>
+            <td>{{ \Carbon\Carbon::parse($appointment->appointment_time)->format('H:i') }}</td>
+
             <td>
                 @if($appointment->status == 'pending')
                     <span class="badge bg-warning">Chờ xử lý</span>

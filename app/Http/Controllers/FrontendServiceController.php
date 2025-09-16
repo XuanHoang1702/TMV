@@ -1,22 +1,24 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use App\Models\About;
 use App\Models\Service;
 use App\Models\Category;
 
 class FrontendServiceController extends Controller
 {
     public function index()
-    {
-        $services = Service::where('is_active', true)
-            ->whereNull('parent_id')
-            ->with(['children', 'category'])
-            ->orderBy('sort_order')
-            ->get();
+{
+    $services = Service::where('is_active', true)
+        ->whereNull('parent_id')
+        ->with(['children', 'category'])
+        ->orderBy('sort_order')
+        ->get();
 
-        return view('layouts.services.index', compact('services'));
-    }
+    $servicesBanner = \App\Models\PageContent::where('page', 'services_banner')->first();
+
+    return view('layouts.services.index', compact('services', 'servicesBanner'));
+}
 
     public function show($slug)
     {
@@ -25,6 +27,8 @@ class FrontendServiceController extends Controller
             ->where('is_active', true)
             ->with(['children', 'category'])
             ->first();
+
+        $serviceBanner = \App\Models\PageContent::where('page', 'services_banner')->first();
 
         // If no service, try to find a category
         if (!$service) {
@@ -36,9 +40,21 @@ class FrontendServiceController extends Controller
                 }])
                 ->firstOrFail();
 
-            return view('layouts.services.show', compact('category'));
+            return view('layouts.services.show', compact('category', 'serviceBanner'));
         }
 
-        return view('layouts.services.show', compact('service'));
+        return view('layouts.services.show', compact('service', 'serviceBanner'));
     }
+
+    public function about()
+    {
+        $abouts = About::all();
+        $pageContent = \App\Models\PageContent::where('page', 'about_banner')->first();
+        return view('abouts', compact('abouts', 'pageContent'));
+    }
+
+
+
+
 }
+

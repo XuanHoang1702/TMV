@@ -150,6 +150,7 @@
     </div>
 
     @yield('scripts')
+     @yield('meta')  
 </body>
 
 </html>
