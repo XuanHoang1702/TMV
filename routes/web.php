@@ -76,7 +76,7 @@ Route::get('/feed.xml', [RssController::class, 'index'])->name('rss.feed');
 Route::get('/dich-vu', [FrontendServiceController::class, 'index'])->name('services.index');
 Route::get('/service-detail/{slug}', [FrontendServiceController::class, 'show'])->name('services.detail');
 
-Route::get('/ve-dr-dat', function () {return view('about');})->name('about');
+Route::get('/ve-dr-dat', [FrontendServiceController::class, 'index'])->name('about');
 
 Route::get('/bao-gia', function () {return view('pricing');})->name('pricing');
 Route::get('/tin-tuc', function () {return view('news.index');})->name('news.index');
@@ -180,6 +180,9 @@ Route::prefix('admin')->name('admin.')->group(function () {
 
     //Process
     Route::resource('process', ProcessController::class);
+
+    // About Management
+    Route::resource('abouts', \App\Http\Controllers\Admin\AboutController::class);
 
 
 });

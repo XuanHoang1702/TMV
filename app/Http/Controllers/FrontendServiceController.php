@@ -1,22 +1,24 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use App\Models\About;
 use App\Models\Service;
 use App\Models\Category;
 
 class FrontendServiceController extends Controller
 {
     public function index()
-    {
-        $services = Service::where('is_active', true)
-            ->whereNull('parent_id')
-            ->with(['children', 'category'])
-            ->orderBy('sort_order')
-            ->get();
+{
+    $services = Service::where('is_active', true)
+        ->whereNull('parent_id')
+        ->with(['children', 'category'])
+        ->orderBy('sort_order')
+        ->get();
 
-        return view('layouts.services.index', compact('services'));
-    }
+    $abouts = About::all();
+
+    return view('layouts.services.index', compact('services', 'abouts'));
+}
 
     public function show($slug)
     {
@@ -40,5 +42,11 @@ class FrontendServiceController extends Controller
         }
 
         return view('layouts.services.show', compact('service'));
+    }
+
+    public function about()
+    {
+        $abouts = About::all();
+        return view('about', compact('abouts'));
     }
 }
