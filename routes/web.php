@@ -24,12 +24,11 @@ use App\Http\Controllers\Admin\HopitalImageController;
 use App\Http\Controllers\FrontendServiceController;
 use App\Http\Controllers\AdvertisementController;
 use App\Http\Controllers\ProcessController;
-<<<<<<< HEAD
 use App\Models\News;
 use App\Models\PageContent;
-=======
+
 use App\Http\Controllers\EmailNotificationController;
->>>>>>> e4f522d68c3ea035f40f94e5a6812ce02a7d1f07
+
 
 Route::get('/', function () {
     return view('welcome');
