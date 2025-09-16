@@ -3,8 +3,10 @@
 @section('title', 'Liên hệ - Thẩm mỹ Dr.DAT')
 
 @section('meta')
-    <meta name="description" content="Liên hệ với Thẩm mỹ Dr.DAT để được tư vấn và hỗ trợ tốt nhất. Địa chỉ, số điện thoại và email liên hệ.">
+    <meta name="description"
+        content="Liên hệ với Thẩm mỹ Dr.DAT để được tư vấn và hỗ trợ tốt nhất. Địa chỉ, số điện thoại và email liên hệ.">
     <meta name="keywords" content="liên hệ, thẩm mỹ, Dr.DAT, tư vấn, hỗ trợ, địa chỉ, hotline, email">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta property="og:title" content="Liên hệ - Thẩm mỹ Dr.DAT" />
     <meta property="og:description" content="Liên hệ với Thẩm mỹ Dr.DAT để được tư vấn và hỗ trợ tốt nhất." />
     <meta property="og:type" content="website" />
@@ -21,20 +23,19 @@
     <div class="cl-body-bg">
         <div class="container">
             <!--banner-->
-            <div class="cl-jCenter">
-                <div class="row cl-sec01" data-aos="zoom-in" data-aos-duration="3000">
-                    <div class="col-12 col-sm-12">
-                        <h4 class="cl-title">Liên Hệ Với Chúng Tôi</h4>
-                    </div>
-                    <div class="col-12 col-sm-12 cl-desc ">
-                        <p class="ab-banner-desc">
-                            Chúng tôi luôn sẵn sàng lắng nghe và hỗ trợ bạn trong hành trình chăm sóc sắc đẹp. Mọi thắc mắc,
-                            yêu cầu tư vấn hay đặt lịch hẹn,
-                            đừng ngần ngại liên hệ với chúng tôi qua các phương thức dưới đây:
-                        </p>
+            @if ($contactBanner)
+                <div class="cl-jCenter">
+                    <div class="row cl-sec01" data-aos="zoom-in" data-aos-duration="3000">
+                        <div class="col-12 col-sm-12">
+                            <h4 class="cl-title">{{ $contactBanner->title }}</h4>
+                        </div>
+                        <div class="col-12 col-sm-12 cl-desc">
+                            <p class="ab-banner-desc">{!! nl2br(e($contactBanner->content)) !!}</p>
+                        </div>
                     </div>
                 </div>
-            </div>
+            @endif
+
 
             <!--contents-->
             <div class="cl-panel-list">
@@ -131,5 +132,5 @@
     </div>
 
     <!--Sec 4 - dat lich kham ngay-->
-     @include('layouts.booking.booking_Popup_DatLichKham')
+    @include('layouts.booking.booking_Popup_DatLichKham')
 @endsection

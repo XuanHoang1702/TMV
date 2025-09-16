@@ -3,10 +3,12 @@
 @section('title', 'Bảng giá - Thẩm mỹ Dr.DAT')
 
 @section('meta')
-    <meta name="description" content="Bảng giá dịch vụ tạo hình thẩm mỹ tại Dr. Đạt với mức giá hợp lý, an toàn và hiệu quả. Tham khảo chi tiết các dịch vụ thẩm mỹ của chúng tôi.">
+    <meta name="description"
+        content="Bảng giá dịch vụ tạo hình thẩm mỹ tại Dr. Đạt với mức giá hợp lý, an toàn và hiệu quả. Tham khảo chi tiết các dịch vụ thẩm mỹ của chúng tôi.">
     <meta name="keywords" content="bảng giá, dịch vụ thẩm mỹ, tạo hình thẩm mỹ, Dr. Đạt, giá dịch vụ, thẩm mỹ an toàn">
     <meta property="og:title" content="Bảng giá - Thẩm mỹ Dr.DAT" />
-    <meta property="og:description" content="Bảng giá dịch vụ tạo hình thẩm mỹ tại Dr. Đạt với mức giá hợp lý, an toàn và hiệu quả." />
+    <meta property="og:description"
+        content="Bảng giá dịch vụ tạo hình thẩm mỹ tại Dr. Đạt với mức giá hợp lý, an toàn và hiệu quả." />
     <meta property="og:type" content="website" />
     <meta property="og:url" content="{{ url()->current() }}" />
     <meta property="og:image" content="{{ asset('images/logo_Dr_Dat.png') }}" />
@@ -28,7 +30,9 @@
     <!--Fonts inter-->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap"
+        rel="stylesheet">
 @endsection
 
 @section('content')
@@ -40,21 +44,18 @@
         <div class="cl-body-bg">
             <div class="container">
                 <!--banner-->
-                <div class="cl-jCenter">
-                    <div class="row cl-sec01" data-aos="zoom-in" data-aos-duration="3000">
-                        <div class="col-12 col-sm-12">
-                            <h4 class="cl-title">Bảng Giá Dịch Vụ Tạo Hình Thẩm Mỹ tại Dr. Đạt</h4>
-                        </div>
-                        <div class="col-12 col-sm-12 cl-desc">
-                            <p>
-                                Chào mừng bạn đến với Dr. Đạt, nơi bạn sẽ nhận được những dịch vụ tạo hình thẩm mỹ chất lượng cao với mức giá hợp lý,
-                                đảm bảo sự an toàn và hiệu quả lâu dài. Chúng tôi cung cấp đa dạng các dịch vụ từ thẩm mỹ không phẫu thuật đến phẫu thuật
-                                tạo hình thẩm mỹ, tất cả đều được thực hiện bởi đội ngũ bác sĩ chuyên khoa giàu kinh nghiệm.
-                            </p>
-                            <p class="p-boderbottom">Dưới đây là bảng giá các dịch vụ chính tại Dr. Đạt:</p>
+                @if ($pricingBanner)
+                    <div class="cl-jCenter">
+                        <div class="row cl-sec01" data-aos="zoom-in" data-aos-duration="3000">
+                            <div class="col-12 col-sm-12">
+                                <h4 class="cl-title">{{ $pricingBanner->title }}</h4>
+                            </div>
+                            <div class="col-12 col-sm-12 cl-desc">
+                                <p class="ab-banner-desc">{!! nl2br(e($pricingBanner->content)) !!}</p>
+                            </div>
                         </div>
                     </div>
-                </div>
+                @endif
 
                 <!--contents-->
                 <div class="cl-panel-list">
@@ -66,9 +67,11 @@
                                         <div class="row">
                                             <div class="col-12 col-sm-5 cl-img">
                                                 @if ($service->image)
-                                                    <img src="{{ asset('storage/' . $service->image) }}" alt="{{ $service->name }}" />
+                                                    <img src="{{ asset('storage/' . $service->image) }}"
+                                                        alt="{{ $service->name }}" />
                                                 @else
-                                                    <img src="{{ asset('images/baogia/bg1.png') }}" alt="{{ $service->name }}" />
+                                                    <img src="{{ asset('images/baogia/bg1.png') }}"
+                                                        alt="{{ $service->name }}" />
                                                 @endif
                                             </div>
                                             <div class="col-12 col-sm-7 cl-ct-info">
@@ -85,13 +88,15 @@
                                                     <div class="row">
                                                         <div class="col-12 col-sm-5">
                                                             <a class="cl-btn-full" href="#">
-                                                                <i class="icon-cal"><img src="{{ asset('images/icon/icon_support.png') }}" /></i>
+                                                                <i class="icon-cal"><img
+                                                                        src="{{ asset('images/icon/icon_support.png') }}" /></i>
                                                                 <span>Gọi lại cho tôi</span>
                                                             </a>
                                                         </div>
                                                         <div class="col-12 col-sm-5">
                                                             <a class="cl-btn-full-2" href="#">
-                                                                <i class="icon-cal"><img src="{{ asset('images/icon/icon_newPage.png') }}" /></i>
+                                                                <i class="icon-cal"><img
+                                                                        src="{{ asset('images/icon/icon_newPage.png') }}" /></i>
                                                                 <span>Gọi lại cho tôi</span>
                                                             </a>
                                                         </div>
@@ -112,9 +117,12 @@
                                 </div>
                                 <div class="col-12 col-sm-9 cl-info">
                                     <ul class="ul-info">
-                                        <li>Các mức giá trên chỉ mang tính tham khảo. Giá cụ thể có thể thay đổi tùy theo tình trạng và yêu cầu của từng khách hàng.</li>
-                                        <li>Tư vấn miễn phí: Dr. Đạt cam kết luôn tư vấn tận tình và đưa ra giải pháp tối ưu cho từng trường hợp cụ thể của khách hàng.</li>
-                                        <li>Thanh toán linh hoạt: Dr. Đạt hỗ trợ nhiều phương thức thanh toán linh hoạt để bạn dễ dàng lựa chọn.</li>
+                                        <li>Các mức giá trên chỉ mang tính tham khảo. Giá cụ thể có thể thay đổi tùy theo
+                                            tình trạng và yêu cầu của từng khách hàng.</li>
+                                        <li>Tư vấn miễn phí: Dr. Đạt cam kết luôn tư vấn tận tình và đưa ra giải pháp tối ưu
+                                            cho từng trường hợp cụ thể của khách hàng.</li>
+                                        <li>Thanh toán linh hoạt: Dr. Đạt hỗ trợ nhiều phương thức thanh toán linh hoạt để
+                                            bạn dễ dàng lựa chọn.</li>
                                     </ul>
                                 </div>
                             </div>

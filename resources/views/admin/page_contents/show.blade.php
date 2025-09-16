@@ -15,6 +15,6 @@
         <div class="border p-3">{{ $page->content }}</div>
     </div>
 
-    <a href="{{ route('page_contents.index') }}" class="btn btn-secondary">Back</a>
+    <a href="{{ route('admin.page_contents.index') }}" class="btn btn-secondary">Back</a>
 </div>
 @endsection

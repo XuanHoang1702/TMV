@@ -3,232 +3,302 @@
 @section('title', 'Tin tức - Thẩm mỹ Dr.DAT')
 
 @section('styles')
-<link rel="stylesheet" href="{{ asset('css/tin-tuc.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/tintuc.css') }}">
 @endsection
 
 @section('content')
-<div class="cl-body-bg">
-    <div class="container">
-        <!--banner-->
-        <div class="cl-jCenter">
-            <div class="row cl-sec01" data-aos="zoom-in" data-aos-duration="3000">
-                <div class="col-12 col-sm-12">
-                    <h4 class="cl-title">TIN TỨC & BÀI VIẾT</h4>
+    <div class="cl-body-bg">
+        <div class="container">
+            <!--banner-->
+            @if ($newsBanner)
+                <div class="cl-jCenter">
+                    <div class="row cl-sec01" data-aos="zoom-in" data-aos-duration="3000">
+                        <div class="col-12 col-sm-12">
+                            <h4 class="cl-title">{{ $newsBanner->title }}</h4>
+                        </div>
+                        <div class="col-12 col-sm-12 cl-desc">
+                            <p>{!! nl2br(e($newsBanner->content)) !!}</p>
+                        </div>
+                    </div>
                 </div>
-                <div class="col-12 col-sm-12 cl-desc">
-                    <p>
-                        Cập nhật những tin tức mới nhất về thẩm mỹ, các phương pháp làm đẹp tiên tiến,
-                        kinh nghiệm chăm sóc da và sức khỏe từ đội ngũ bác sĩ chuyên khoa của chúng tôi.
-                    </p>
-                </div>
-            </div>
-        </div>
+            @endif
 
-        <!--contents-->
-        <div class="cl-panel-list">
-            <div class="cl-panel-body">
+
+            <!--contents-->
+            <div class="cl-news">
                 <div class="row">
-                    <!-- Featured News -->
-                    <div class="col-12 col-sm-12" data-aos="zoom-in" data-aos-duration="3000">
-                        <div class="cl-featured-news">
-                            <div class="row">
-                                <div class="col-12 col-sm-6">
-                                    <img src="{{ asset('images/tin-tuc/featured-news.jpg') }}" />
+                    <!--Left-->
+                    <div class="col-12 col-sm-3">
+                        <!--div button-->
+                        <div class="row">
+                            <div class="col-12 col-sm-12">
+                                <a class="cl-btn-full" href="{{ route('news.index') }}">
+                                    <span>Tất cả</span>
+                                </a>
+                            </div>
+                            @foreach ($newsCategories as $category)
+                                <div class="col-12 col-sm-12">
+                                    <a class="cl-btn-full-2" href="{{ route('news.category', $category->slug) }}">
+                                        <span>{{ $category->name }}</span>
+                                    </a>
                                 </div>
-                                <div class="col-12 col-sm-6">
-                                    <div class="cl-featured-content">
-                                        <span class="cl-category">Tin tức nổi bật</span>
-                                        <h3>Ứng dụng công nghệ tiên tiến trong phẫu thuật thẩm mỹ hiện đại</h3>
-                                        <p>
-                                            Với sự phát triển của khoa học công nghệ, ngành thẩm mỹ đã có những bước tiến vượt trội.
-                                            Các phương pháp phẫu thuật hiện đại giúp mang lại kết quả tự nhiên và an toàn hơn bao giờ hết.
+                            @endforeach
+                        </div>
+                        <!--imge-->
+                        <div class="row cl-img-left">
+                            <div class="col-12 col-sm-12">
+                                <img src="images/tintuc/tin-tuc-banner_1.png" />
+                            </div>
+                        </div>
+                        <!--Form-->
+                        @include('layouts.booking.tuvan_no_popup')
+
+
+                    </div>
+                    <!--Right-->
+                    <div class="col-12 col-sm-9">
+                        <div class="row">
+                            <div class="col-12 col-sm-4">
+                                <div class="cl-item-new" data-aos="zoom-in" data-aos-duration="1000">
+                                    <div class="dv-img">
+                                        <img src="images/tintuc/tin-tuc_img_1_1.png" />
+                                    </div>
+                                    <div class="dv-info">
+                                        <h2>Ám Ảnh Vẻ Ngoài: Khi Thẩm Mỹ Trở Thành Nỗi Áp Lực...</h2>
+                                        <p class="cl-info-date"><label>Đào tạo</label><i>18:00, 30/3/2025 </i></p>
+                                        <p class="cl-desc">
+                                            Đằng sau gương mặt hoàn hảo là những nỗi lo, sự tự ti và cả những chứng rối loạn
+                                            tâm lý do...
                                         </p>
-                                        <div class="cl-meta">
-                                            <span><i class="fa fa-calendar"></i> 15/12/2024</span>
-                                            <span><i class="fa fa-user"></i> Dr. Hà Quốc Đạt</span>
-                                        </div>
-                                        <a href="#" class="cl-read-more">Đọc tiếp <i class="fa fa-arrow-right"></i></a>
+                                        <a href="tin-tuc/tin-tuc-chit-tiet.html" class="btn-more">xem thêm</a>
                                     </div>
                                 </div>
                             </div>
+                            <!--item 2-->
+                            <div class="col-12 col-sm-4">
+                                <div class="cl-item-new" data-aos="zoom-in" data-aos-duration="1000">
+                                    <div class="dv-img">
+                                        <img src="images/tintuc/tin-tuc_img_1_2.png" />
+                                    </div>
+                                    <div class="dv-info">
+                                        <h2>“Dao Kéo” Có Gây Nghiện Không? Sự Thật Cần Được...</h2>
+                                        <p class="cl-info-date"><label>Chuyên môn</label><i>18:00, 30/3/2025 </i></p>
+                                        <p class="cl-desc">
+                                            Nhiều người không dừng lại sau một ca phẫu thuật, điều gì khiến họ tiếp tục
+                                            chỉnh sửa mãi khôn...
+                                        </p>
+                                        <a href="tin-tuc/tin-tuc-chit-tiet.html" class="btn-more">xem thêm</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--item 3-->
+                            <div class="col-12 col-sm-4">
+                                <div class="cl-item-new" data-aos="zoom-in" data-aos-duration="1000">
+                                    <div class="dv-img">
+                                        <img src="images/tintuc/tin-tuc_img_1_3.png" />
+                                    </div>
+                                    <div class="dv-info">
+                                        <h2>“Dao Kéo” Có Gây Nghiện Không? Sự Thật Cần Được...</h2>
+                                        <p class="cl-info-date"><label>Chuyên môn</label><i>18:00, 30/3/2025 </i></p>
+                                        <p class="cl-desc">
+                                            Nhiều người không dừng lại sau một ca phẫu thuật, điều gì khiến họ tiếp tục
+                                            chỉnh sửa mãi khôn...
+                                        </p>
+                                        <a href="tin-tuc/tin-tuc-chit-tiet.html" class="btn-more">xem thêm</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--item 4-->
+                            <div class="col-12 col-sm-4">
+                                <div class="cl-item-new" data-aos="zoom-in" data-aos-duration="1000">
+                                    <div class="dv-img">
+                                        <img src="images/tintuc/tin-tuc_img_1_4.png" />
+                                    </div>
+                                    <div class="dv-info">
+                                        <h2>Hậu Quả Của Những Ca Phẫu Thuật Thẩm Mỹ Hỏng: Nỗi Đa...</h2>
+                                        <p class="cl-info-date"><label>Từ thiện</label><i>18:00, 30/3/2025 </i></p>
+                                        <p class="cl-desc">
+                                            Nhiều người chọn cách im lặng sau khi thẩm mỹ thất bại. Bài viết sẽ phơi bày sự
+                                            thật đau lòng...
+                                        </p>
+                                        <a href="tin-tuc/tin-tuc-chit-tiet.html" class="btn-more">xem thêm</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--item 5-->
+                            <div class="col-12 col-sm-4">
+                                <div class="cl-item-new" data-aos="zoom-in" data-aos-duration="1000">
+                                    <div class="dv-img">
+                                        <img src="images/tintuc/tin-tuc_img_1_5.png" />
+                                    </div>
+                                    <div class="dv-info">
+                                        <h2>Phẫu Thuật Thẩm Mỹ Và Ranh Giới Mong Manh Giữa Tự...</h2>
+                                        <p class="cl-info-date"><label>Đào tạo</label><i>18:00, 30/3/2025 </i></p>
+                                        <p class="cl-desc">
+                                            Liệu chỉnh sửa khuôn mặt có giúp bạn yêu bản thân hơn, hay lại khiến bạn ngày
+                                            càng soi mói...
+                                        </p>
+                                        <a href="tin-tuc/tin-tuc-chit-tiet.html" class="btn-more">xem thêm</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--item 6-->
+                            <div class="col-12 col-sm-4">
+                                <div class="cl-item-new" data-aos="zoom-in" data-aos-duration="1000">
+                                    <div class="dv-img">
+                                        <img src="images/tintuc/tin-tuc_img_1_6.png" />
+                                    </div>
+                                    <div class="dv-info">
+                                        <h2>Vẻ Đẹp Chuẩn Hàn: Khi Cả Xã Hội Bị Ám Ảnh Bởi Một Khuô...</h2>
+                                        <p class="cl-info-date"><label>Báo chí...</label><i>18:00, 30/3/2025 </i></p>
+                                        <p class="cl-desc">
+                                            Góc nhìn về sự bùng nổ của phẫu thuật thẩm mỹ phong cách Hàn Quốc và tác động
+                                            văn...
+                                        </p>
+                                        <a href="tin-tuc/tin-tuc-chit-tiet.html" class="btn-more">xem thêm</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--item 7-->
+                            <div class="col-12 col-sm-4">
+                                <div class="cl-item-new" data-aos="zoom-in" data-aos-duration="1000">
+                                    <div class="dv-img">
+                                        <img src="images/tintuc/tin-tuc_img_1_7.png" />
+                                    </div>
+                                    <div class="dv-info">
+                                        <h2>Chi Phí Cho Một Gương Mặt Mới: Đẹp Nhưng Có Đáng...</h2>
+                                        <p class="cl-info-date"><label>Báo chí...</label><i>18:00, 30/3/2025 </i></p>
+                                        <p class="cl-desc">
+                                            Phẫu thuật thẩm mỹ không hề rẻ. Bài viết sẽ phân tích chi phí thực tế và những
+                                            điều cần...
+                                        </p>
+                                        <a href="tin-tuc/tin-tuc-chit-tiet.html" class="btn-more">xem thêm</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--item 8-->
+                            <div class="col-12 col-sm-4">
+                                <div class="cl-item-new" data-aos="zoom-in" data-aos-duration="1000">
+                                    <div class="dv-img">
+                                        <img src="images/tintuc/tin-tuc_img_1_8.png" />
+                                    </div>
+                                    <div class="dv-info">
+                                        <h2>Tuổi Trẻ Và Quyết Định “Dao Kéo” Sớm – Lợi Hay Hại?</h2>
+                                        <p class="cl-info-date"><label>Báo chí...</label><i>18:00, 30/3/2025 </i></p>
+                                        <p class="cl-desc">
+                                            Ngày càng nhiều bạn trẻ lựa chọn thẩm mỹ từ tuổi teen. Điều này liệu có hợp
+                                            lý?...
+                                        </p>
+                                        <a href="tin-tuc/tin-tuc-chit-tiet.html" class="btn-more">xem thêm</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--item 9-->
+                            <div class="col-12 col-sm-4">
+                                <div class="cl-item-new" data-aos="zoom-in" data-aos-duration="1000">
+                                    <div class="dv-img">
+                                        <img src="images/tintuc/tin-tuc_img_1_9.png" />
+                                    </div>
+                                    <div class="dv-info">
+                                        <h2>Người Nổi Tiếng Và Ảnh Hưởng Đến Trào Lưu Thẩm Mỹ...</h2>
+                                        <p class="cl-info-date"><label>Từ thiện</label><i>18:00, 30/3/2025 </i></p>
+                                        <p class="cl-desc">
+                                            Khi idol chỉnh mũi, cắt mí, hàng triệu người cũng làm theo. Trách nhiệm thuộc về
+                                            ai?...
+                                        </p>
+                                        <a href="tin-tuc/tin-tuc-chit-tiet.html" class="btn-more">xem thêm</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--item 10-->
+                            <div class="col-12 col-sm-4">
+                                <div class="cl-item-new" data-aos="zoom-in" data-aos-duration="1000">
+                                    <div class="dv-img">
+                                        <img src="images/tintuc/tin-tuc_img_1_10.png" />
+                                    </div>
+                                    <div class="dv-info">
+                                        <h2>“Dao Kéo” Có Thể Cứu Một Mối Quan Hệ Tình Cảm?</h2>
+                                        <p class="cl-info-date"><label>Chuyên môn</label><i>18:00, 30/3/2025 </i></p>
+                                        <p class="cl-desc">
+                                            Nhiều người tin rằng đẹp hơn sẽ giữ được tình yêu – nhưng sự thật có như thế
+                                            không?...
+                                        </p>
+                                        <a href="tin-tuc/tin-tuc-chit-tiet.html" class="btn-more">xem thêm</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--item 11-->
+                            <div class="col-12 col-sm-4">
+                                <div class="cl-item-new" data-aos="zoom-in" data-aos-duration="1000">
+                                    <div class="dv-img">
+                                        <img src="images/tintuc/tin-tuc_img_1_11.png" />
+                                    </div>
+                                    <div class="dv-info">
+                                        <h2>Phẫu Thuật Thẩm Mỹ Và Tiêu Chuẩn Đẹp Phi Thực Tế</h2>
+                                        <p class="cl-info-date"><label>Từ thiện</label><i>18:00, 30/3/2025 </i></p>
+                                        <p class="cl-desc">
+                                            Instagram, TikTok tạo nên những tiêu chuẩn không thật. Người thật có thể theo
+                                            kịp không?...
+                                        </p>
+                                        <a href="tin-tuc/tin-tuc-chit-tiet.html" class="btn-more">xem thêm</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--item 12-->
+                            <div class="col-12 col-sm-4">
+                                <div class="cl-item-new" data-aos="zoom-in" data-aos-duration="1000">
+                                    <div class="dv-img">
+                                        <img src="images/tintuc/tin-tuc_img_1_12.png" />
+                                    </div>
+                                    <div class="dv-info">
+                                        <h2>Bác Sĩ Thẩm Mỹ: Thiên Thần Hay "Thợ Sửa Mặt"?</h2>
+                                        <p class="cl-info-date"><label>Chuyên môn</label><i>18:00, 30/3/2025 </i></p>
+                                        <p class="cl-desc">
+                                            Sự thật về tay nghề, đạo đức và cả những nguy cơ khi giao nhan sắc cho người
+                                            khác....
+                                        </p>
+                                        <a href="tin-tuc/tin-tuc-chit-tiet.html" class="btn-more">xem thêm</a>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="row">
+                            <div class="col-12 col-sm-12">
+                                <ul class="cl-pagging">
+                                    <li class="p-first">
+                                        <a href="#"> <img src="images/icon/icon_btn_left.png" /></a>
+                                    </li>
+                                    <li class="active">
+                                        <a href="#"> <span>1</span></a>
+                                    </li>
+                                    <li>
+                                        <a href="#"> <span>2</span></a>
+                                    </li>
+                                    <li>
+                                        <a href="#"> <span>3</span></a>
+                                    </li>
+                                    <li>
+                                        <a href="#"> <span>4</span></a>
+                                    </li>
+                                    <li>
+                                        <a href="#"> <span>5</span></a>
+                                    </li>
+                                    <li class="p-last">
+                                        <a href="#"> <img src="images/icon/icon_btn_right.png" /></a>
+                                    </li>
+                                </ul>
+                            </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- News Grid -->
-                <div class="row" style="margin-top:50px;">
-                    <div class="col-12 col-sm-4" data-aos="fade-up" data-aos-duration="1000">
-                        <div class="cl-news-item">
-                            <div class="cl-news-image">
-                                <img src="{{ asset('images/tin-tuc/news-1.jpg') }}" />
-                                <span class="cl-category-tag">Thẩm mỹ</span>
-                            </div>
-                            <div class="cl-news-content">
-                                <h4>Những lưu ý quan trọng trước khi phẫu thuật thẩm mỹ</h4>
-                                <p>
-                                    Trước khi quyết định phẫu thuật thẩm mỹ, việc chuẩn bị kỹ lưỡng là yếu tố quan trọng
-                                    quyết định đến kết quả và sự an toàn của ca phẫu thuật.
-                                </p>
-                                <div class="cl-news-meta">
-                                    <span><i class="fa fa-calendar"></i> 10/12/2024</span>
-                                    <a href="#" class="cl-read-more-small">Đọc tiếp</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col-12 col-sm-4" data-aos="fade-up" data-aos-duration="2000">
-                        <div class="cl-news-item">
-                            <div class="cl-news-image">
-                                <img src="{{ asset('images/tin-tuc/news-2.jpg') }}" />
-                                <span class="cl-category-tag">Chăm sóc da</span>
-                            </div>
-                            <div class="cl-news-content">
-                                <h4>Bí quyết chăm sóc da sau phẫu thuật thẩm mỹ</h4>
-                                <p>
-                                    Quá trình chăm sóc da sau phẫu thuật đóng vai trò quan trọng trong việc phục hồi
-                                    và duy trì kết quả thẩm mỹ lâu dài.
-                                </p>
-                                <div class="cl-news-meta">
-                                    <span><i class="fa fa-calendar"></i> 08/12/2024</span>
-                                    <a href="#" class="cl-read-more-small">Đọc tiếp</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col-12 col-sm-4" data-aos="fade-up" data-aos-duration="3000">
-                        <div class="cl-news-item">
-                            <div class="cl-news-image">
-                                <img src="{{ asset('images/tin-tuc/news-3.jpg') }}" />
-                                <span class="cl-category-tag">Sức khỏe</span>
-                            </div>
-                            <div class="cl-news-content">
-                                <h4>Tầm quan trọng của việc kiểm tra sức khỏe định kỳ</h4>
-                                <p>
-                                    Việc kiểm tra sức khỏe định kỳ không chỉ giúp phát hiện sớm các bệnh tật
-                                    mà còn đảm bảo an toàn cho các ca phẫu thuật thẩm mỹ.
-                                </p>
-                                <div class="cl-news-meta">
-                                    <span><i class="fa fa-calendar"></i> 05/12/2024</span>
-                                    <a href="#" class="cl-read-more-small">Đọc tiếp</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- More News -->
-                <div class="row" style="margin-top:30px;">
-                    <div class="col-12 col-sm-4" data-aos="fade-up" data-aos-duration="1000">
-                        <div class="cl-news-item">
-                            <div class="cl-news-image">
-                                <img src="{{ asset('images/tin-tuc/news-4.jpg') }}" />
-                                <span class="cl-category-tag">Công nghệ</span>
-                            </div>
-                            <div class="cl-news-content">
-                                <h4>Công nghệ laser trong điều trị da hiện đại</h4>
-                                <p>
-                                    Công nghệ laser đã mang lại cuộc cách mạng trong lĩnh vực điều trị da,
-                                    giúp giải quyết nhiều vấn đề về da một cách hiệu quả và an toàn.
-                                </p>
-                                <div class="cl-news-meta">
-                                    <span><i class="fa fa-calendar"></i> 03/12/2024</span>
-                                    <a href="#" class="cl-read-more-small">Đọc tiếp</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col-12 col-sm-4" data-aos="fade-up" data-aos-duration="2000">
-                        <div class="cl-news-item">
-                            <div class="cl-news-image">
-                                <img src="{{ asset('images/tin-tuc/news-5.jpg') }}" />
-                                <span class="cl-category-tag">Thẩm mỹ</span>
-                            </div>
-                            <div class="cl-news-content">
-                                <h4>Xu hướng thẩm mỹ Hàn Quốc năm 2024</h4>
-                                <p>
-                                    Năm 2024 chứng kiến sự bùng nổ của các xu hướng thẩm mỹ đến từ Hàn Quốc,
-                                    mang đến những lựa chọn làm đẹp đa dạng và hiện đại.
-                                </p>
-                                <div class="cl-news-meta">
-                                    <span><i class="fa fa-calendar"></i> 01/12/2024</span>
-                                    <a href="#" class="cl-read-more-small">Đọc tiếp</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col-12 col-sm-4" data-aos="fade-up" data-aos-duration="3000">
-                        <div class="cl-news-item">
-                            <div class="cl-news-image">
-                                <img src="{{ asset('images/tin-tuc/news-6.jpg') }}" />
-                                <span class="cl-category-tag">Lời khuyên</span>
-                            </div>
-                            <div class="cl-news-content">
-                                <h4>Lựa chọn bác sĩ thẩm mỹ uy tín</h4>
-                                <p>
-                                    Việc lựa chọn bác sĩ thẩm mỹ uy tín là yếu tố quan trọng nhất quyết định
-                                    đến sự thành công và an toàn của ca phẫu thuật.
-                                </p>
-                                <div class="cl-news-meta">
-                                    <span><i class="fa fa-calendar"></i> 28/11/2024</span>
-                                    <a href="#" class="cl-read-more-small">Đọc tiếp</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Pagination -->
-                <div class="row" style="margin-top:50px;">
-                    <div class="col-12 col-sm-12">
-                        <div class="cl-pagination">
-                            <a href="#" class="cl-page-link active">1</a>
-                            <a href="#" class="cl-page-link">2</a>
-                            <a href="#" class="cl-page-link">3</a>
-                            <a href="#" class="cl-page-link">Tiếp theo <i class="fa fa-arrow-right"></i></a>
-                        </div>
-                    </div>
-                </div>
             </div>
+
+            <!--Sec 4 - dat lich kham ngay-->
+
         </div>
+          @include('layouts.booking.booking_Popup_DatLichKham')
     </div>
-</div>
 
-<!--Sec 4 - dat lich kham ngay-->
-<div class="cl-sec04">
-    <div class="container">
-        <div class="row">
-            <div class="col-12 col-sm-6">
-                <div class="h-sec4-info">
-                    <h4>ĐẶT LỊCH KHÁM NGAY!</h4>
-                    <p>Để được tư vấn trực tiếp bởi Dr. Đạt, hãy để lại thông tin của bạn ngay tại đây nhé!</p>
-                </div>
-            </div>
-            <div class="col-12 col-sm-6 h-sec4-form">
-                <div class="row">
-                    <div class="col-12 col-sm-4">
-                        <input type="text" placeholder="Họ & tên" class="ctr-h-input" />
-                    </div>
-                    <div class="col-12 col-sm-4">
-                        <input type="text" placeholder="Email" class="ctr-h-input" />
-                    </div>
-                    <div class="col-12 col-sm-4">
-                        <input type="text" placeholder="Số điện thoại" class="ctr-h-input" />
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-12 col-sm-12">
-                        <a class="cl-btn-full" href="#">
-                            <span>Gọi lại cho tôi</span>
-                            <i class="fa fa-angle-right"></i>
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-@endsection
+        @endsection

@@ -10,48 +10,44 @@
     <div class="cl-body-bg">
         <div class="container">
             <!--banner-->
-           <div class="cl-jCenter cl-aboutUs-0">
+            @if ($pageContent)
+                <div class="cl-jCenter cl-aboutUs-0">
                     <div class="row cl-sec01" data-aos="zoom-in" data-aos-duration="3000">
                         <div class="col-12 col-sm-12">
-                            <h4 class="cl-title">THẨM MỸ TẬN TÂM - KIM CHỈ NAM CHO SỨ MỆNH PHỤNG SỰ</h4>
+                            <h4 class="cl-title">{{ $pageContent->title }}</h4>
                         </div>
                         <div class="col-12 col-sm-12 cl-desc">
-                            <p class="ab-banner-desc">
-                                Dr. Đạt tự hào là đội ngũ bác sĩ phẫu thuật tạo hình thẩm mỹ chính thống,
-                                được dẫn dắt bởi bác sĩ Hà Quốc Đạt - Trưởng khoa Tạo hình Thẩm mỹ, Bệnh viện Lê Văn Thịnh - Bệnh viện hạng nhất thành phố Thủ Đức.
-                            </p>
+                            <p class="ab-banner-desc">{!! nl2br(e($pageContent->content)) !!}</p>
                         </div>
                     </div>
                 </div>
+            @endif
+
 
 
             <!--contents-->
             <div class="cl-aboutUs-info">
                 <div class="row">
-                    <div class="col-12 col-sm-6 info-avartar" data-aos="fade-right" data-aos-duration="2000">
-                        <img src="images/veDrDat/drDat.png" />
-                    </div>
-                    <div class="col-12 col-sm-6 info-desc" data-aos="fade-left" data-aos-duration="2000">
-                        <div class="icon_nhay_1">
-                            <img src="images/veDrDat/top_n.png" />
+                    @foreach ($abouts as $about)
+                        <div class="col-12 col-sm-6 info-avartar" data-aos="fade-right" data-aos-duration="2000">
+                            @if ($about->image)
+                                <img src="{{ asset('storage/' . $about->image) }}" alt="{{ $about->title }}" />
+                            @endif
                         </div>
-                        <h4>25 năm Kiến tạo vẻ đẹp chuẩn Y Khoa</h4>
-                        <p>
-                            Với hơn 25 năm kinh nghiệm, Dr. Đạt là bác sĩ chuyên khoa uy tín trong lĩnh vực phẫu thuật Tạo
-                            Hình Thẩm Mỹ tại
-                            TP. HCM. Bên cạnh công tác tại Bệnh viện Lê Văn Thịnh, Dr. Đạt còn hợp tác với nhiều bệnh viện
-                            quốc tế danh tiếng,
-                            cùng đội ngũ bác sĩ chuyên khoa giàu kinh nghiệm.
-                            Qua từng ca phẫu thuật thành công, Dr. Đạt đã và đang mang lại sự tự tin cùng vẻ đẹp hoàn mỹ cho
-                            hàng trăm khách
-                            hàng trong và ngoài nước.
-                        </p>
-                        <div class="icon_nhay_2">
-                            <img src="images/veDrDat/bottom_n.png" />
+                        <div class="col-12 col-sm-6 info-desc" data-aos="fade-left" data-aos-duration="2000">
+                            <div class="icon_nhay_1">
+                                <img src="{{ asset('images/veDrDat/top_n.png') }}" />
+                            </div>
+                            <h4>{{ $about->title }}</h4>
+                            <p>{!! nl2br(e($about->content)) !!}</p>
+                            <div class="icon_nhay_2">
+                                <img src="{{ asset('images/veDrDat/bottom_n.png') }}" />
+                            </div>
                         </div>
-                    </div>
+                    @endforeach
                 </div>
             </div>
+
 
             <div class="cl-aboutUs-1">
 

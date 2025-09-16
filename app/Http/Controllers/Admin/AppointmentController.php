@@ -133,7 +133,7 @@ class AppointmentController extends Controller
         return redirect()->route('admin.appointments.index')->with('success', 'Lịch hẹn đã được tạo thành công!');
     }
 
-    public function storeFrontend(Request $request)
+  public function storeFrontend(Request $request)
 {
     if ($request->has('service_id')) {
         // Booking dịch vụ
@@ -142,13 +142,16 @@ class AppointmentController extends Controller
             'customer_phone'    => 'required|digits:10',
             'customer_email'    => 'required|email|max:255',
             'service_id'        => 'required|exists:services,id',
-            'appointment_time'  => 'required',
             'appointment_date'  => 'required|date',
+            'appointment_time'  => 'nullable', // cho phép null
             'notes'             => 'nullable|string|max:1000',
         ]);
 
         $service = Service::find($validated['service_id']);
         $validated['estimated_price'] = $service ? $service->price_range : 0;
+
+        // Nếu không có giờ từ form thì lấy giờ hiện tại
+        $validated['appointment_time'] = $validated['appointment_time'] ?? now()->format('H:i');
 
     } elseif ($request->has('datlichkham')) {
         // Đặt lịch khám nhanh (chỉ cần họ tên, email, SĐT)
@@ -179,7 +182,6 @@ class AppointmentController extends Controller
     }
 
     $validated['status'] = 'pending';
-
     Appointment::create($validated);
 
     if ($request->has('service_id')) {
@@ -190,6 +192,15 @@ class AppointmentController extends Controller
         $message = 'Gửi thông tin tư vấn thành công, Chúng tôi sẽ liên hệ với bạn sớm nhất!';
     }
 
+    // Nếu là AJAX → trả JSON
+    if ($request->ajax()) {
+        return response()->json([
+            'success' => true,
+            'message' => $message
+        ]);
+    }
+
+    // Nếu là form thường → redirect
     return redirect()->back()->with('success', $message);
 }
 
