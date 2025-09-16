@@ -26,18 +26,34 @@
             </div>
             <ul class="sidebar-menu list-unstyled">
                 @foreach ($adminMenu as $item)
-                <li class="{{ isset($item['route']) && request()->routeIs($item['route']) ? 'active bg-primary' : '' }} rounded mb-2">
-                    <a href="{{ $item['link'] }}"
-                        class="d-flex align-items-center text-white text-decoration-none px-3 py-2">
+                <li class="{{ (isset($item['route']) && request()->routeIs($item['route'])) || (isset($item['children']) && collect($item['children'])->contains(function($child) { return isset($child['route']) && request()->routeIs($child['route']); })) ? 'active bg-primary' : '' }} rounded mb-2">
+                    @if(isset($item['children']) && count($item['children']) > 0)
+                    <a href="#" class="d-flex align-items-center text-white text-decoration-none px-3 py-2" data-bs-toggle="collapse" data-bs-target="#submenu-{{ $loop->index }}" aria-expanded="false">
+                        <i class="{{ $item['icon'] }} me-2"></i>
+                        <span>{{ $item['label'] }}</span>
+                        <i class="fas fa-chevron-down ms-auto"></i>
+                    </a>
+                    <ul class="collapse list-unstyled ms-3" id="submenu-{{ $loop->index }}">
+                        @foreach ($item['children'] as $child)
+                        <li class="{{ isset($child['route']) && request()->routeIs($child['route']) ? 'active bg-primary' : '' }} rounded mb-1">
+                            <a href="{{ $child['link'] }}" class="d-flex align-items-center text-white text-decoration-none px-3 py-2">
+                                <i class="{{ $child['icon'] }} me-2"></i>
+                                <span>{{ $child['label'] }}</span>
+                            </a>
+                        </li>
+                        @endforeach
+                    </ul>
+                    @else
+                    <a href="{{ $item['link'] }}" class="d-flex align-items-center text-white text-decoration-none px-3 py-2">
                         <i class="{{ $item['icon'] }} me-2"></i>
                         <span>{{ $item['label'] }}</span>
                     </a>
+                    @endif
                 </li>
                 @endforeach
 
                 <li class="{{ request()->routeIs('admin.menus.*') ? 'active bg-primary' : '' }} rounded mb-2">
-                    <a href="{{ route('admin.menus.index') }}"
-                        class="d-flex align-items-center text-white text-decoration-none px-3 py-2">
+                    <a href="{{ route('admin.menus.index') }}" class="d-flex align-items-center text-white text-decoration-none px-3 py-2">
                         <i class="fas fa-bars me-2"></i>
                         <span>Quản lý Menu</span>
                     </a>
@@ -107,7 +123,7 @@
     </script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <!-- Custom JS -->
-    
+
     <script>
         function toggleSidebar() {
             const sidebar = document.querySelector('.admin-sidebar');

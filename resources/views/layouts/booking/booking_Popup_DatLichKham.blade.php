@@ -9,7 +9,7 @@
             </div>
             <div class="col-12 col-sm-6 h-sec4-form">
                 <!-- Debug Route -->
-                <p>Debug: Form action = {{ route('appointments.store') }}</p>
+
                 @if ($errors->any())
                     <div class="alert alert-danger">
                         <ul>
@@ -24,7 +24,7 @@
                     <input type="hidden" name="datlichkham" value="1">
                     <div class="row">
                         <div class="col-12 col-sm-4">
-                            <label for="customer_name" class="form-label">Họ & tên</label>
+                            <label for="customer_name" class="form-label"></label>
                             <input type="text" id="customer_name" name="customer_name" placeholder="Họ & tên" class="ctr-h-input" value="{{ old('customer_name') }}" required />
                             <div class="text-danger" id="error_customer_name"></div>
                             @error('customer_name')
@@ -32,7 +32,7 @@
                             @enderror
                         </div>
                         <div class="col-12 col-sm-4">
-                            <label for="customer_email" class="form-label">Email</label>
+                            <label for="customer_email" class="form-label"></label>
                             <input type="email" id="customer_email" name="customer_email" placeholder="Email" class="ctr-h-input" value="{{ old('customer_email') }}" required />
                             <div class="text-danger" id="error_customer_email"></div>
                             @error('customer_email')
@@ -40,7 +40,7 @@
                             @enderror
                         </div>
                         <div class="col-12 col-sm-4">
-                            <label for="customer_phone" class="form-label">Số điện thoại</label>
+                            <label for="customer_phone" class="form-label"></label>
                             <input type="text" id="customer_phone" name="customer_phone" placeholder="Số điện thoại" class="ctr-h-input" value="{{ old('customer_phone') }}" required />
                             <div class="text-danger" id="error_customer_phone"></div>
                             @error('customer_phone')

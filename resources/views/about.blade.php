@@ -3,197 +3,183 @@
 @section('title', 'Về Dr. Đạt - Thẩm mỹ Dr.DAT')
 
 @section('styles')
-<link rel="stylesheet" href="{{ asset('css/ve-dr-dat.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/veDrDat.css') }}">
 @endsection
 
 @section('content')
-<div class="cl-body-bg">
-    <div class="container">
-        <!--banner-->
-        <div class="cl-jCenter">
-            <div class="row cl-sec01" data-aos="zoom-in" data-aos-duration="3000">
-                <div class="col-12 col-sm-12">
-                    <h4 class="cl-title">VỀ DR. ĐẠT</h4>
-                </div>
-                <div class="col-12 col-sm-12 cl-desc">
-                    <p>
-                        Thẩm Mỹ Tận Tâm Dr. Đạt tự hào là đội ngũ bác sĩ phẫu thuật tạo hình thẩm mỹ chính thống,
-                        dẫn dắt bởi Dr. Hà Quốc Đạt, Trưởng khoa Tạo hình Thẩm mỹ, Bệnh viện Lê Văn Thịnh.
-                        Với hơn 25 năm kinh nghiệm trong ngành Y, Dr. Đạt là một trong những bác sĩ chuyên khoa uy tín trong lĩnh vực phẫu thuật Tạo Hình Thẩm Mỹ tại TP. HCM.
-                    </p>
-                </div>
-            </div>
-        </div>
-
-        <!--contents-->
-        <div class="cl-panel-list">
-            <div class="cl-panel-body">
-                <div class="row">
-                    <div class="col-12 col-sm-6" data-aos="fade-right" data-aos-duration="3000">
-                        <img src="{{ asset('images/ve-dr-dat/dr_dat.png') }}" />
-                    </div>
-                    <div class="col-12 col-sm-6 cl-ct-info" data-aos="fade-left" data-aos-duration="3000">
-                        <div class="cl-info">
-                            <h4>DR. HÀ QUỐC ĐẠT</h4>
-                            <p><strong>Trưởng khoa Tạo hình Thẩm mỹ</strong></p>
-                            <p><strong>Bệnh viện Lê Văn Thịnh</strong></p>
-                            <p>
-                                Với hơn 25 năm kinh nghiệm trong ngành Y, Dr. Đạt là một trong những bác sĩ chuyên khoa uy tín
-                                trong lĩnh vực phẫu thuật Tạo Hình Thẩm Mỹ tại TP. HCM. Bên cạnh công tác tại Bệnh viện Lê Văn Thịnh,
-                                Dr. Đạt còn hợp tác với nhiều bệnh viện quốc tế danh tiếng, cùng đội ngũ bác sĩ chuyên khoa giàu kinh nghiệm.
-                            </p>
-                            <p>
-                                Qua từng ca phẫu thuật thành công, Dr. Đạt đã mang lại sự tự tin và vẻ đẹp hoàn mỹ cho hàng trăm khách hàng
-                                trong và ngoài nước. Với triết lý "Tận tâm – Chính thống – An toàn," Dr. Đạt luôn cam kết mang đến cho khách hàng
-                                những giải pháp làm đẹp chất lượng cao, hài hòa với nét đẹp tự nhiên và bền vững theo thời gian.
+    <div class="cl-body-bg">
+        <div class="container">
+            <!--banner-->
+           <div class="cl-jCenter cl-aboutUs-0">
+                    <div class="row cl-sec01" data-aos="zoom-in" data-aos-duration="3000">
+                        <div class="col-12 col-sm-12">
+                            <h4 class="cl-title">THẨM MỸ TẬN TÂM - KIM CHỈ NAM CHO SỨ MỆNH PHỤNG SỰ</h4>
+                        </div>
+                        <div class="col-12 col-sm-12 cl-desc">
+                            <p class="ab-banner-desc">
+                                Dr. Đạt tự hào là đội ngũ bác sĩ phẫu thuật tạo hình thẩm mỹ chính thống,
+                                được dẫn dắt bởi bác sĩ Hà Quốc Đạt - Trưởng khoa Tạo hình Thẩm mỹ, Bệnh viện Lê Văn Thịnh - Bệnh viện hạng nhất thành phố Thủ Đức.
                             </p>
                         </div>
                     </div>
                 </div>
-            </div>
-        </div>
 
-        <!--Qua trinh dao tao-->
-        <div class="cl-panel-list">
-            <div class="cl-panel-body">
+
+            <!--contents-->
+            <div class="cl-aboutUs-info">
                 <div class="row">
-                    <div class="col-12 col-sm-12 cl-info">
-                        <h4>QUÁ TRÌNH ĐÀO TẠO VÀ PHÁT TRIỂN</h4>
+                    <div class="col-12 col-sm-6 info-avartar" data-aos="fade-right" data-aos-duration="2000">
+                        <img src="images/veDrDat/drDat.png" />
                     </div>
-                </div>
-
-                <div class="row">
-                    <div class="col-12 col-sm-6" data-aos="fade-right" data-aos-duration="3000">
-                        <div class="cl-info">
-                            <h5>TRÌNH ĐỘ HỌC VẤN</h5>
-                            <ul class="ul-info">
-                                <li><strong>1998:</strong> Tốt nghiệp Đại học Y Dược TP.HCM</li>
-                                <li><strong>2005:</strong> Hoàn thành chương trình đào tạo chuyên khoa I Tạo hình Thẩm mỹ</li>
-                                <li><strong>2010:</strong> Hoàn thành chương trình đào tạo chuyên khoa II Tạo hình Thẩm mỹ</li>
-                                <li><strong>2015:</strong> Tham gia khóa đào tạo nâng cao tại Hàn Quốc</li>
-                                <li><strong>2020:</strong> Tham gia khóa đào tạo nâng cao tại Singapore</li>
-                            </ul>
+                    <div class="col-12 col-sm-6 info-desc" data-aos="fade-left" data-aos-duration="2000">
+                        <div class="icon_nhay_1">
+                            <img src="images/veDrDat/top_n.png" />
                         </div>
-                    </div>
-                    <div class="col-12 col-sm-6" data-aos="fade-left" data-aos-duration="3000">
-                        <div class="cl-info">
-                            <h5>KINH NGHIỆM LÀM VIỆC</h5>
-                            <ul class="ul-info">
-                                <li><strong>1998-2005:</strong> Bác sĩ tại Bệnh viện Chợ Rẫy</li>
-                                <li><strong>2005-2010:</strong> Bác sĩ tại Bệnh viện Việt Đức</li>
-                                <li><strong>2010-Nay:</strong> Trưởng khoa Tạo hình Thẩm mỹ, Bệnh viện Lê Văn Thịnh</li>
-                                <li><strong>2015-Nay:</strong> Giám đốc chuyên môn Thẩm Mỹ Tận Tâm Dr. Đạt</li>
-                            </ul>
+                        <h4>25 năm Kiến tạo vẻ đẹp chuẩn Y Khoa</h4>
+                        <p>
+                            Với hơn 25 năm kinh nghiệm, Dr. Đạt là bác sĩ chuyên khoa uy tín trong lĩnh vực phẫu thuật Tạo
+                            Hình Thẩm Mỹ tại
+                            TP. HCM. Bên cạnh công tác tại Bệnh viện Lê Văn Thịnh, Dr. Đạt còn hợp tác với nhiều bệnh viện
+                            quốc tế danh tiếng,
+                            cùng đội ngũ bác sĩ chuyên khoa giàu kinh nghiệm.
+                            Qua từng ca phẫu thuật thành công, Dr. Đạt đã và đang mang lại sự tự tin cùng vẻ đẹp hoàn mỹ cho
+                            hàng trăm khách
+                            hàng trong và ngoài nước.
+                        </p>
+                        <div class="icon_nhay_2">
+                            <img src="images/veDrDat/bottom_n.png" />
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
 
-        <!--Chung chi hanh nghe-->
-        <div class="cl-panel-list">
-            <div class="cl-panel-body">
-                <div class="row">
-                    <div class="col-12 col-sm-12 cl-info">
-                        <h4>CHỨNG CHỈ HÀNH NGHỀ</h4>
-                    </div>
-                </div>
+            <div class="cl-aboutUs-1">
 
-                <div class="row">
-                    <div class="col-12 col-sm-4" data-aos="zoom-in" data-aos-duration="1000">
-                        <div class="cl-certificate-item">
-                            <img src="{{ asset('images/ve-dr-dat/chung-chi-1.png') }}" />
-                            <h5>Chứng chỉ hành nghề</h5>
-                            <p>Chứng chỉ hành nghề bác sĩ chuyên khoa II Tạo hình Thẩm mỹ</p>
-                        </div>
-                    </div>
-                    <div class="col-12 col-sm-4" data-aos="zoom-in" data-aos-duration="2000">
-                        <div class="cl-certificate-item">
-                            <img src="{{ asset('images/ve-dr-dat/chung-chi-2.png') }}" />
-                            <h5>Chứng chỉ đào tạo</h5>
-                            <p>Chứng chỉ hoàn thành khóa đào tạo nâng cao tại Hàn Quốc</p>
-                        </div>
-                    </div>
-                    <div class="col-12 col-sm-4" data-aos="zoom-in" data-aos-duration="3000">
-                        <div class="cl-certificate-item">
-                            <img src="{{ asset('images/ve-dr-dat/chung-chi-3.png') }}" />
-                            <h5>Giấy khen</h5>
-                            <p>Giấy khen của Sở Y tế TP.HCM về thành tích xuất sắc</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
 
-        <!--Triet ly lam viec-->
-        <div class="cl-panel-list">
-            <div class="cl-panel-body">
-                <div class="row">
-                    <div class="col-12 col-sm-12 cl-info">
-                        <h4>TRIẾT LÝ LÀM VIỆC</h4>
-                    </div>
-                </div>
-
-                <div class="row">
-                    <div class="col-12 col-sm-4" data-aos="zoom-in" data-aos-duration="1000">
-                        <div class="cl-philosophy-item">
-                            <img src="{{ asset('images/ve-dr-dat/tan-tam.png') }}" />
-                            <h5>TẬN TÂM</h5>
-                            <p>Luôn đặt sự hài lòng và an toàn của khách hàng lên hàng đầu</p>
-                        </div>
-                    </div>
-                    <div class="col-12 col-sm-4" data-aos="zoom-in" data-aos-duration="2000">
-                        <div class="cl-philosophy-item">
-                            <img src="{{ asset('images/ve-dr-dat/chinh-thong.png') }}" />
-                            <h5>CHÍNH THỐNG</h5>
-                            <p>Áp dụng các phương pháp và công nghệ tiên tiến, chuẩn y khoa</p>
-                        </div>
-                    </div>
-                    <div class="col-12 col-sm-4" data-aos="zoom-in" data-aos-duration="3000">
-                        <div class="cl-philosophy-item">
-                            <img src="{{ asset('images/ve-dr-dat/an-toan.png') }}" />
-                            <h5>AN TOÀN</h5>
-                            <p>Đảm bảo an toàn tuyệt đối trong mọi quy trình phẫu thuật</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!--Sec 4 - dat lich kham ngay-->
-<div class="cl-sec04">
-    <div class="container">
-        <div class="row">
-            <div class="col-12 col-sm-6">
-                <div class="h-sec4-info">
-                    <h4>ĐẶT LỊCH KHÁM NGAY!</h4>
-                    <p>Để được tư vấn trực tiếp bởi Dr. Đạt, hãy để lại thông tin của bạn ngay tại đây nhé!</p>
-                </div>
-            </div>
-            <div class="col-12 col-sm-6 h-sec4-form">
-                <div class="row">
-                    <div class="col-12 col-sm-4">
-                        <input type="text" placeholder="Họ & tên" class="ctr-h-input" />
-                    </div>
-                    <div class="col-12 col-sm-4">
-                        <input type="text" placeholder="Email" class="ctr-h-input" />
-                    </div>
-                    <div class="col-12 col-sm-4">
-                        <input type="text" placeholder="Số điện thoại" class="ctr-h-input" />
-                    </div>
-                </div>
-                <div class="row">
+                <div class="row" data-aos="fade-up" data-aos-duration="2000">
                     <div class="col-12 col-sm-12">
-                        <a class="cl-btn-full" href="#">
-                            <span>Gọi lại cho tôi</span>
-                            <i class="fa fa-angle-right"></i>
-                        </a>
+                        <h4 class="cl-title">
+                            Đội ngũ nhân sự<br />
+                            vững chuyên môn, giàu tâm đức
+                        </h4>
+                    </div>
+                    <div class="col-12 col-sm-12 cl-desc">
+                        <p>
+                            Đội ngũ bác sĩ tại Dr. Đạt đều có chứng chỉ hành nghề chuyên khoa được cấp phép bởi Bộ Y Tế và
+                            luôn lấy “tận tâm”
+                            làm kim chỉ nam hoạt động, hướng tới triết lý làm nghề: Chuyên nghiệp - Tận tâm - Thấu hiểu
+                        </p>
                     </div>
                 </div>
             </div>
+
+            <div class="cl-aboutUs-2">
+                <div class="row">
+                    <div class="col-12 col-sm-4">
+                        <div class="cl-item" data-aos="flip-right" data-aos-duration="3000">
+                            <div class="cl-icon">
+                                <img src="images/home/icon_sec01_1.png" />
+                            </div>
+                            <h2>Chuyên nghiệp</h2>
+                            <p>
+                                Bằng kinh nghiệm chuyên môn vững vàng, công nghệ, máy móc hiện đại và tiêu chí chuẩn y khoa,
+                                Dr. Đạt cùng đội ngũ luôn mang đến những dịch vụ chuyên nghiệp và đẳng cấp hàng đầu.
+                            </p>
+                        </div>
+                    </div>
+                    <div class="col-12 col-sm-4">
+                        <div class="cl-item" data-aos="flip-right" data-aos-duration="3000">
+                            <div class="cl-icon">
+                                <img src="images/home/icon_sec01_2.png" />
+                            </div>
+                            <h2>Tận tâm</h2>
+                            <p>
+                                Không chỉ phụ trách khoa phẫu thuật tạo hình thẩm mỹ, Dr. Đạt còn là người trực tiếp tư vấn
+                                và đồng hành cùng khách
+                                hàng xuyên suốt hành trình tìm lại sự tự tin.
+                            </p>
+                        </div>
+                    </div>
+                    <div class="col-12 col-sm-4">
+                        <div class="cl-item" data-aos="flip-right" data-aos-duration="3000">
+                            <div class="cl-icon">
+                                <img src="images/home/icon_sec01_3.png" />
+                            </div>
+                            <h2>Thấu hiểu</h2>
+                            <p>
+                                Tận tuỵ lắng nghe để thấu hiểu mong muốn của từng khách hàng. Đó chính là phong cách làm
+                                việc đặc trưng của
+                                “Bác sĩ thẩm mỹ tận tâm” Dr. Đạt.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="cl-aboutUs-3">
+                <div class="row">
+                    <div class="col-12 col-sm-12 cl-image">
+                        <img src="images/veDrDat/image_no.png" />
+                    </div>
+                </div>
+            </div>
+
+            <div class="cl-aboutUs-1">
+                <div class="row" data-aos="fade-up" data-aos-duration="2000">
+                    <div class="col-12 col-sm-12">
+                        <h4 class="cl-title">
+                            Dịch vụ chuẩn Y Khoa <br />
+                            Chăm sóc chuyên nghiệp, trải nghiệm an tâm
+                        </h4>
+                    </div>
+                    <div class="col-12 col-sm-12 cl-desc">
+                        <p>
+                            Tại Dr. Đạt, tất cả các quy trình thẩm mỹ đều được các bác sĩ trực tiếp thăm khám và tư vấn, kết
+                            hợp với trang thiết bị hiện đại cùng kỹ thuật cao và cập nhật mới nhất,
+                            đảm bảo khách hàng sẽ nhận được sự chăm sóc tận tình, chuyên nghiệp và an tâm tuyệt đối.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="cl-aboutUs-1" data-aos="zoom-in" data-aos-duration="2000">
+                <div class="cl-aboutUs-4">
+                    <label class="dv-title">Chúng tôi cam kết</label>
+                    <div class="cl-content">
+                        <ul class="cl-ul-lists">
+                            <li>
+                                <i class="cl-icon"><img src="images/icon/icon_check.png" /></i>
+                                <label>Quy trình chuẩn y khoa – Bảo đảm tiêu chuẩn chuyên môn cao nhất trong mọi ca phẫu
+                                    thuật.</label>
+                            </li>
+                            <li>
+                                <i class="cl-icon"><img src="images/icon/icon_check.png" /></i>
+                                <label>Dịch vụ tận tâm – Tư vấn kỹ lưỡng, theo sát từng giai đoạn điều trị, cá nhân hoá
+                                    phương pháp theo nhu cầu riêng biệt.</label>
+                            </li>
+                            <li>
+                                <i class="cl-icon"><img src="images/icon/icon_check.png" /></i>
+                                <label>Kết quả được bảo chứng – Bằng sự hài lòng thực tế từ hàng trăm khách hàng đã làm đẹp
+                                    thành công.</label>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="cl-aboutUs-3">
+                <div class="row">
+                    <div class="col-12 col-sm-12 cl-image" style="padding-bottom: 70px;">
+                        <img src="images/veDrDat/image_aboutUs_end.png" />
+                    </div>
+                </div>
+            </div>
+
         </div>
+
     </div>
-</div>
+
+    <!--Sec 4 - dat lich kham ngay-->
+    @include('layouts.booking.booking_Popup_DatLichKham')
 @endsection
