@@ -27,7 +27,7 @@ use App\Http\Controllers\ProcessController;
 use App\Models\News;
 use App\Models\PageContent;
 
-use App\Http\Controllers\EmailNotificationController;
+use App\Http\Controllers\Admin\EmailNotificationController;
 
 
 Route::get('/', function () {
@@ -66,7 +66,22 @@ Route::get('/', function () {
     $certificates = \App\Models\Certificate::orderBy('order')
         ->get();
 
-    return view('home', compact('banners', 'categories', 'services', 'certificates'));
+    $tabs = \App\Models\Category::where('type', 'news')
+        ->where('is_active', true)
+        ->orderBy('order')
+        ->get();
+
+    $newsByCategory = [];
+    foreach ($tabs as $category) {
+        $newsByCategory[$category->slug] = \App\Models\News::where('category_id', $category->id)
+            ->where('is_active', true)
+            ->whereNotNull('published_at')
+            ->orderBy('published_at', 'desc')
+            ->take(5)
+            ->get();
+    }
+
+    return view('home', compact('banners', 'categories', 'services', 'certificates', 'tabs', 'newsByCategory'));
 })->name('home');
 
 // Sitemap route
@@ -119,8 +134,23 @@ $news = \App\Models\News::with('category')
 })->name('news.detail');
 
 Route::get('/tin-tuc/danh-muc/{category}', function ($category) {
+   $categories = \App\Models\Category::where('type', 'news')
+        ->whereIn('slug', ['chuyen-mon', 'dao-tao', 'tu-thien', 'bao-chi-truyen-thong'])
+        ->get()
+        ->keyBy('slug');
+
     $newsCategories = \App\Models\Category::where('type', 'news')->where('is_active', true)->orderBy('order')->get();
-    return view('news.category', compact('category', 'newsCategories'));
+
+    $newsByCategory = [];
+    foreach ($categories as $slug => $cat) {
+        $newsByCategory[$slug] = \App\Models\News::where('category_id', $cat->id)
+            ->where('is_active', true)
+            ->whereNotNull('published_at')
+            ->orderBy('published_at', 'desc')
+            ->take(6)
+            ->get();
+    }
+    return view('news.category', compact('category', 'newsCategories', 'newsByCategory'));
 })->name('news.category');
 Route::get('/lien-he', function () {
     $hospitalImages = \App\Models\HopitalImage::latest()->take(5)->get();
@@ -130,7 +160,7 @@ Route::get('/lien-he', function () {
 })->name('contact');
 
 // Email Notification
-Route::resource('email_notification', EmailNotificationController::class);
+Route::resource('email-notification', EmailNotificationController::class)->only(['store']);
 
 
 Route::post('/dat-lich', [\App\Http\Controllers\Admin\AppointmentController::class, 'storeFrontend'])->name('appointments.store');

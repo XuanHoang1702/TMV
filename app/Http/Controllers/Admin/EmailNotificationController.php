@@ -32,7 +32,8 @@ class EmailNotificationController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'email' => 'required|email|unique:mail_notifications,email',
+
+                'email' => 'required|email|unique:email_notifications,email',
         ]);
 
         if ($validator->fails()) {
@@ -43,10 +44,10 @@ class EmailNotificationController extends Controller
 
         EmailNotification::firstOrCreate(
             ['email' => $request->email],
-            ['email' => $request->email] 
+            ['email' => $request->email]
         );
-        
-        return redirect()->back()->with('success', 'Tạo email thông báo thành công');    
+
+        return redirect()->back()->with('success', 'Tạo email thông báo thành công');
     }
 
     /**
