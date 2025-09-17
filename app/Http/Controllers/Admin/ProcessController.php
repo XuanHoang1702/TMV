@@ -33,9 +33,12 @@ class ProcessController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(),[
+            'order' => 'required|integer',
             'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
             'title' => 'required|string',
-            'content' => 'required|string'
+            'content' => 'required|string',
+            'page' => 'required|string',
+            'section' => 'required|integer|in:1,2'
         ]);
 
         if ($validator->fails()) {
@@ -50,9 +53,12 @@ class ProcessController extends Controller
         $validated = $validator->validated();
 
         Process::create([
+            'order' => $request->order,
             'image' => $imagePath,
             'title' => $request->title,
             'content' => $request->content,
+            'page' => $request->page,
+            'section' => $request->section
         ]);
 
         return redirect()->route('admin.process.index')->with('success', 'Tạo quy trình thành công');
@@ -82,9 +88,12 @@ class ProcessController extends Controller
     public function update(Request $request, string $id)
     {
         $validator = Validator::make($request->all(),[
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'order' => 'required|integer',
+            'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
             'title' => 'required|string',
-            'content' => 'required|string'
+            'content' => 'required|string',
+            'page' => 'required|string',
+            'section' => 'required|integer|in:1,2'
         ]);
 
         if ($validator->fails()) {
@@ -101,9 +110,12 @@ class ProcessController extends Controller
         $process = Process::findOrFail($id);
 
         $process->update([
+            'order' => $request->order,
             'image' => $imagePath ?? $process->image,
             'title' => $request->title,
             'content' => $request->content,
+            'page' => $request->page,
+            'section' => $request->section
         ]);
 
         return redirect()->route('admin.process.index')->with('success', 'Cập nhật quy trình thành công');

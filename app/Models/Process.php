@@ -12,8 +12,11 @@ class Process extends Model
 
     protected $fillable = [
         'id',
+        'order',
         'image',
         'title',
-        'content'
+        'content',
+        'page',
+        'section'
     ];
 }

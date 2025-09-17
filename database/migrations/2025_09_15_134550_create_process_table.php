@@ -13,9 +13,12 @@ return new class extends Migration
     {
         Schema::create('process', function (Blueprint $table) {
             $table->id();
+            $table->integer('order');
             $table->string('image');
             $table->string('title');
             $table->string('content');
+            $table->string('page');
+            $table->integer('section');
             $table->timestamps();
         });
     }
