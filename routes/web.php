@@ -23,7 +23,7 @@ use App\Http\Controllers\Admin\PageContentController;
 use App\Http\Controllers\Admin\HopitalImageController;
 use App\Http\Controllers\FrontendServiceController;
 use App\Http\Controllers\AdvertisementController;
-use App\Http\Controllers\ProcessController;
+use App\Http\Controllers\Admin\ProcessController;
 use App\Models\News;
 use App\Models\PageContent;
 
@@ -152,8 +152,13 @@ Route::get('/tin-tuc/danh-muc/{category}', function ($category) {
     }
     return view('news.category', compact('category', 'newsCategories', 'newsByCategory'));
 })->name('news.category');
-Route::get('/lien-he', [ContactController::class, 'create'])->name('contact');
-Route::post('/lien-he', [ContactController::class, 'store'])->name('contact.store');
+Route::get('/lien-he', function () {
+    $hospitalImages = \App\Models\HopitalImage::latest()->take(5)->get();
+    $information = \App\Models\Information::first();
+    $contactBanner = \App\Models\PageContent::where('page', 'contact')->first();
+    return view('contact', compact('hospitalImages', 'information', 'contactBanner'));
+})->name('contact');
+
 // Email Notification
 Route::resource('email-notification', EmailNotificationController::class)->only(['store']);
 
@@ -195,7 +200,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::get('appointments-export', [AppointmentController::class, 'export'])->name('appointments.export');
 
     // Contacts Management
-    Route::resource('contacts', ContactController::class)->except(['edit', 'update']);
+    Route::resource('contacts', ContactController::class)->except(['create', 'store', 'edit', 'update']);
     Route::post('contacts/{contact}/reply', [ContactController::class, 'reply'])->name('contacts.reply');
     Route::post('contacts/{contact}/mark-read', [ContactController::class, 'markAsRead'])->name('contacts.mark-read');
     Route::post('contacts/bulk-mark-read', [ContactController::class, 'bulkMarkAsRead'])->name('contacts.bulk-mark-read');

@@ -177,7 +177,13 @@
         </div>
 
         <div class="cl-sec02" data-aos="zoom-in" data-aos-duration="3000">
-            <img src="{{ asset('images/dichvu/bap_tay_het_mo.png') }}">
+            @if($bannersSection1->count() > 0)
+                @foreach($bannersSection1 as $banner)
+                    <img src="{{ asset('storage/' . $banner->image_path) }}" alt="{{ $banner->title }}" />
+                @endforeach
+            @else
+                <img src="{{ asset('images/dichvu/bap_tay_het_mo.png') }}">
+            @endif
         </div>
 
         <!--Quy trinh-->
