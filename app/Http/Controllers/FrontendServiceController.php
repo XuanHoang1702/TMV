@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 use App\Models\About;
 use App\Models\Service;
 use App\Models\Category;
+use App\Models\Process;
 
 class FrontendServiceController extends Controller
 {
@@ -17,7 +18,13 @@ class FrontendServiceController extends Controller
 
     $servicesBanner = \App\Models\PageContent::where('page', 'services_banner')->first();
 
-    return view('layouts.services.index', compact('services', 'servicesBanner'));
+    $bannersSection1 = \App\Models\Banner::where('section', '1')
+        ->where('page', 'services')
+        ->where('is_active', true)
+        ->orderBy('order')
+        ->get();
+
+    return view('layouts.services.index', compact('services', 'servicesBanner', 'bannersSection1'));
 }
 
     public function show($slug)
@@ -50,7 +57,17 @@ class FrontendServiceController extends Controller
     {
         $abouts = About::all();
         $pageContent = \App\Models\PageContent::where('page', 'about_banner')->first();
-        return view('abouts', compact('abouts', 'pageContent'));
+        $bannersSection1 = \App\Models\Banner::where('section', '1')
+            ->where('page', 'about')
+            ->where('is_active', true)
+            ->orderBy('order')
+            ->get();
+        $bannersSection2 = \App\Models\Banner::where('section', '2')
+            ->where('page', 'about')
+            ->where('is_active', true)
+            ->orderBy('order')
+            ->get();
+        return view('abouts', compact('abouts', 'pageContent', 'bannersSection1', 'bannersSection2'));
     }
 
 

@@ -11,10 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('mail_notification', function (Blueprint $table) {
-            $table->id();
-            $table->string('email');
-            $table->timestamps();
+        Schema::table('site_info', function (Blueprint $table) {
+            $table->dropColumn('logo');
         });
     }
 
@@ -23,6 +21,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('mail_notification');
+        Schema::table('site_info', function (Blueprint $table) {
+            $table->string('logo')->after('id');
+        });
     }
 };

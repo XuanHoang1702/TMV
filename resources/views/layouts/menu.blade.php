@@ -9,61 +9,70 @@
                             <img src="{{ asset('storage/' . $siteInfo->header_logo) }}" alt="Logo" />
                         @endif
                     </a>
-
                 </div>
             </div>
             <div class="col-md-8 col-center-item">
                 <ul class="main-menu">
                     @foreach ($frontendMenu as $menuItem)
-                        <li class="{{ request()->routeIs($menuItem['route']) ? 'active' : '' }}">
-                            <a href="{{ route($menuItem['route']) }}"><span>{{ $menuItem['label'] }}</span></a>
-                        </li>
+                        @if ($menuItem['route'] !== 'services.index' && $menuItem['route'] !== 'news.index')
+                            <li class="{{ request()->routeIs($menuItem['route']) ? 'active' : '' }}">
+                                <a href="{{ route($menuItem['route']) }}"><span>{{ $menuItem['label'] }}</span></a>
+                            </li>
+                        @endif
                     @endforeach
-                    {{-- Dịch vụ --}}
-                    <li class="li-group {{ request()->routeIs('services.*') ? 'active' : '' }}">
-                        <a href="{{ route('services.index') }}"><span>Dịch vụ</span><i class="fa fa-angle-down"></i></a>
-                        <ul class="m-ul-sub">
-                            @if (isset($categories))
-                                @foreach ($categories->where('type', 'services')->where('parent_id', null) as $parentCategory)
-                                    <li>
-                                        <a
-                                            href="{{ route('services.detail', $parentCategory->slug ?? '#') }}"><span>{{ $parentCategory->name }}</span></a>
-                                        @php
-                                            $childCategories = $categories->where('parent_id', $parentCategory->id);
-                                        @endphp
-                                        @if ($childCategories->count() > 0)
-                                            <ul class="m-ul-sub-child">
-                                                @foreach ($childCategories as $childCategory)
-                                                    <li>
-                                                        <a
-                                                            href="{{ route('services.detail', $childCategory->slug ?? '#') }}"><span>{{ $childCategory->name }}</span></a>
-                                                    </li>
-                                                @endforeach
-                                            </ul>
-                                        @endif
-                                    </li>
-                                @endforeach
-                            @endif
-                        </ul>
-                    </li>
-                    {{-- Tin tức --}}
-                    <li class="li-group {{ request()->routeIs('news.*') ? 'active' : '' }}">
-                        <a href="{{ route('news.index') }}"><span>Tin tức</span><i class="fa fa-angle-down"></i></a>
-                        <ul class="m-ul-sub">
-                            @if (isset($categories))
-                                @foreach ($categories->where('type', 'news')->where('parent_id', null) as $category)
-                                    <li>
-                                        <a
-                                            href="{{ route('news.category', $category->slug ?? '#') }}"><span>{{ $category->name }}</span></a>
-                                    </li>
-                                @endforeach
-                            @endif
-                        </ul>
-                    </li>
-                    {{-- Liên hệ --}}
-                    <li class="{{ request()->routeIs('contact') ? 'active' : '' }}">
-                        <a href="{{ route('contact') }}"><span>Liên hệ</span></a>
-                    </li>
+                    {{-- Dịch vụ (lấy label từ menu, dropdown từ categories) --}}
+                    @php
+                        $serviceMenu = $frontendMenu->firstWhere('route', 'services.index');
+                    @endphp
+                    @if ($serviceMenu)
+                        <li class="li-group {{ request()->routeIs('services.*') ? 'active' : '' }}">
+                            <a href="{{ route('services.index') }}"><span>{{ $serviceMenu['label'] }}</span><i class="fa fa-angle-down"></i></a>
+                            <ul class="m-ul-sub">
+                                @if (isset($categories))
+                                    @foreach ($categories->where('type', 'services')->where('parent_id', null) as $parentCategory)
+                                        <li>
+                                            <a href="{{ route('services.detail', $parentCategory->slug ?? '#') }}"><span>{{ $parentCategory->name }}</span></a>
+                                            @php
+                                                $childCategories = $categories->where('parent_id', $parentCategory->id);
+                                            @endphp
+                                            @if ($childCategories->count() > 0)
+                                                <ul class="m-ul-sub-child">
+                                                    @foreach ($childCategories as $childCategory)
+                                                        <li>
+                                                            <a href="{{ route('services.detail', $childCategory->slug ?? '#') }}"><span>{{ $childCategory->name }}</span></a>
+                                                        </li>
+                                                    @endforeach
+                                                </ul>
+                                            @endif
+                                        </li>
+                                    @endforeach
+                                @endif
+                            </ul>
+                        </li>
+                    @endif
+                    {{-- Tin tức (lấy label từ menu, dropdown từ categories) --}}
+                    @php
+                        $newsMenu = $frontendMenu->firstWhere('route', 'news.index');
+                    @endphp
+                    @if ($newsMenu)
+                        <li class="li-group {{ request()->routeIs('news.*') ? 'active' : '' }}">
+                            <a href="{{ route('news.index') }}"><span>{{ $newsMenu['label'] }}</span><i class="fa fa-angle-down"></i></a>
+                            <ul class="m-ul-sub">
+                                @if (isset($categories))
+                                    @foreach ($categories->where('type', 'news')->where('parent_id', null) as $category)
+                                        <li>
+                                            <a href="{{ route('news.category', $category->slug ?? '#') }}"><span>{{ $category->name }}</span></a>
+                                        </li>
+                                    @endforeach
+                                @endif
+                            </ul>
+                        </li>
+                    @endif
+                    {{-- Liên hệ (giữ nguyên từ menu) --}}
+                    @php
+                        $contactMenu = $frontendMenu->firstWhere('route', 'contact');
+                    @endphp
+                   
                 </ul>
             </div>
             <div class="col-md-3 col-center-item menu-icon">

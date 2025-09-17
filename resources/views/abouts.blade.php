@@ -115,7 +115,13 @@
             <div class="cl-aboutUs-3">
                 <div class="row">
                     <div class="col-12 col-sm-12 cl-image">
-                        <img src="images/veDrDat/image_no.png" />
+                        @if($bannersSection1->count() > 0)
+                            @foreach($bannersSection1 as $banner)
+                                <img src="{{ asset('storage/' . $banner->image_path) }}" alt="{{ $banner->title }}" />
+                            @endforeach
+                        @else
+                            <img src="images/veDrDat/image_no.png" />
+                        @endif
                     </div>
                 </div>
             </div>
@@ -167,7 +173,13 @@
             <div class="cl-aboutUs-3">
                 <div class="row">
                     <div class="col-12 col-sm-12 cl-image" style="padding-bottom: 70px;">
-                        <img src="images/veDrDat/image_aboutUs_end.png" />
+                        @if($bannersSection2->count() > 0)
+                            @foreach($bannersSection2 as $banner)
+                                <img src="{{ asset('storage/' . $banner->image_path) }}" alt="{{ $banner->title }}" />
+                            @endforeach
+                        @else
+                            <img src="images/veDrDat/image_aboutUs_end.png" />
+                        @endif
                     </div>
                 </div>
             </div>

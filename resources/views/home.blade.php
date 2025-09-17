@@ -14,14 +14,15 @@
 
 @section('styles')
     <link rel="stylesheet" href="{{ asset('css/home.css') }}">
+    <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css"/>
 @endsection
 
 @section('content')
     <!-- Banners -->
-    @if(isset($banners) && $banners->isNotEmpty())
+    @if (isset($banners) && $banners->isNotEmpty())
         @include('layouts.banners', ['banners' => $banners])
     @else
-        <!-- Fallback nếu không có banners -->
         <p>Không có banner để hiển thị.</p>
     @endif
 
@@ -29,15 +30,20 @@
         <div class="container">
             <!-- Service List -->
             @php
-                $services = isset($services) ? $services : \App\Models\Service::where('is_active', true)->whereNull('parent_id')->with(['children', 'category'])->orderBy('sort_order')->get();
+                $services = isset($services)
+                    ? $services
+                    : \App\Models\Service::where('is_active', true)
+                        ->whereNull('parent_id')
+                        ->with(['children', 'category'])
+                        ->orderBy('sort_order')
+                        ->get();
             @endphp
-            @if(isset($services) && $services->isNotEmpty())
+            @if (isset($services) && $services->isNotEmpty())
                 @include('layouts.service-list', ['services' => $services])
             @else
                 <p>Không có dịch vụ để hiển thị.</p>
             @endif
 
-            <!-- Vững Chuyên Môn, Giàu Tâm Đức -->
             @include('home.section1')
         </div>
     </div>
@@ -50,7 +56,7 @@
             ->orderBy('order')
             ->first();
     @endphp
-    @if($sec02Banner)
+    @if ($sec02Banner)
         @include('layouts.section_banner', ['sec02Banner' => $sec02Banner])
     @else
         <p>Không có banner cho section 2.</p>
@@ -65,17 +71,15 @@
                         @include('home.section2')
                     </div>
                 </div>
-                <!-- Chung chi hanh nghe -->
-                @if(isset($certificates) && $certificates->isNotEmpty())
+                @if (isset($certificates) && $certificates->isNotEmpty())
                     @include('layouts.certificate', ['certificates' => $certificates])
                 @else
                     <p>Không có chứng chỉ để hiển thị.</p>
                 @endif
-                <!-- End chung chi hanh nghe -->
             </div>
         </div>
 
-        <!-- Section 4 - Dat lich kham ngay -->
+        <!-- Section 4 -->
         <div class="cl-sec04">
             <div class="container">
                 <div class="row">
@@ -110,6 +114,7 @@
             </div>
         </div>
 
+        <!-- Section 5 (News) -->
         <div class="cl-sec5">
             <div class="container" data-aos="zoom-in" data-aos-duration="2000">
                 <div class="row">
@@ -120,130 +125,105 @@
                 <div class="row">
                     <div class="col-12 col-sm-12">
                         <div class="cl-tab">
+                            <!-- Tab Headers -->
                             <div class="cl-tab-head">
                                 <div class="row">
-                                    <div class="col-12 col-sm-3 cl-tab-head-item active" onclick="onChangeTab(this,'tab1')">
-                                        <a href="javascript:void(0)">Chuyên môn</a>
-                                    </div>
-                                    <div class="col-12 col-sm-3 cl-tab-head-item" onclick="onChangeTab(this,'tab2')">
-                                        <a href="javascript:void(0)">Đào tạo</a>
-                                    </div>
-                                    <div class="col-12 col-sm-3 cl-tab-head-item" onclick="onChangeTab(this,'tab3')">
-                                        <a href="javascript:void(0)">Từ thiện</a>
-                                    </div>
-                                    <div class="col-12 col-sm-3 cl-tab-head-item" onclick="onChangeTab(this,'tab4')">
-                                        <a href="javascript:void(0)">Báo chí, Truyền thông</a>
-                                    </div>
+                                    @foreach ($tabs as $index => $category)
+                                        <div class="col-12 col-sm-3 cl-tab-head-item {{ $index === 0 ? 'active' : '' }}" onclick="onChangeTab(this, '{{ e('tab' . $category->id) }}')">
+                                            <a href="javascript:void(0)">{{ $category->name }}</a>
+                                        </div>
+                                    @endforeach
                                 </div>
                             </div>
+
+                            <!-- Tab Bodies -->
                             <div class="cl-tab-bodys">
-                                <div class="cl-content-news active" id="tab1">
-                                    <div class="btn-left">
-                                        <a href="javascript:void(0)"><img src="images/icon/icon_left.png" /> </a>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-12 col-sm-12">
-                                            <section class="nl-sx-slider slider">
-                                                <div class="slide nl-sx-item-slide">
-                                                    <div class="item-news">
-                                                        <img src="images/home/new_1.png" />
-                                                        <p class="cl-date">13.12.2024</p>
-                                                        <h2>Cắt mí có ảnh hưởng đến chức năng thị lực?</h2>
-                                                        <div class="dv-button">
-                                                            <a class="cl-btn-full-2" href="tin-tuc/tin-tuc-chit-tiet.html" style="width:90%;">
-                                                                <span>Xem thêm</span>
-                                                                <i class="fa fa-angle-right"></i>
-                                                            </a>
+                                @foreach ($tabs as $index => $category)
+                                    <div class="cl-content-news {{ $index === 0 ? 'active' : '' }}" id="tab{{ $category->id }}">
+                                        <div class="btn-left">
+                                            <a href="javascript:void(0)"><img src="{{ asset('images/icon/icon_left.png') }}" /></a>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-12 col-sm-12">
+                                                <section class="nl-sx-slider slider">
+                                                    @forelse ($newsByCategory[$category->slug] as $news)
+                                                        <div class="slide nl-sx-item-slide">
+                                                            <div class="item-news">
+                                                                @if (!empty($news->images) && isset($news->images[0]))
+                                                                    <img src="{{ Storage::url($news->images[0]) }}" alt="{{ $news->title }}" />
+                                                                @else
+                                                                    <img src="{{ asset('images/home/default.png') }}" alt="Default Image" />
+                                                                @endif
+                                                                <p class="cl-date">{{ \Carbon\Carbon::parse($news->published_at)->format('d.m.Y') }}</p>
+                                                                <h2>{{ $news->title }}</h2>
+                                                                <div class="dv-button">
+                                                                    <a class="cl-btn-full-2" href="{{ route('news.detail', [$news->category->slug, $news->slug]) }}" style="width:90%;">
+                                                                        <span>Xem thêm</span>
+                                                                        <i class="fa fa-angle-right"></i>
+                                                                    </a>
+                                                                </div>
+                                                            </div>
                                                         </div>
-                                                    </div>
-                                                </div>
-                                                <div class="slide nl-sx-item-slide">
-                                                    <div class="item-news">
-                                                        <img src="images/home/new_2.png" />
-                                                        <p class="cl-date">13.12.2024</p>
-                                                        <h2>Phẫu Thuật Thẩm Mỹ: Làm Đẹp Hay Đánh Mất Chính Mình?</h2>
-                                                        <div class="dv-button">
-                                                            <a class="cl-btn-full-2" href="tin-tuc/tin-tuc-chit-tiet.html" style="width:90%;">
-                                                                <span>Xem thêm</span>
-                                                                <i class="fa fa-angle-right"></i>
-                                                            </a>
+                                                    @empty
+                                                        <div class="row">
+                                                            <div class="col-12 col-sm-12">
+                                                                <i>{{ $category->name }} đang cập nhật dữ liệu...</i>
+                                                            </div>
                                                         </div>
-                                                    </div>
-                                                </div>
-                                                <div class="slide nl-sx-item-slide">
-                                                    <div class="item-news">
-                                                        <img src="images/home/new_3.png" />
-                                                        <p class="cl-date">13.12.2024</p>
-                                                        <h2>Phẫu Thuật Thẩm Mỹ: Làm Đẹp Hay Đánh Mất Chính Mình?</h2>
-                                                        <div class="dv-button">
-                                                            <a class="cl-btn-full-2" href="tin-tuc/tin-tuc-chit-tiet.html" style="width:90%;">
-                                                                <span>Xem thêm</span>
-                                                                <i class="fa fa-angle-right"></i>
-                                                            </a>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="slide nl-sx-item-slide">
-                                                    <div class="item-news">
-                                                        <img src="images/home/new_3.png" />
-                                                        <p class="cl-date">13.12.2024</p>
-                                                        <h2>Phẫu Thuật Thẩm Mỹ: Làm Đẹp Hay Đánh Mất Chính Mình?</h2>
-                                                        <div class="dv-button">
-                                                            <a class="cl-btn-full-2" href="tin-tuc/tin-tuc-chit-tiet.html" style="width:90%;">
-                                                                <span>Xem thêm</span>
-                                                                <i class="fa fa-angle-right"></i>
-                                                            </a>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="slide nl-sx-item-slide">
-                                                    <div class="item-news">
-                                                        <img src="images/home/new_3.png" />
-                                                        <p class="cl-date">13.12.2024</p>
-                                                        <h2>Phẫu Thuật Thẩm Mỹ: Làm Đẹp Hay Đánh Mất Chính Mình?</h2>
-                                                        <div class="dv-button">
-                                                            <a class="cl-btn-full-2" href="tin-tuc/tin-tuc-chit-tiet.html" style="width:90%;">
-                                                                <span>Xem thêm</span>
-                                                                <i class="fa fa-angle-right"></i>
-                                                            </a>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </section>
+                                                    @endforelse
+                                                </section>
+                                            </div>
+                                        </div>
+                                        <div class="btn-right">
+                                            <a href="javascript:void(0)"><img src="{{ asset('images/icon/icon_right.png') }}" /></a>
                                         </div>
                                     </div>
-                                    <div class="btn-right">
-                                        <a href="javascript:void(0)"><img src="images/icon/icon_right.png" /> </a>
-                                    </div>
-                                </div>
-                                <!-- Tab 2 -->
-                                <div class="cl-content-news" id="tab2">
-                                    <div class="row">
-                                        <div class="col-12 col-sm-12">
-                                            <i>Đào tạo đang cập nhật dữ liệu...</i>
-                                        </div>
-                                    </div>
-                                </div>
-                                <!-- Tab 3 -->
-                                <div class="cl-content-news" id="tab3">
-                                    <div class="row">
-                                        <div class="col-12 col-sm-12">
-                                            <i>Từ thiện đang cập nhật dữ liệu...</i>
-                                        </div>
-                                    </div>
-                                </div>
-                                <!-- Tab 4 -->
-                                <div class="cl-content-news" id="tab4">
-                                    <div class="row">
-                                        <div class="col-12 col-sm-12">
-                                            <i>Báo chí, Truyền thông đang cập nhật dữ liệu...</i>
-                                        </div>
-                                    </div>
-                                </div>
+                                @endforeach
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    @endsection
+    </div>
+@endsection
+
+@section('scripts')
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            // Initialize AOS
+            AOS.init();
+
+            // Initialize Slick Slider for each tab
+            $('.nl-sx-slider').each(function() {
+                $(this).slick({
+                    slidesToShow: 3,
+                    slidesToScroll: 1,
+                    prevArrow: $(this).closest('.cl-content-news').find('.btn-left a'),
+                    nextArrow: $(this).closest('.cl-content-news').find('.btn-right a'),
+                    dots: false,
+                    infinite: true,
+                    responsive: [
+                        {
+                            breakpoint: 768,
+                            settings: {
+                                slidesToShow: 1
+                            }
+                        }
+                    ]
+                });
+            });
+
+            // Handle tab switching
+            window.onChangeTab = function(element, tabId) {
+                $('.cl-tab-head-item').removeClass('active');
+                $('.cl-content-news').removeClass('active');
+                $(element).addClass('active');
+                $('#' + tabId).addClass('active');
+                $('#' + tabId + ' .nl-sx-slider').slick('setPosition');
+            };
+        });
+    </script>
+@endsection

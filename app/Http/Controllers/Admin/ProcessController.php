@@ -32,20 +32,21 @@ class ProcessController extends Controller
      */
     public function store(Request $request)
     {
-        $validate = Validator::make($request->all(),[
-            'image' => 'required|image|imes:jpeg,png,jpg,gif|max:2048',
+        $validator = Validator::make($request->all(),[
+            'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
             'title' => 'required|string',
             'content' => 'required|string'
         ]);
+
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator)->withInput();
+        }
 
         $imagePath = null;
         if($request->hasFile('image')){
             $imagePath = $request->file('image')->store('process', 'public');
         }
 
-        if ($validator->fails()) {
-            return redirect()->back()->withErrors($validator)->withInput();
-        }
         $validated = $validator->validated();
 
         Process::create([
@@ -80,20 +81,21 @@ class ProcessController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        $validate = Validator::make($request->all(),[
-            'image' => 'required|image|imes:jpeg,png,jpg,gif|max:2048',
+        $validator = Validator::make($request->all(),[
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'title' => 'required|string',
             'content' => 'required|string'
         ]);
+
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator)->withInput();
+        }
 
         $imagePath = null;
         if($request->hasFile('image')){
             $imagePath = $request->file('image')->store('process', 'public');
         }
 
-        if ($validator->fails()) {
-            return redirect()->back()->withErrors($validator)->withInput();
-        }
         $validated = $validator->validated();
 
         $process = Process::findOrFail($id);

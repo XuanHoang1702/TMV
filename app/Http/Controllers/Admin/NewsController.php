@@ -95,7 +95,6 @@ class NewsController extends Controller
             'images' => 'nullable|array',
             'images.*' => 'image|mimes:jpeg,png,jpg|max:2048',
             'removed_images' => 'nullable|array',
-            'removed_images.*' => 'string',
             'category_id' => 'required|exists:categories,id',
             'is_featured' => 'boolean',
             'published_at' => 'nullable|date',
@@ -104,36 +103,30 @@ class NewsController extends Controller
             'meta_description' => 'nullable|string|max:500'
         ]);
 
-        // Handle removing existing images
+        // Remove selected images
         $currentImages = $news->images ?? [];
-        if ($request->has('removed_images') && is_array($request->removed_images)) {
-            foreach ($request->removed_images as $removedImage) {
-                // Remove from storage
-                if (Storage::disk('public')->exists($removedImage)) {
-                    Storage::disk('public')->delete($removedImage);
-                }
-                // Remove from current images array
-                $currentImages = array_filter($currentImages, function($image) use ($removedImage) {
-                    return $image !== $removedImage;
-                });
-            }
+       if ($request->filled('removed_images')) {
+    foreach ($request->removed_images as $removedImage) {
+        if (Storage::disk('public')->exists($removedImage)) {
+            Storage::disk('public')->delete($removedImage);
         }
+        $currentImages = array_filter($currentImages, fn($img) => $img !== $removedImage);
+    }
+}
 
-        // Handle multiple images - append new images to existing ones
+
+        // Append new uploaded images
         if ($request->hasFile('images')) {
             foreach ($request->file('images') as $file) {
-                if ($file) { // Check if file is not null
-                    $currentImages[] = $file->store('news', 'public');
-                }
+                $currentImages[] = $file->store('news', 'public');
             }
         }
 
-        $validated['images'] = array_values($currentImages); // Reindex array
+        $validated['images'] = array_values($currentImages); // Reindex
 
         $news->update($validated);
 
-        return redirect()->route('admin.news.index')
-            ->with('success', 'Tin tức đã được cập nhật thành công');
+        return redirect()->route('admin.news.index')->with('success', 'Tin tức đã được cập nhật thành công');
     }
 
     public function destroy(News $news)
@@ -179,4 +172,24 @@ class NewsController extends Controller
 
     return view('admin.news.show', compact('news', 'relatedNews'));
 }
+public function removeImage(News $news, Request $request)
+{
+    $imagePath = $request->image;
+
+    if ($imagePath && in_array($imagePath, $news->images)) {
+        // Xóa file khỏi storage
+        if (\Storage::disk('public')->exists($imagePath)) {
+            \Storage::disk('public')->delete($imagePath);
+        }
+
+        // Cập nhật lại mảng images
+        $updatedImages = array_values(array_filter($news->images, fn($img) => $img !== $imagePath));
+        $news->update(['images' => $updatedImages]);
+
+        return response()->json(['success' => true]);
+    }
+
+    return response()->json(['success' => false], 400);
+}
+
 }
