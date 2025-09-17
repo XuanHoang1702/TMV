@@ -7,6 +7,9 @@ use App\Models\News;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+use App\Models\EmailNotification;
+use App\Mail\MailNotification;
+use Illuminate\Support\Facades\Mail;
 
 class NewsController extends Controller
 {
@@ -74,6 +77,11 @@ class NewsController extends Controller
         }
 
         News::create($validated);
+
+        $users = EmailNotification::all();
+        foreach ($users as $user) {
+            Mail::to($user->email)->send(new MailNotification($user));
+        }
 
         return redirect()->route('admin.news.index')
             ->with('success', 'Tin tức đã được tạo thành công');
