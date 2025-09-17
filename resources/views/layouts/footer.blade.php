@@ -8,10 +8,21 @@
             </div>
 
             <div class="col-12 col-sm-3">
-                <h4>BỆNH VIỆN LÊ VĂN THỊNH</h4>
-                <p><i class="fa fa-phone"></i>0705 242 999</p>
-                <p><i class="fa fa-map-marker"></i>130 Lê Văn Thịnh, P. Bình Trưng Tây, TP. Thủ Đức</p>
+                @if ($information)
+                    <h4>{{ $information->name }}</h4>
+
+                    @if ($information->hotline)
+                        <p><i class="fa fa-phone"></i> {{ $information->hotline }}</p>
+                    @endif
+
+                    @if ($information->address)
+                        <p><i class="fa fa-map-marker"></i> {{ $information->address }}</p>
+                    @endif
+                @else
+                    <h4>Chưa có thông tin</h4>
+                @endif
             </div>
+
             <div class="col-12 col-sm-3">
                 <h4>ĐĂNG KÝ NHẬN BẢN TIN</h4>
                 <p>Cập nhật các thông tin mới nhất về sản phẩm, dịch vụ và ưu đãi</p>

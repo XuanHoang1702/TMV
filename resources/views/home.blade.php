@@ -2,24 +2,20 @@
 
 @section('title', 'Trang chủ - Thẩm mỹ Dr.DAT')
 
-@section('meta_description',
-    'Thẩm mỹ Dr.DAT - Trung tâm thẩm mỹ hàng đầu với dịch vụ phẫu thuật thẩm mỹ chuyên nghiệp,
-    đội ngũ bác sĩ giàu kinh nghiệm. Tư vấn miễn phí 24/7.')
+@section('meta_description', 'Thẩm mỹ Dr.DAT - Trung tâm thẩm mỹ hàng đầu với dịch vụ phẫu thuật thẩm mỹ chuyên nghiệp, đội ngũ bác sĩ giàu kinh nghiệm. Tư vấn miễn phí 24/7.')
 
-@section('meta_keywords',
-    'thẩm mỹ dr dat, phẫu thuật thẩm mỹ, làm đẹp, spa thẩm mỹ, cắt mí, nâng mũi, hút mỡ, trẻ hóa
-    da')
+@section('meta_keywords', 'thẩm mỹ dr dat, phẫu thuật thẩm mỹ, làm đẹp, spa thẩm mỹ, cắt mí, nâng mũi, hút mỡ, trẻ hóa da')
 
 @section('og_title', 'Trang chủ - Thẩm mỹ Dr.DAT')
 
-@section('og_description',
-    'Thẩm mỹ Dr.DAT - Trung tâm thẩm mỹ hàng đầu với dịch vụ phẫu thuật thẩm mỹ chuyên nghiệp,
-    đội ngũ bác sĩ giàu kinh nghiệm. Tư vấn miễn phí 24/7.')
+@section('og_description', 'Thẩm mỹ Dr.DAT - Trung tâm thẩm mỹ hàng đầu với dịch vụ phẫu thuật thẩm mỹ chuyên nghiệp, đội ngũ bác sĩ giàu kinh nghiệm. Tư vấn miễn phí 24/7.')
 
 @section('og_image', asset('images/logo_Dr_Dat.png'))
 
 @section('styles')
     <link rel="stylesheet" href="{{ asset('css/home.css') }}">
+    <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css"/>
 @endsection
 
 @section('content')
@@ -118,7 +114,7 @@
             </div>
         </div>
 
-        <!-- Section 5 -->
+        <!-- Section 5 (News) -->
         <div class="cl-sec5">
             <div class="container" data-aos="zoom-in" data-aos-duration="2000">
                 <div class="row">
@@ -129,202 +125,104 @@
                 <div class="row">
                     <div class="col-12 col-sm-12">
                         <div class="cl-tab">
+                            <!-- Tab Headers -->
                             <div class="cl-tab-head">
                                 <div class="row">
-                                    @foreach ($tabs as $index => $tab)
-                                        <div class="col-12 col-sm-3 cl-tab-head-item {{ $index === 0 ? 'active' : '' }}"
-                                            onclick="onChangeTab(this, 'tab{{ $index + 1 }}')">
-                                            <a href="javascript:void(0)">{{ $tab->name }}</a>
+                                    @foreach ($tabs as $index => $category)
+                                        <div class="col-12 col-sm-3 cl-tab-head-item {{ $index === 0 ? 'active' : '' }}" onclick="onChangeTab(this, '{{ e('tab' . $category->id) }}')">
+                                            <a href="javascript:void(0)">{{ $category->name }}</a>
                                         </div>
                                     @endforeach
                                 </div>
                             </div>
 
+                            <!-- Tab Bodies -->
                             <div class="cl-tab-bodys">
-                                <!-- Tab 1 -->
-                                <div class="cl-content-news active" id="tab1">
-                                    <div class="btn-left">
-                                        <a href="javascript:void(0)"><img src="images/icon/icon_left.png" /></a>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-12 col-sm-12">
-                                            <section class="nl-sx-slider slider">
-                                                @forelse ($newsByCategory['chuyen-mon'] ?? [] as $item)
-                                                    <div class="slide nl-sx-item-slide">
-                                                        <div class="item-news">
-                                                            <img src="{{ asset('storage/' . $item->images[0]) }}"
-                                                                alt="{{ $item->title }}">
-                                                            <p class="cl-date">{{ $item->published_at->format('d.m.Y') }}
-                                                            </p>
-                                                            <h2>{{ $item->title }}</h2>
-                                                            <div class="dv-button">
-                                                                <a class="cl-btn-full-2"
-                                                                    href="{{ route('news.detail', $item->slug) }}"
-                                                                    style="width:90%;">
-                                                                    <span>Xem thêm</span>
-                                                                    <i class="fa fa-angle-right"></i>
-                                                                </a>
+                                @foreach ($tabs as $index => $category)
+                                    <div class="cl-content-news {{ $index === 0 ? 'active' : '' }}" id="tab{{ $category->id }}">
+                                        <div class="btn-left">
+                                            <a href="javascript:void(0)"><img src="{{ asset('images/icon/icon_left.png') }}" /></a>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-12 col-sm-12">
+                                                <section class="nl-sx-slider slider">
+                                                    @forelse ($newsByCategory[$category->slug] as $news)
+                                                        <div class="slide nl-sx-item-slide">
+                                                            <div class="item-news">
+                                                                @if (!empty($news->images) && isset($news->images[0]))
+                                                                    <img src="{{ Storage::url($news->images[0]) }}" alt="{{ $news->title }}" />
+                                                                @else
+                                                                    <img src="{{ asset('images/home/default.png') }}" alt="Default Image" />
+                                                                @endif
+                                                                <p class="cl-date">{{ \Carbon\Carbon::parse($news->published_at)->format('d.m.Y') }}</p>
+                                                                <h2>{{ $news->title }}</h2>
+                                                                <div class="dv-button">
+                                                                    <a class="cl-btn-full-2" href="{{ route('news.detail', [$news->category->slug, $news->slug]) }}" style="width:90%;">
+                                                                        <span>Xem thêm</span>
+                                                                        <i class="fa fa-angle-right"></i>
+                                                                    </a>
+                                                                </div>
                                                             </div>
                                                         </div>
-                                                    </div>
-                                                @empty
-                                                    <i>Chuyên môn đang cập nhật dữ liệu...</i>
-                                                @endforelse
-                                            </section>
-                                        </div>
-                                    </div>
-
-                                    <div class="btn-right">
-                                        <a href="javascript:void(0)"><img src="images/icon/icon_right.png" /></a>
-                                    </div>
-                                </div>
-
-                                <!-- Tab 2 -->
-                                <div class="cl-content-news" id="tab2">
-                                    <div class="btn-left">
-                                        <a href="javascript:void(0)"><img src="images/icon/icon_left.png" /></a>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-12 col-sm-12">
-                                            <section class="nl-sx-slider slider">
-                                                @forelse ($newsByCategory['dao-tao'] ?? [] as $item)
-                                                    <div class="slide nl-sx-item-slide">
-                                                        <div class="item-news">
-                                                            <img src="{{ asset('storage/' . $item->images[0]) }}"
-                                                                alt="{{ $item->title }}">
-                                                            <p class="cl-date">{{ $item->published_at->format('d.m.Y') }}
-                                                            </p>
-                                                            <h2>{{ $item->title }}</h2>
-                                                            <div class="dv-button">
-                                                                <a class="cl-btn-full-2"
-                                                                    href="{{ route('news.detail', $item->slug) }}"
-                                                                    style="width:90%;">
-                                                                    <span>Xem thêm</span>
-                                                                    <i class="fa fa-angle-right"></i>
-                                                                </a>
+                                                    @empty
+                                                        <div class="row">
+                                                            <div class="col-12 col-sm-12">
+                                                                <i>{{ $category->name }} đang cập nhật dữ liệu...</i>
                                                             </div>
                                                         </div>
-                                                    </div>
-                                                @empty
-                                                    <i>Chuyên môn đang cập nhật dữ liệu...</i>
-                                                @endforelse
-                                            </section>
+                                                    @endforelse
+                                                </section>
+                                            </div>
+                                        </div>
+                                        <div class="btn-right">
+                                            <a href="javascript:void(0)"><img src="{{ asset('images/icon/icon_right.png') }}" /></a>
                                         </div>
                                     </div>
-
-                                    <div class="btn-right">
-                                        <a href="javascript:void(0)"><img src="images/icon/icon_right.png" /></a>
-                                    </div>
-                                </div>
-
-                                <!-- Tab 3 -->
-                                <div class="cl-content-news" id="tab3">
-                                    <div class="btn-left">
-                                        <a href="javascript:void(0)"><img src="images/icon/icon_left.png" /></a>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-12 col-sm-12">
-                                            <section class="nl-sx-slider slider">
-                                                @forelse ($newsByCategory['tu-thien'] ?? [] as $item)
-                                                    <div class="slide nl-sx-item-slide">
-                                                        <div class="item-news">
-                                                            <img src="{{ asset('storage/' . $item->images[0]) }}"
-                                                                alt="{{ $item->title }}">
-                                                            <p class="cl-date">{{ $item->published_at->format('d.m.Y') }}
-                                                            </p>
-                                                            <h2>{{ $item->title }}</h2>
-                                                            <div class="dv-button">
-                                                                <a class="cl-btn-full-2"
-                                                                    href="{{ route('news.detail', $item->slug) }}"
-                                                                    style="width:90%;">
-                                                                    <span>Xem thêm</span>
-                                                                    <i class="fa fa-angle-right"></i>
-                                                                </a>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                @empty
-                                                    <i>Từ thiện đang cập nhật dữ liệu...</i>
-                                                @endforelse
-                                            </section>
-                                        </div>
-                                    </div>
-                                    <div class="btn-right">
-                                        <a href="javascript:void(0)"><img src="images/icon/icon_right.png" /></a>
-                                    </div>
-                                </div>
-
-                                <!-- Tab 4 -->
-                                <div class="cl-content-news" id="tab4">
-                                    <div class="btn-left">
-                                        <a href="javascript:void(0)"><img src="images/icon/icon_left.png" /></a>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-12 col-sm-12">
-                                            <section class="nl-sx-slider slider">
-                                                @forelse ($newsByCategory['bao-chi-truyen-thong'] ?? [] as $item)
-                                                    <div class="slide nl-sx-item-slide">
-                                                        <div class="item-news">
-                                                            <img src="{{ asset('storage/' . $item->images[0]) }}"
-                                                                alt="{{ $item->title }}">
-                                                            <p class="cl-date">{{ $item->published_at->format('d.m.Y') }}
-                                                            </p>
-                                                            <h2>{{ $item->title }}</h2>
-                                                            <div class="dv-button">
-                                                                <a class="cl-btn-full-2"
-                                                                    href="{{ route('news.detail', $item->slug) }}"
-                                                                    style="width:90%;">
-                                                                    <span>Xem thêm</span>
-                                                                    <i class="fa fa-angle-right"></i>
-                                                                </a>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                @empty
-                                                    <i>Báo chí, Truyền thông đang cập nhật dữ liệu...</i>
-                                                @endforelse
-                                            </section>
-                                        </div>
-                                    </div>
-                                    <div class="btn-right">
-                                        <a href="javascript:void(0)"><img src="images/icon/icon_right.png" /></a>
-                                    </div>
-                                </div>
+                                @endforeach
                             </div>
-
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-
 @endsection
 
 @section('scripts')
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
     <script>
         $(document).ready(function() {
-            // Khởi tạo slick cho tất cả slider
-            $('.slider').slick({
-                slidesToShow: 1,
-                slidesToScroll: 1,
-                arrows: false,
-                dots: false,
-                infinite: false
+            // Initialize AOS
+            AOS.init();
+
+            // Initialize Slick Slider for each tab
+            $('.nl-sx-slider').each(function() {
+                $(this).slick({
+                    slidesToShow: 3,
+                    slidesToScroll: 1,
+                    prevArrow: $(this).closest('.cl-content-news').find('.btn-left a'),
+                    nextArrow: $(this).closest('.cl-content-news').find('.btn-right a'),
+                    dots: false,
+                    infinite: true,
+                    responsive: [
+                        {
+                            breakpoint: 768,
+                            settings: {
+                                slidesToShow: 1
+                            }
+                        }
+                    ]
+                });
             });
 
-            // Hàm đổi tab
+            // Handle tab switching
             window.onChangeTab = function(element, tabId) {
-                // Remove active cũ
                 $('.cl-tab-head-item').removeClass('active');
                 $('.cl-content-news').removeClass('active');
-
-                // Add active mới
                 $(element).addClass('active');
                 $('#' + tabId).addClass('active');
-
-                // Refresh slick
-                $('#' + tabId + ' .slider').slick('setPosition');
+                $('#' + tabId + ' .nl-sx-slider').slick('setPosition');
             };
         });
     </script>
