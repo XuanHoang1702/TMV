@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 class EmailNotification extends Model
 {
     use HasFactory;
-    protected $table = 'email_notification';
+    protected $table = 'email_notifications';
 
     protected $fillable = [
         'id',

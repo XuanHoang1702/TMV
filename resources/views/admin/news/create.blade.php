@@ -237,7 +237,7 @@
     </script>
 @endsection
 
-@section('scripts')
+@push('scripts')
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             let imageCount = 1;
@@ -272,4 +272,4 @@
             });
         });
     </script>
-@endsection
+ @endpush

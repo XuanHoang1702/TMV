@@ -28,19 +28,21 @@
     <div class="cl-body-bg">
         <div class="container">
             <!--banner-->
-            @if ($servicesBanner)
-                <div class="cl-jCenter">
-                    <div class="row cl-sec01" data-aos="zoom-in" data-aos-duration="3000">
-                        <div class="col-12 col-sm-12">
-                            <h4 class="cl-title">{{ $servicesBanner->title }}</h4>
-                        </div>
-                        <div class="col-12 col-sm-12 cl-desc">
-                            <p class="ab-banner-desc">{!! nl2br(e($servicesBanner->content)) !!}</p>
-                        </div>
+            <div class="cl-jCenter">
+                <div class="row cl-sec01" data-aos="zoom-in" data-aos-duration="3000">
+                    <div class="col-12 col-sm-12">
+                        <h4 class="cl-title">DỊCH VỤ CỦA CHÚNG TÔI</h4>
+                    </div>
+                    <div class="col-12 col-sm-12 cl-desc">
+                        <p>
+                            Chúng tôi cung cấp các dịch vụ thẩm mỹ tiên tiến, an toàn và hiệu quả, được thực hiện bởi ekip
+                            bác sĩ giàu kinh nghiệm, tận tâm và luôn đặt sức khỏe của bạn lên hàng đầu.
+                            Tại Dr. Đạt, mỗi khách hàng đều là một câu chuyện riêng biệt, và chúng tôi luôn cam kết mang lại
+                            kết quả tuyệt vời, tự nhiên, và lâu dài.
+                        </p>
                     </div>
                 </div>
-            @endif
-
+            </div>
 
             <!--contents-->
             @foreach ($services as $service)
@@ -69,15 +71,14 @@
                     <div class="cl-panel-list">
                         <div class="cl-panel-body">
                             <div class="row">
+                                <!-- Cột trái -->
                                 <div class="col-12 col-sm-5 cl-info" data-aos="fade-right" data-aos-duration="3000">
                                     <h4>
-                                        <b> <br />
-                                            {{ $service->name }} <br />
-                                            BAO GỒM<b>
+                                        <b><br />{{ $service->name }} <br />BAO GỒM</b>
                                     </h4>
                                     <div class="cl-dv-btn">
                                         <a href="{{ route('services.detail', $service->slug) }}">
-                                            <img src="{{ asset('images/icon/icon_arowOnly_right.png') }}" />
+                                            <img src="{{ asset('images/icon/icon_arowOnly_right.png') }}" alt="arrow" />
                                         </a>
                                     </div>
                                     @if ($service->image)
@@ -87,24 +88,26 @@
                                         </div>
                                     @endif
                                 </div>
+
+                                <!-- Cột phải -->
                                 <div class="col-12 col-sm-7 cl-detail">
                                     @foreach ($service->children as $child)
                                         <div class="cl-pl-item" data-aos="fade-left" data-aos-duration="3000">
-                                            <div class="row">
+                                            <div class="row align-items-start">
+                                                <!-- Icon -->
                                                 <div class="col-12 col-sm-2 cl-img">
                                                     @if ($child->icon_page_service)
                                                         <img src="{{ Storage::url($child->icon_page_service) }}"
-                                                            alt="{{ $child->name }}" class="img-fluid">
+                                                            alt="{{ $child->name }}" class="img-fluid" />
                                                     @else
                                                         <img src="{{ asset('images/dichvu/default-icon.png') }}"
-                                                            alt="Default Icon" class="img-fluid">
+                                                            alt="Default Icon" class="img-fluid" />
                                                     @endif
                                                 </div>
+                                                <!-- Nội dung -->
                                                 <div class="col-12 col-sm-10 cl-ct-info">
                                                     <h2>{{ $child->name }}</h2>
-                                                    <p>
-                                                        {{ $child->description ?: 'Không có mô tả.' }}
-                                                    </p>
+                                                    <p>{{ $child->description ?: 'Không có mô tả.' }}</p>
                                                 </div>
                                             </div>
                                         </div>
@@ -112,6 +115,7 @@
                                 </div>
                             </div>
                         </div>
+
                     </div>
                 @endif
             @endforeach
@@ -173,7 +177,13 @@
         </div>
 
         <div class="cl-sec02" data-aos="zoom-in" data-aos-duration="3000">
-            <img src="{{ asset('images/dichvu/bap_tay_het_mo.png') }}">
+            @if($bannersSection1->count() > 0)
+                @foreach($bannersSection1 as $banner)
+                    <img src="{{ asset('storage/' . $banner->image_path) }}" alt="{{ $banner->title }}" />
+                @endforeach
+            @else
+                <img src="{{ asset('images/dichvu/bap_tay_het_mo.png') }}">
+            @endif
         </div>
 
         <!--Quy trinh-->

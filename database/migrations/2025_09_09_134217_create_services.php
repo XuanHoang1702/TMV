@@ -40,7 +40,6 @@ return new class extends Migration
     public function down(): void
     {
         Schema::dropIfExists('services');
-        $table->dropForeign(['parent_id']);
-            $table->dropColumn('parent_id');
+
     }
 };

@@ -3,7 +3,8 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
-use App\Models\Category;
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\DB;
 
 class CategorySeeder extends Seeder
 {
@@ -12,124 +13,28 @@ class CategorySeeder extends Seeder
      */
     public function run(): void
     {
-        // Main service categories
-        $serviceCategories = [
-            [
-                'name' => 'Phẫu thuật thẩm mỹ',
-                'slug' => 'phau-thuat-tham-my',
-                'description' => 'Các dịch vụ phẫu thuật thẩm mỹ chuyên nghiệp',
-                'type' => 'service',
-                'order' => 1,
-                'is_active' => true,
-            ],
-            [
-                'name' => 'Điều trị da',
-                'slug' => 'dieu-tri-da',
-                'description' => 'Các phương pháp điều trị da chuyên sâu',
-                'type' => 'service',
-                'order' => 2,
-                'is_active' => true,
-            ],
-            [
-                'name' => 'Tiêm filler',
-                'slug' => 'tiem-filler',
-                'description' => 'Dịch vụ tiêm filler làm đầy nếp nhăn',
-                'type' => 'service',
-                'order' => 3,
-                'is_active' => true,
-            ],
-            [
-                'name' => 'Tiêm Botox',
-                'slug' => 'tiem-botox',
-                'description' => 'Dịch vụ tiêm Botox trẻ hóa da',
-                'type' => 'service',
-                'order' => 4,
-                'is_active' => true,
-            ],
+        DB::table('categories')->truncate();
+
+        $categories = [
+            'Phẫu thuật thẩm mỹ cô bé',
+            'Phẫu thuật tạo hình thẩm mỹ ngực',
+            'Phẫu thuật tạo hình thẩm mỹ mông',
+            'Hút mỡ, cấy mỡ',
+            'Phẫu thuật tạo hình thẩm mỹ mắt',
+            'Phẫu thuật tạo hình thẩm mỹ mũi',
+            'Phẫu thuật tạo hình thẩm mỹ vùng mặt',
+            'Thẩm mỹ nội khoa',
         ];
 
-        // News categories
-        $newsCategories = [
-            [
-                'name' => 'Chuyên môn',
-                'slug' => 'chuyen-mon',
-                'description' => 'Bài viết về kỹ thuật và chuyên môn',
-                'type' => 'news',
-                'order' => 1,
-                'is_active' => true,
-            ],
-            [
-                'name' => 'Báo chí & Truyền thông',
-                'slug' => 'bao-chi-truyen-thong',
-                'description' => 'Tin tức và hoạt động của phòng khám',
-                'type' => 'news',
-                'order' => 2,
-                'is_active' => true,
-            ],
-            [
-                'name' => 'Đào tạo',
-                'slug' => 'dao-tao',
-                'description' => 'Các chương trình đào tạo và hội thảo',
-                'type' => 'news',
-                'order' => 3,
-                'is_active' => true,
-            ],
-            [
-                'name' => 'Từ thiện',
-                'slug' => 'tu-thien',
-                'description' => 'Hoạt động từ thiện và trách nhiệm xã hội',
-                'type' => 'news',
-                'order' => 4,
-                'is_active' => true,
-            ],
-        ];
-
-        // Create service categories
-        foreach ($serviceCategories as $category) {
-            Category::create($category);
-        }
-
-        // Create news categories
-        foreach ($newsCategories as $category) {
-            Category::create($category);
-        }
-
-        // Create subcategories for services
-        $eyeSurgery = Category::where('slug', 'phau-thuat-tham-my')->first();
-        if ($eyeSurgery) {
-            $eyeSubcategories = [
-                [
-                    'name' => 'Phẫu thuật mắt',
-                    'slug' => 'phau-thuat-mat',
-                    'description' => 'Cắt mí mắt, nâng mí mắt',
-                    'parent_id' => $eyeSurgery->id,
-                    'type' => 'service',
-                    'order' => 1,
-                    'is_active' => true,
-                ],
-                [
-                    'name' => 'Phẫu thuật mũi',
-                    'slug' => 'phau-thuat-mui',
-                    'description' => 'Nâng mũi, chỉnh hình mũi',
-                    'parent_id' => $eyeSurgery->id,
-                    'type' => 'service',
-                    'order' => 2,
-                    'is_active' => true,
-                ],
-                [
-                    'name' => 'Phẫu thuật ngực',
-                    'slug' => 'phau-thuat-nguc',
-                    'description' => 'Tăng ngực, thu nhỏ ngực',
-                    'parent_id' => $eyeSurgery->id,
-                    'type' => 'service',
-                    'order' => 3,
-                    'is_active' => true,
-                ],
-            ];
-
-            foreach ($eyeSubcategories as $subcategory) {
-                Category::create($subcategory);
-            }
+        foreach ($categories as $category) {
+            DB::table('categories')->insert([
+                'name'       => $category,
+                'slug'       => Str::slug($category, '-'),
+                'parent_id'  => null, // nếu muốn có danh mục cha thì sửa ở đây
+                'is_active'  => true,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]);
         }
     }
 }
