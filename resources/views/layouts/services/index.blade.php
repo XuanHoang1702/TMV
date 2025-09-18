@@ -129,49 +129,19 @@
                 </div>
 
                 <div class="row" style="padding:35px 0;">
-                    <div class="col-12 col-sm-3">
-                        <div class="col-item">
-                            <div class="cl-img">
-                                <img src="{{ asset('images/dichvu/icon_lydo1.png') }}" />
+                    @foreach($processesLiDo as $process)
+                        @foreach($process->processImages as $image)
+                            <div class="col-12 col-sm-3">
+                                <div class="col-item">
+                                    <div class="cl-img">
+                                        <img src="{{ asset('storage/' . $image->image) }}" />
+                                    </div>
+                                    <h3>{{ $image->title }}</h3>
+                                    <p>{{ $image->description }}</p>
+                                </div>
                             </div>
-                            <h3>Kinh nghiệm chuyên sâu</h3>
-                            <p>Các bác sĩ tại Dr. Đạt có chuyên môn cao trong lĩnh vực phẫu thuật thẩm mỹ cô bé, đảm bảo quy
-                                trình thực hiện chính xác, an toàn và hiệu quả.</p>
-                        </div>
-                    </div>
-                    <div class="col-12 col-sm-3">
-                        <div class="col-item">
-                            <div class="cl-img">
-                                <img src="{{ asset('images/dichvu/icon_lydo2.png') }}" />
-                            </div>
-                            <h3>Kỹ thuật hiện đại</h3>
-                            <p>
-                                Dr. Đạt luôn áp dụng các phương pháp phẫu thuật kỹ thuật cao và luôn cập nhật, giúp phẫu
-                                thuật tạo hình thẩm mỹ một cách hiệu quả,
-                                hạn chế tối đa các biến chứng.
-                            </p>
-                        </div>
-                    </div>
-                    <div class="col-12 col-sm-3">
-                        <div class="col-item">
-                            <div class="cl-img">
-                                <img src="{{ asset('images/dichvu/icon_lydo3.png') }}" />
-                            </div>
-                            <h3>An toàn tuyệt đối</h3>
-                            <p>Quy trình phẫu thuật được thực hiện trong môi trường vô trùng, với sự giám sát của đội ngũ y
-                                bác sĩ chuyên khoa, mang lại sự an tâm cho bệnh nhân.</p>
-                        </div>
-                    </div>
-                    <div class="col-12 col-sm-3">
-                        <div class="col-item">
-                            <div class="cl-img">
-                                <img src="{{ asset('images/dichvu/icon_lydo4.png') }}" />
-                            </div>
-                            <h3>Phục hồi nhanh chóng</h3>
-                            <p>Sau phẫu thuật, bác sĩ sẽ hướng dẫn chăm sóc vết thương và theo dõi quá trình hồi phục để đảm
-                                bảo không có biến chứng và bệnh nhân phục hồi nhanh chóng.</p>
-                        </div>
-                    </div>
+                        @endforeach
+                    @endforeach
                 </div>
             </div>
         </div>
@@ -196,77 +166,27 @@
                 </div>
 
                 <div class="row" style="padding:35px 0;">
-                    <div class="col-12 col-sm-3 cl-colItem" data-aos="zoom-in">
-                        <div class="col-item item-bg-org">
-                            <div class="row" style="margin-bottom:15px;">
-                                <div class="col-12 col-sm-9 dv-number">
-                                    <h1>01</h1>
-                                </div>
-                                <div class="col-12 col-sm-3 cl-img-right">
-                                    <img src="{{ asset('images/icon/icon_arow_right_blue.png') }}" />
-                                </div>
-                            </div>
-                            <h3>Tư vấn và khám sức khỏe</h3>
-                            <p>Bác sĩ sẽ tư vấn phương pháp phù hợp với nhu cầu của bạn, kiểm tra tình trạng sức khỏe để đảm
-                                bảo an toàn trước khi phẫu thuật.</p>
-                            <div class="cl-img">
-                                <img src="{{ asset('images/dichvu/img_qt1.png') }}" />
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-12 col-sm-3 cl-colItem" data-aos="zoom-in" data-aos-duration="1000">
-                        <div class="col-item item-bg-org">
-                            <div class="row" style="margin-bottom:15px;">
-                                <div class="col-12 col-sm-9 dv-number">
-                                    <h1>02</h1>
-                                </div>
-                                <div class="col-12 col-sm-3 cl-img-right">
-                                    <img src="{{ asset('images/icon/icon_arow_right_blue.png') }}" />
+                    @foreach($processesQuyTrinh as $process)
+                        @foreach($process->processImages as $index => $image)
+                            <div class="col-12 col-sm-3 cl-colItem" data-aos="zoom-in" data-aos-duration="{{ ($index + 1) * 1000 }}">
+                                <div class="col-item item-bg-org">
+                                    <div class="row" style="margin-bottom:15px;">
+                                        <div class="col-12 col-sm-9 dv-number">
+                                            <h1>{{ str_pad($index + 1, 2, '0', STR_PAD_LEFT) }}</h1>
+                                        </div>
+                                        <div class="col-12 col-sm-3 cl-img-right">
+                                            <img src="{{ asset('images/icon/icon_arow_right_blue.png') }}" />
+                                        </div>
+                                    </div>
+                                    <h3>{{ $image->title }}</h3>
+                                    <p>{{ $image->description }}</p>
+                                    <div class="cl-img">
+                                        <img src="{{ asset('storage/' . $image->image) }}" />
+                                    </div>
                                 </div>
                             </div>
-                            <h3>Lập kế hoạch phẫu thuật</h3>
-                            <p>Sau khi xác định phương pháp, bác sĩ sẽ lên kế hoạch chi tiết cho ca hút mỡ, cấy mỡ.</p>
-                            <div class="cl-img">
-                                <img src="{{ asset('images/dichvu/img_qt2.png') }}" />
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-12 col-sm-3 cl-colItem" data-aos="zoom-in" data-aos-duration="2000">
-                        <div class="col-item item-bg-org">
-                            <div class="row" style="margin-bottom:15px;">
-                                <div class="col-12 col-sm-9 dv-number">
-                                    <h1>03</h1>
-                                </div>
-                                <div class="col-12 col-sm-3 cl-img-right">
-                                    <img src="{{ asset('images/icon/icon_arow_right_blue.png') }}" />
-                                </div>
-                            </div>
-                            <h3>Tiến hành phẫu thuật</h3>
-                            <p>Phẫu thuật hút mỡ và cấy mỡ được thực hiện dưới gây tê hoặc gây mê nhẹ, bạn sẽ không cảm thấy
-                                đau đớn trong quá trình thực hiện.</p>
-                            <div class="cl-img">
-                                <img src="{{ asset('images/dichvu/img_qt3.png') }}" />
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-12 col-sm-3 cl-colItem" data-aos="zoom-in" data-aos-duration="3000">
-                        <div class="col-item item-bg-org">
-                            <div class="row" style="margin-bottom:15px;">
-                                <div class="col-12 col-sm-9 dv-number">
-                                    <h1>04</h1>
-                                </div>
-                                <div class="col-12 col-sm-3 cl-img-right">
-                                    <img src="{{ asset('images/icon/icon_arow_right_blue.png') }}" />
-                                </div>
-                            </div>
-                            <h3>Chăm sóc sau phẫu thuật</h3>
-                            <p>Bác sĩ sẽ hướng dẫn chăm sóc vết mổ, giảm sưng, đau và phục hồi nhanh chóng.</p>
-                            <div class="cl-img">
-                                <img src="{{ asset('images/dichvu/img_qt4.png') }}" />
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                        @endforeach
+                    @endforeach
             </div>
         </div>
 

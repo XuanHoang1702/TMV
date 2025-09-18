@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
+class CreateAdvertisementsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -19,16 +19,19 @@ return new class extends Migration
             $table->json('sub_images')->nullable();
             $table->json('titles')->nullable();
             $table->json('contents')->nullable();
+            $table->integer('order')->default(0);
+            $table->boolean('is_active')->default(true);
             $table->timestamps();
+
+            $table->foreign('service_id')->references('id')->on('services')->onDelete('set null');
         });
     }
-
 
     /**
      * Reverse the migrations.
      */
     public function down(): void
     {
-        Schema::dropIfExists('advertisement');
+        Schema::dropIfExists('advertisements');
     }
-};
+}

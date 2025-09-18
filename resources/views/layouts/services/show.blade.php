@@ -1,6 +1,7 @@
 @extends('layouts.app')
 
-@section('title', isset($service) ? $service->name : (isset($category) ? $category->name : 'Dịch vụ - Thẩm mỹ Dr.DAT'))
+@section('title', isset($service) ? $service->meta_title ?? $service->name : (isset($category) ? $category->meta_title
+    ?? $category->name : 'Dịch vụ - Thẩm mỹ Dr.DAT'))
 
 @section('meta')
     <meta name="description"
@@ -29,6 +30,7 @@
 @section('content')
     <div class="cl-body-bg">
         <div class="container">
+
             <!--banner-->
             @if ($serviceBanner)
                 <div class="cl-jCenter">
@@ -42,7 +44,6 @@
                     </div>
                 </div>
             @endif
-
 
             <!--contents-->
             @if (isset($service))
@@ -65,51 +66,6 @@
                 </div>
 
                 <!-- Dịch vụ phụ thuộc -->
-                @if ($service->children->count() > 0)
-                    <div class="cl-panel-list">
-                        <div class="cl-panel-body">
-                            <div class="row">
-                                <div class="col-12 col-sm-5 cl-info" data-aos="fade-right" data-aos-duration="3000">
-                                    <h4>
-                                        <b><br />{{ $service->name }}<br />BAO GỒM</b>
-                                    </h4>
-                                    <div class="cl-dv-btn">
-                                        <a href="{{ route('services.detail', $service->slug) }}">
-                                            <img src="{{ asset('images/icon/icon_arowOnly_right.png') }}" />
-                                        </a>
-                                    </div>
-                                    @if ($service->image)
-                                        <div>
-                                            <img src="{{ Storage::url($service->image) }}" alt="{{ $service->name }}"
-                                                class="img-fluid" style="max-width: 100%;">
-                                        </div>
-                                    @endif
-                                </div>
-                                <div class="col-12 col-sm-7 cl-detail">
-                                    @foreach ($service->children as $child)
-                                        <div class="cl-pl-item" data-aos="fade-left" data-aos-duration="3000">
-                                            <div class="row">
-                                                <div class="col-12 col-sm-2 cl-img">
-                                                    @if ($child->icon_page_service)
-                                                        <img src="{{ Storage::url($child->icon_page_service) }}"
-                                                            alt="{{ $child->name }}" class="img-fluid">
-                                                    @else
-                                                        <img src="{{ asset('images/dichvu/default-icon.png') }}"
-                                                            alt="Default Icon" class="img-fluid">
-                                                    @endif
-                                                </div>
-                                                <div class="col-12 col-sm-10 cl-ct-info">
-                                                    <h2>{{ $child->name }}</h2>
-                                                    <p>{{ $child->description ?: 'Không có mô tả.' }}</p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    @endforeach
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                @endif
             @elseif (isset($category))
                 @foreach ($category->services as $service)
                     <!-- Dịch vụ phụ thuộc -->
@@ -170,145 +126,144 @@
             @endif
         </div>
 
-        <div class="cl-sec02" data-aos="zoom-in" data-aos-duration="3000">
-            <img src="{{ asset('images/dichvu/bap_tay_het_mo.png') }}">
-        </div>
+        @if ($processesLiDo->count() > 0)
+            <div class="cl-dv-lydo" data-aos="zoom-in" data-aos-duration="3000">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-12 col-sm-12 cl-info">
+                            {{-- Lấy title từ process order = 0 --}}
+                            @php
+                                $liDoTitleProcess = $processesLiDo->where('order', 0)->first();
+                                $sectionTitle = $liDoTitleProcess
+                                    ? $liDoTitleProcess->title
+                                    : 'LÝ DO NÊN CHỌN ' . strtoupper($pageTitle) . ' TẠI DR. ĐẠT';
 
-        <!--Quy trinh-->
-        <div class="cl-dv-lydo">
-            <div class="container">
-                <div class="row">
-                    <div class="col-12 col-sm-12 cl-info ">
-                        <h4>QUY TRÌNH PHẪU THUẬT THẨM MỸ</h4>
-                    </div>
-                </div>
+                                // Debug trong blade
+                                // dd($processesLiDo->toArray(), $sectionTitle);
 
-                <div class="row" style="padding:35px 0;">
-                    <div class="col-12 col-sm-3 cl-colItem" data-aos="zoom-in">
-                        <div class="col-item item-bg-org">
-                            <div class="row" style="margin-bottom:15px;">
-                                <div class="col-12 col-sm-9 dv-number">
-                                    <h1>01</h1>
-                                </div>
-                                <div class="col-12 col-sm-3 cl-img-right">
-                                    <img src="{{ asset('images/icon/icon_arow_right_blue.png') }}" />
-                                </div>
-                            </div>
-                            <h3>Tư vấn và khám sức khỏe</h3>
-                            <p>Bác sĩ sẽ tư vấn phương pháp phù hợp với nhu cầu của bạn, kiểm tra tình trạng sức khỏe để đảm
-                                bảo an toàn trước khi phẫu thuật.</p>
-                            <div class="cl-img">
-                                <img src="{{ asset('images/dichvu/img_qt1.png') }}" />
-                            </div>
+                            @endphp
+                            <h4>{{ $sectionTitle }}</h4>
                         </div>
                     </div>
-                    <div class="col-12 col-sm-3 cl-colItem" data-aos="zoom-in" data-aos-duration="1000">
-                        <div class="col-item item-bg-org">
-                            <div class="row" style="margin-bottom:15px;">
-                                <div class="col-12 col-sm-9 dv-number">
-                                    <h1>02</h1>
-                                </div>
-                                <div class="col-12 col-sm-3 cl-img-right">
-                                    <img src="{{ asset('images/icon/icon_arow_right_blue.png') }}" />
-                                </div>
-                            </div>
-                            <h3>Lập kế hoạch phẫu thuật</h3>
-                            <p>Sau khi xác định phương pháp, bác sĩ sẽ lên kế hoạch chi tiết cho ca hút mỡ, cấy mỡ.</p>
-                            <div class="cl-img">
-                                <img src="{{ asset('images/dichvu/img_qt2.png') }}" />
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-12 col-sm-3 cl-colItem" data-aos="zoom-in" data-aos-duration="2000">
-                        <div class="col-item item-bg-org">
-                            <div class="row" style="margin-bottom:15px;">
-                                <div class="col-12 col-sm-9 dv-number">
-                                    <h1>03</h1>
-                                </div>
-                                <div class="col-12 col-sm-3 cl-img-right">
-                                    <img src="{{ asset('images/icon/icon_arow_right_blue.png') }}" />
+
+                    <div class="row" style="padding:35px 0;">
+                        @php $liDoIndex = 1; @endphp
+                        {{-- Chỉ hiển thị các process có order > 0 (nội dung), tối đa 4 items --}}
+                        @foreach ($processesLiDo->where('order', '>', 0)->take(4) as $process)
+                            <div class="col-12 col-sm-3">
+                                <div class="col-item">
+                                    <div class="cl-img">
+                                        @if ($process->processImages->count() > 0)
+                                            {{-- Sử dụng image_path từ database --}}
+                                            <img src="{{ Storage::url($process->processImages->first()->image_path) }}"
+                                                alt="{{ $process->processImages->first()->alt_text ?? $process->title }}"
+                                                class="img-fluid" />
+                                        @else
+                                            {{-- Fallback static image theo index --}}
+                                            <img src="{{ asset('images/dichvu/icon_lydo' . $liDoIndex . '.png') }}"
+                                                alt="{{ $process->title }}" class="img-fluid" />
+                                        @endif
+                                    </div>
+                                    <h3>{{ $process->title }}</h3>
+                                    {{-- SỬA: dùng description thay vì content --}}
+                                    <p>{{ $process->description ?? 'Nội dung sẽ được cập nhật.' }}</p>
                                 </div>
                             </div>
-                            <h3>Tiến hành phẫu thuật</h3>
-                            <p>Phẫu thuật hút mỡ và cấy mỡ được thực hiện dưới gây tê hoặc gây mê nhẹ, bạn sẽ không cảm thấy
-                                đau đớn trong quá trình thực hiện.</p>
-                            <div class="cl-img">
-                                <img src="{{ asset('images/dichvu/img_qt3.png') }}" />
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-12 col-sm-3 cl-colItem" data-aos="zoom-in" data-aos-duration="3000">
-                        <div class="col-item item-bg-org">
-                            <div class="row" style="margin-bottom:15px;">
-                                <div class="col-12 col-sm-9 dv-number">
-                                    <h1>04</h1>
-                                </div>
-                                <div class="col-12 col-sm-3 cl-img-right">
-                                    <img src="{{ asset('images/icon/icon_arow_right_blue.png') }}" />
-                                </div>
-                            </div>
-                            <h3>Chăm sóc sau phẫu thuật</h3>
-                            <p>Bác sĩ sẽ hướng dẫn chăm sóc vết mổ, giảm sưng, đau và phục hồi nhanh chóng.</p>
-                            <div class="cl-img">
-                                <img src="{{ asset('images/dichvu/img_qt4.png') }}" />
-                            </div>
-                        </div>
+                            @php $liDoIndex++; @endphp
+                        @endforeach
                     </div>
                 </div>
             </div>
+        @endif
+        <div class="cl-sec02" data-aos="zoom-in" data-aos-duration="3000">
+            @if ($bannersSection1->count() > 0)
+                @foreach ($bannersSection1 as $banner)
+                    <img src="{{ asset('storage/' . $banner->image_path) }}" alt="{{ $banner->title }}" />
+                @endforeach
+            @else
+                <img src="{{ asset('images/dichvu/bap_tay_het_mo.png') }}">
+            @endif
         </div>
+        <!--Quy trinh-->
+        @if ($processesQuyTrinh->count() > 0)
+            <div class="cl-dv-lydo">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-12 col-sm-12 cl-info">
+                            @php
+                                $quyTrinhTitleProcess = $processesQuyTrinh->where('order', 0)->first();
+                                $quyTrinhSectionTitle = $quyTrinhTitleProcess
+                                    ? $quyTrinhTitleProcess->title
+                                    : 'QUY TRÌNH ' . strtoupper($pageTitle);
+                            @endphp
+                            <h4>{{ $quyTrinhSectionTitle }}</h4>
+                        </div>
+                    </div>
+
+                    <div class="row" style="padding:35px 0;">
+                        @php $quyTrinhIndex = 1; @endphp
+                        @foreach ($processesQuyTrinh->where('order', '>', 0) as $process)
+                            <div class="col-12 col-sm-3 cl-colItem" data-aos="zoom-in"
+                                data-aos-duration="{{ $quyTrinhIndex * 1000 }}">
+                                <div class="col-item item-bg-org">
+                                    <div class="row" style="margin-bottom:15px;">
+                                        <div class="col-12 col-sm-9 dv-number">
+                                            <h1>{{ str_pad($quyTrinhIndex, 2, '0', STR_PAD_LEFT) }}</h1>
+                                        </div>
+                                        <div class="col-12 col-sm-3 cl-img-right">
+                                            <img src="{{ asset('images/icon/icon_arow_right_blue.png') }}" />
+                                        </div>
+                                    </div>
+                                    <h3>{{ $process->title }}</h3>
+                                    {{-- SỬA: dùng description thay vì content --}}
+                                    <p>{{ $process->description ?? 'Chi tiết sẽ được cập nhật.' }}</p>
+                                    <div class="cl-img">
+                                        @if ($process->processImages->count() > 0)
+                                            {{-- SỬA: dùng image_path thay vì image --}}
+                                            <img src="{{ Storage::url($process->processImages->first()->image_path) }}"
+                                                alt="{{ $process->processImages->first()->alt_text ?? $process->title }}" />
+                                        @else
+                                            <img src="{{ asset('images/dichvu/img_qt' . $quyTrinhIndex . '.png') }}" />
+                                        @endif
+                                    </div>
+                                </div>
+                            </div>
+                            @php $quyTrinhIndex++; @endphp
+                        @endforeach
+                    </div>
+                </div>
+            </div>
+        @endif
 
         <div class="cl-dv-camnhan">
             <div class="container">
                 <div class="cl-bg-camnhan">
                     <div class="row">
-                        <div class="col-12 col-sm-4 cl-img-vertical" data-aos="zoom-in" data-aos-duration="1000">
-                            <img src="{{ asset('images/dichvu/camnhan_1.png') }}" />
-                        </div>
-                        <div class="col-12 col-sm-8">
-                            <div class="row">
-                                <div class="col-12 col-sm-6" data-aos="fade-left">
-                                    <div class="col-item">
-                                        <div class="cl-img">
-                                            <img src="{{ asset('images/dichvu/camnhan_2.png') }}" />
+                        @foreach($advertisements as $advertisement)
+                            @php
+                                $subImages = json_decode($advertisement->sub_images, true) ?? [];
+                                $titles = json_decode($advertisement->titles, true) ?? [];
+                                $contents = json_decode($advertisement->contents, true) ?? [];
+                            @endphp
+                            <div class="col-12 col-sm-4 cl-img-vertical" data-aos="zoom-in" data-aos-duration="1000">
+                                <img src="{{ Storage::url($advertisement->main_image) }}" />
+                            </div>
+                            <div class="col-12 col-sm-8">
+                                <div class="row">
+                                    @for($i = 0; $i < count($subImages); $i++)
+                                        <div class="col-12 col-sm-6" data-aos="fade-left" data-aos-duration="{{ ($i + 1) * 1000 }}">
+                                            <div class="col-item">
+                                                <div class="cl-img">
+                                                    <img src="{{ Storage::url($subImages[$i]) }}" />
+                                                </div>
+                                                <h3>{{ $titles[$i] ?? '' }}</h3>
+                                                <p>{{ $contents[$i] ?? '' }}</p>
+                                            </div>
                                         </div>
-                                        <h3>Vóc dáng thon gọn</h3>
-                                        <p>Sau khi hút mỡ, các vùng mỡ thừa sẽ được loại bỏ, giúp bạn sở hữu vóc dáng thon
-                                            gọn và săn chắc hơn.</p>
-                                    </div>
-                                </div>
-                                <div class="col-12 col-sm-6" data-aos="fade-left" data-aos-duration="1000">
-                                    <div class="col-item">
-                                        <div class="cl-img">
-                                            <img src="{{ asset('images/dichvu/camnhan_3.png') }}" />
-                                        </div>
-                                        <h3>Cải thiện diện mạo</h3>
-                                        <p>Cấy mỡ vào các vùng mặt hoặc cơ thể giúp tạo hình hài hòa, tự nhiên và trẻ trung
-                                            hơn.</p>
-                                    </div>
-                                </div>
-                                <div class="col-12 col-sm-6" data-aos="fade-left" data-aos-duration="2000">
-                                    <div class="col-item">
-                                        <div class="cl-img">
-                                            <img src="{{ asset('images/dichvu/camnhan_4.png') }}" />
-                                        </div>
-                                        <h3>Hiệu quả lâu dài</h3>
-                                        <p>Các kết quả sau phẫu thuật duy trì lâu dài, bạn sẽ không phải lo lắng về mỡ thừa
-                                            hay sự biến đổi bất ngờ.</p>
-                                    </div>
-                                </div>
-                                <div class="col-12 col-sm-6" data-aos="fade-left" data-aos-duration="3000">
-                                    <div class="col-item">
-                                        <div class="cl-img">
-                                            <img src="{{ asset('images/dichvu/camnhan_5.png') }}" />
-                                        </div>
-                                        <h3>Phục hồi nhanh chóng</h3>
-                                        <p>Với các phương pháp hiện đại, thời gian phục hồi nhanh chóng, giúp bạn quay lại
-                                            với công việc và các hoạt động bình thường.</p>
-                                    </div>
+                                    @endfor
                                 </div>
                             </div>
-                        </div>
+                        @endforeach
                     </div>
                 </div>
             </div>

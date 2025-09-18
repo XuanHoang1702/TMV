@@ -8,6 +8,15 @@
         @csrf
 
         <div class="mb-3">
+            <label>Dịch vụ</label>
+            <select name="service_id" class="form-control">
+                @foreach($services as $service)
+                    <option value="{{ $service->id }}">{{ $service->name }}</option>
+                @endforeach
+            </select>
+        </div>
+
+        <div class="mb-3">
             <label>Page</label>
             <input type="text" name="page" class="form-control" required>
         </div>
@@ -18,21 +27,23 @@
         </div>
 
         <div class="mb-3">
-            <label>Ảnh phụ (tối đa 4)</label>
-            <input type="file" name="sub_images[]" class="form-control" multiple>
-        </div>
-
-        <div class="mb-3">
-            <label>Tiêu đề (4 cái)</label>
+            <label>Ảnh phụ và thông tin (4 ảnh)</label>
             @for ($i = 0; $i < 4; $i++)
-                <input type="text" name="titles[]" class="form-control mb-2">
-            @endfor
-        </div>
-
-        <div class="mb-3">
-            <label>Nội dung (4 cái)</label>
-            @for ($i = 0; $i < 4; $i++)
-                <textarea name="contents[]" class="form-control mb-2"></textarea>
+                <div class="border p-3 mb-3">
+                    <h5>Ảnh {{ $i + 1 }}</h5>
+                    <div class="mb-2">
+                        <label>Ảnh</label>
+                        <input type="file" name="sub_images[]" class="form-control">
+                    </div>
+                    <div class="mb-2">
+                        <label>Tiêu đề</label>
+                        <input type="text" name="titles[]" class="form-control">
+                    </div>
+                    <div class="mb-2">
+                        <label>Nội dung</label>
+                        <textarea name="contents[]" class="form-control"></textarea>
+                    </div>
+                </div>
             @endfor
         </div>
 

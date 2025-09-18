@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Appointment;
-use App\Models\Contact;
+use App\Models\Information;
 use App\Models\News;
 use App\Models\Service;
 use Illuminate\Http\Request;
@@ -17,7 +17,7 @@ class DashboardController extends Controller
             'total_services' => Service::count(),
             'total_news' => News::count(),
             'pending_appointments' => Appointment::where('status', 'pending')->count(),
-            'total_contacts' => Contact::where('is_read', false)->count(),
+            'total_contacts' => Information::where('is_read', false)->count(),
             'monthly_appointments' => Appointment::whereMonth('created_at', now()->month)->count(),
             'yearly_revenue' => Appointment::whereYear('created_at', now()->year)
                 ->where('status', 'completed')
@@ -25,7 +25,7 @@ class DashboardController extends Controller
         ];
 
         $recentAppointments = Appointment::latest()->take(5)->get();
-        $recentContacts = Contact::where('is_read', false)->latest()->take(5)->get();
+        $recentContacts = Information::where('is_read', false)->latest()->take(5)->get();
 
         return view('admin.dashboard', compact('stats', 'recentAppointments', 'recentContacts'));
     }

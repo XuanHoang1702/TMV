@@ -33,7 +33,7 @@ class EmailNotificationController extends Controller
     {
         $validator = Validator::make($request->all(), [
 
-                'email' => 'required|email|unique:email_notifications,email',
+                'email' => 'required|email|unique:email_notification,email',
         ]);
 
         if ($validator->fails()) {
