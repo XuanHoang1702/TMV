@@ -38,7 +38,7 @@ class MailNotification extends Mailable
     public function content(): Content
     {
         return new Content(
-            view: 'email.mail_notification',
+            view: 'email.email_notification',
         );
     }
 

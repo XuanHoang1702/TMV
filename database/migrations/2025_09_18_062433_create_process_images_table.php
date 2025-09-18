@@ -11,24 +11,21 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('advertisement', function (Blueprint $table) {
+        Schema::create('process_images', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('service_id')->nullable()->index();
-            $table->string('page');
-            $table->string('main_image');
-            $table->json('sub_images')->nullable();
-            $table->json('titles')->nullable();
-            $table->json('contents')->nullable();
+            $table->foreignId('process_id')->constrained('process')->onDelete('cascade');
+            $table->string('image');
+            $table->string('title');
+            $table->text('description')->nullable();
             $table->timestamps();
         });
     }
-
 
     /**
      * Reverse the migrations.
      */
     public function down(): void
     {
-        Schema::dropIfExists('advertisement');
+        Schema::dropIfExists('process_images');
     }
 };

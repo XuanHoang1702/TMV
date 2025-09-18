@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="container">
-    <h1>Cập nhật Quy trình</h1>
+    <h1>Cập nhật</h1>
 
     @if($errors->any())
         <div class="alert alert-danger">
@@ -19,15 +19,17 @@
         @method('PUT')
 
         <div class="mb-3">
-            <label>Ảnh hiện tại</label><br>
-            @if($process->image)
-                <img src="{{ asset('storage/' . $process->image) }}" width="120">
-            @endif
+            <label>Dịch vụ</label>
+            <select name="service_id" class="form-control">
+                @foreach($services as $service)
+                    <option value="{{ $service->id }}" {{ old('service_id', $process->service_id) == $service->id ? 'selected' : '' }}>{{ $service->name }}</option>
+                @endforeach
+            </select>
         </div>
 
         <div class="mb-3">
-            <label>Ảnh mới (nếu muốn thay)</label>
-            <input type="file" name="image" class="form-control">
+            <label>Thứ tự</label>
+            <input type="number" name="order" class="form-control" value="{{ old('order', $process->order) }}">
         </div>
 
         <div class="mb-3">
@@ -36,8 +38,36 @@
         </div>
 
         <div class="mb-3">
-            <label>Nội dung</label>
-            <textarea name="content" class="form-control">{{ old('content', $process->content) }}</textarea>
+            <label>Trang</label>
+            <input type="text" name="page" class="form-control" value="{{ old('page', $process->page) }}">
+        </div>
+
+        <div class="mb-3">
+            <label>Phần</label>
+            <select name="section" class="form-control">
+                <option value="quy_trình" {{ old('section', $process->section) == 'quy_trình' ? 'selected' : '' }}>Quy trình</option>
+                <option value="lí_do" {{ old('section', $process->section) == 'lí_do' ? 'selected' : '' }}>Lí do</option>
+            </select>
+        </div>
+
+        <div class="mb-3">
+            <label>Ảnh và thông tin</label>
+            @for($i = 0; $i < 4; $i++)
+                <div class="image-item mb-3 border p-3">
+                    <div class="mb-2">
+                        <label>Ảnh {{ $i + 1 }}</label>
+                        <input type="file" name="images[]" class="form-control">
+                    </div>
+                    <div class="mb-2">
+                        <label>Tiêu đề ảnh</label>
+                        <input type="text" name="image_titles[]" class="form-control" value="{{ old('image_titles.' . $i, $process->processImages[$i]->title ?? '') }}">
+                    </div>
+                    <div class="mb-2">
+                        <label>Mô tả</label>
+                        <textarea name="image_descriptions[]" class="form-control">{{ old('image_descriptions.' . $i, $process->processImages[$i]->description ?? '') }}</textarea>
+                    </div>
+                </div>
+            @endfor
         </div>
 
         <button type="submit" class="btn btn-success">Cập nhật</button>

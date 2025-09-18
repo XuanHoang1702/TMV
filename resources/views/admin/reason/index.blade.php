@@ -2,8 +2,9 @@
 
 @section('content')
 <div class="container">
-    <h1>Danh sách Quy trình</h1>
-    <a href="{{ route('admin.process.create') }}" class="btn btn-primary mb-3">+ Thêm mới</a>
+    <h1>Danh sách Lí do</h1>
+
+    <a href="{{ route('admin.reason.create') }}" class="btn btn-primary mb-3">Thêm mới</a>
 
     <table class="table table-bordered">
         <thead>
@@ -27,9 +28,9 @@
                     <td>{{ $item->section == 'quy_trình' ? 'Quy trình' : 'Lí do' }}</td>
                     <td>{{ $item->processImages->count() }}</td>
                     <td>
-                        <a href="{{ route('admin.process.show', $item->id) }}" class="btn btn-info btn-sm">Xem</a>
-                        <a href="{{ route('admin.process.edit', $item->id) }}" class="btn btn-warning btn-sm">Sửa</a>
-                        <form action="{{ route('admin.process.destroy', $item->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Bạn có chắc chắn muốn xóa?')">
+                        <a href="{{ route('admin.reason.show', $item->id) }}" class="btn btn-info btn-sm">Xem</a>
+                        <a href="{{ route('admin.reason.edit', $item->id) }}" class="btn btn-warning btn-sm">Sửa</a>
+                        <form action="{{ route('admin.reason.destroy', $item->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Bạn có chắc chắn muốn xóa?')">
                             @csrf
                             @method('DELETE')
                             <button class="btn btn-danger btn-sm">Xóa</button>

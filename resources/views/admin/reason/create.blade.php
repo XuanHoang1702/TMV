@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="container">
-    <h1>Thêm mới</h1>
+    <h1>Thêm mới Lý do</h1>
 
     @if($errors->any())
         <div class="alert alert-danger">
@@ -14,7 +14,7 @@
         </div>
     @endif
 
-    <form action="{{ route('admin.process.store') }}" method="POST" enctype="multipart/form-data">
+    <form action="{{ route('admin.reason.store') }}" method="POST" enctype="multipart/form-data">
         @csrf
         <div class="mb-3">
             <label>Dịch vụ</label>
@@ -40,13 +40,7 @@
             <input type="text" name="page" class="form-control" value="{{ old('page') }}">
         </div>
 
-        <div class="mb-3">
-            <label>Phần</label>
-            <select name="section" class="form-control">
-                <option value="quy_trình" {{ old('section') == 'quy_trình' ? 'selected' : '' }}>Quy trình</option>
-                <option value="lí_do" {{ old('section') == 'lí_do' ? 'selected' : '' }}>Lí do</option>
-            </select>
-        </div>
+        <input type="hidden" name="section" value="lí_do">
 
         <div class="mb-3">
             <label>Ảnh và thông tin</label>
@@ -69,7 +63,7 @@
         </div>
 
         <button type="submit" class="btn btn-success">Lưu</button>
-        <a href="{{ route('admin.process.index') }}" class="btn btn-secondary">Hủy</a>
+        <a href="{{ route('admin.reason.index') }}" class="btn btn-secondary">Hủy</a>
     </form>
 </div>
 @endsection

@@ -11,14 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('process', function (Blueprint $table) {
+        Schema::create('processes', function (Blueprint $table) {
             $table->id();
-            $table->integer('order');
-            $table->string('image');
-            $table->string('title');
-            $table->string('content');
-            $table->string('page');
-            $table->integer('section');
+            $table->integer('sort_order')->default(0); // Thứ tự
+            $table->string('title');                   // Tiêu đề
+            
+            $table->string('page')->nullable();        // Thuộc trang nào (vd: services, news...)
+            $table->integer('section')->default(1);    // Khu vực hiển thị
             $table->timestamps();
         });
     }
@@ -28,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('process');
+        Schema::dropIfExists('processes');
     }
 };

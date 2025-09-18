@@ -22,7 +22,7 @@ use App\Http\Controllers\Admin\SiteInfoController;
 use App\Http\Controllers\Admin\PageContentController;
 use App\Http\Controllers\Admin\HopitalImageController;
 use App\Http\Controllers\FrontendServiceController;
-use App\Http\Controllers\AdvertisementController;
+use App\Http\Controllers\Admin\AdvertisementController;
 use App\Http\Controllers\Admin\ProcessController;
 use App\Models\News;
 use App\Models\PageContent;
@@ -260,6 +260,13 @@ Route::prefix('admin')->name('admin.')->group(function () {
 
     //Process
     Route::resource('process', ProcessController::class);
+    Route::get('reason', [ProcessController::class, 'reasonIndex'])->name('reason.index');
+    Route::get('reason/create', [ProcessController::class, 'reasonCreate'])->name('reason.create');
+    Route::post('reason', [ProcessController::class, 'reasonStore'])->name('reason.store');
+    Route::get('reason/{process}', [ProcessController::class, 'reasonShow'])->name('reason.show');
+    Route::get('reason/{process}/edit', [ProcessController::class, 'reasonEdit'])->name('reason.edit');
+    Route::put('reason/{process}', [ProcessController::class, 'reasonUpdate'])->name('reason.update');
+    Route::delete('reason/{process}', [ProcessController::class, 'reasonDestroy'])->name('reason.destroy');
 
     // About Management
     Route::resource('abouts', \App\Http\Controllers\Admin\AboutController::class);

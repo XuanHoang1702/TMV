@@ -15,8 +15,8 @@ class AdvertisementController extends Controller
      */
     public function index()
     {
-        $advertisement = Advertisement::all();
-        return view('admin.advertisement.index', compact('advertisement'));
+        $advertisements = Advertisement::with('service')->orderBy('order')->get();
+        return view('admin.advertisement.index', compact('advertisements'));
     }
 
     /**
@@ -24,8 +24,8 @@ class AdvertisementController extends Controller
      */
     public function create()
     {
-        $advertisement = Advertisement::orderBy('page')->get();
-        return view('admin.advertisement.create', compact('advertisement'));
+        $services = \App\Models\Service::where('parent_id', null)->get();
+        return view('admin.advertisement.create', compact('services'));
     }
 
     /**
@@ -33,37 +33,41 @@ class AdvertisementController extends Controller
      */
     public function store(Request $request)
     {
-        $validated = $request->validate([
-            'page' => 'required|string|max:255',
-            'main_image' => 'required|image|mimes:jpg,jpeg,png,webp|max:2048',
-            'sub_images.*' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048', // nhiều ảnh phụ
-            'titles' => 'required|array',
-            'titles.*' => 'string|max:255',
-            'contents' => 'required|array',
-            'contents.*' => 'string',
+        $request->validate([
+            'service_id' => 'nullable|exists:services,id',
+            'page' => 'required|string',
+            'main_image' => 'required|image|max:2048',
+            'sub_images' => 'nullable|array',
+            'sub_images.*' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
+            'titles' => 'nullable|array',
+            'titles.*' => 'nullable|string',
+            'contents' => 'nullable|array',
+            'contents.*' => 'nullable|string',
+            'order' => 'nullable|integer',
+            'is_active' => 'nullable|boolean',
         ]);
 
         $mainImagePath = $request->file('main_image')->store('advertisements', 'public');
 
         $subImagePaths = [];
         if ($request->hasFile('sub_images')) {
-            foreach ($request->file('sub_images') as $image) {
-                $subImagePaths[] = $image->store('advertisements', 'public');
+            foreach ($request->file('sub_images') as $subImage) {
+                $subImagePaths[] = $subImage->store('advertisements', 'public');
             }
         }
 
-        $advertisement = Advertisement::create([
-            'page' => $validated['page'],
+        Advertisement::create([
+            'service_id' => $request->service_id,
+            'page' => $request->page,
             'main_image' => $mainImagePath,
-            'sub_images' => $subImagePaths,
-            'titles' => $validated['titles'],
-            'contents' => $validated['contents'],
+            'sub_images' => json_encode($subImagePaths),
+            'titles' => json_encode($request->titles),
+            'contents' => json_encode($request->contents),
+            'order' => $request->order ?? 0,
+            'is_active' => $request->is_active ?? true,
         ]);
 
-        return response()->json([
-            'message' => 'Advertisement created successfully!',
-            'data' => $advertisement
-        ]);
+        return redirect()->route('admin.advertisement.index')->with('success', 'Advertisement created successfully.');
     }
 
 
@@ -79,55 +83,61 @@ class AdvertisementController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit($id)
     {
         $advertisement = Advertisement::findOrFail($id);
-        return view('admin.advertisement.edit', compact('advertisement'));
+        $services = \App\Models\Service::where('parent_id', null)->get();
+        return view('admin.advertisement.edit', compact('advertisement', 'services'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
+    public function update(Request $request, $id)
     {
-        $validated = $request->validate([
-            'page' => 'required|string|max:255',
-            'main_image' => 'required|image|mimes:jpg,jpeg,png,webp|max:2048',
-            'sub_images.*' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048', // nhiều ảnh phụ
-            'titles' => 'required|array',
-            'titles.*' => 'string|max:255',
-            'contents' => 'required|array',
-            'contents.*' => 'string',
+        $advertisement = Advertisement::findOrFail($id);
+
+        $request->validate([
+            'service_id' => 'nullable|exists:services,id',
+            'page' => 'required|string',
+            'main_image' => 'nullable|image|max:2048',
+            'sub_images' => 'nullable|array',
+            'sub_images.*' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
+            'titles' => 'nullable|array',
+            'titles.*' => 'nullable|string',
+            'contents' => 'nullable|array',
+            'contents.*' => 'nullable|string',
+            'order' => 'nullable|integer',
+            'is_active' => 'nullable|boolean',
         ]);
 
-        $mainImagePath = $request->file('main_image')->store('advertisements', 'public');
+        if ($request->hasFile('main_image')) {
+            $mainImagePath = $request->file('main_image')->store('advertisements', 'public');
+            $advertisement->main_image = $mainImagePath;
+        }
 
-        $subImagePaths = [];
+        $subImagePaths = json_decode($advertisement->sub_images, true) ?? [];
         if ($request->hasFile('sub_images')) {
-            foreach ($request->file('sub_images') as $image) {
-                $subImagePaths[] = $image->store('advertisements', 'public');
+            foreach ($request->file('sub_images') as $subImage) {
+                $subImagePaths[] = $subImage->store('advertisements', 'public');
             }
         }
 
-        $advertisement = Advertisement::findOrFail($id);
+        $advertisement->service_id = $request->service_id;
+        $advertisement->page = $request->page;
+        $advertisement->sub_images = json_encode($subImagePaths);
+        $advertisement->titles = json_encode($request->titles);
+        $advertisement->contents = json_encode($request->contents);
+        $advertisement->order = $request->order ?? 0;
+        $advertisement->is_active = $request->is_active ?? true;
 
-        $advertisement->update([
-            'page' => $validated['page'],
-            'main_image' => $mainImagePath,
-            'sub_images' => $subImagePaths,
-            'titles' => $validated['titles'],
-            'contents' => $validated['contents'],
-        ]);
+        $advertisement->save();
 
+        return redirect()->route('admin.advertisement.index')->with('success', 'Advertisement updated successfully.');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
+    public function destroy($id)
     {
         $advertisement = Advertisement::findOrFail($id);
         $advertisement->delete();
-        return redirect()->route('admin.advertisement.index')->with('success', 'Quảng cáo đã được xóa');
+
+        return redirect()->route('admin.advertisement.index')->with('success', 'Advertisement deleted successfully.');
     }
 }
