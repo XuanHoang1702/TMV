@@ -77,12 +77,17 @@ class NewsController extends Controller
         }
 
         News::create($validated);
-
         $users = EmailNotification::all();
         foreach ($users as $user) {
-            Mail::to($user->email)->send(new MailNotification($user));
+            Mail::to($user->email)->send(
+                new MailNotification(
+                    $user,
+                    'Tin tức mới: ' . $request->title,
+                    'Chúng tôi vừa có một tin tức mới dành cho bạn.',
+                    url('/news')
+                )
+            );
         }
-
         return redirect()->route('admin.news.index')
             ->with('success', 'Tin tức đã được tạo thành công');
     }
