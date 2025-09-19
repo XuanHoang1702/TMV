@@ -1,3 +1,4 @@
+<!-- HTML MENU -->
 <div class="m-menu">
     <div class="container">
         <span class="btn-miniMenu" onclick="show_miniMenu()"><i class="fa fa-list"></i></span>
@@ -20,10 +21,9 @@
                             </li>
                         @endif
                     @endforeach
-                    {{-- Dịch vụ (lấy label từ menu, dropdown từ categories) --}}
-                    @php
-                        $serviceMenu = $frontendMenu->firstWhere('route', 'services.index');
-                    @endphp
+
+                    {{-- Dịch vụ --}}
+                    @php $serviceMenu = $frontendMenu->firstWhere('route', 'services.index'); @endphp
                     @if ($serviceMenu)
                         <li class="li-group {{ request()->routeIs('services.*') ? 'active' : '' }}">
                             <a href="{{ route('services.index') }}"><span>{{ $serviceMenu['label'] }}</span><i class="fa fa-angle-down"></i></a>
@@ -32,9 +32,7 @@
                                     @foreach ($categories->where('type', 'services')->where('parent_id', null) as $parentCategory)
                                         <li>
                                             <a href="{{ route('services.detail', $parentCategory->slug ?? '#') }}"><span>{{ $parentCategory->name }}</span></a>
-                                            @php
-                                                $childCategories = $categories->where('parent_id', $parentCategory->id);
-                                            @endphp
+                                            @php $childCategories = $categories->where('parent_id', $parentCategory->id); @endphp
                                             @if ($childCategories->count() > 0)
                                                 <ul class="m-ul-sub-child">
                                                     @foreach ($childCategories as $childCategory)
@@ -50,10 +48,9 @@
                             </ul>
                         </li>
                     @endif
-                    {{-- Tin tức (lấy label từ menu, dropdown từ categories) --}}
-                    @php
-                        $newsMenu = $frontendMenu->firstWhere('route', 'news.index');
-                    @endphp
+
+                    {{-- Tin tức --}}
+                    @php $newsMenu = $frontendMenu->firstWhere('route', 'news.index'); @endphp
                     @if ($newsMenu)
                         <li class="li-group {{ request()->routeIs('news.*') ? 'active' : '' }}">
                             <a href="{{ route('news.index') }}"><span>{{ $newsMenu['label'] }}</span><i class="fa fa-angle-down"></i></a>
@@ -68,11 +65,14 @@
                             </ul>
                         </li>
                     @endif
-                    {{-- Liên hệ (giữ nguyên từ menu) --}}
-                    @php
-                        $contactMenu = $frontendMenu->firstWhere('route', 'contact');
-                    @endphp
-                   
+
+                    {{-- Liên hệ --}}
+                    @php $contactMenu = $frontendMenu->firstWhere('route', 'contact'); @endphp
+                    @if($contactMenu)
+                        <li class="{{ request()->routeIs('contact') ? 'active' : '' }}">
+                            <a href="{{ route('contact') }}"><span>{{ $contactMenu['label'] }}</span></a>
+                        </li>
+                    @endif
                 </ul>
             </div>
             <div class="col-md-3 col-center-item menu-icon">
@@ -114,3 +114,49 @@
         </div>
     </div>
 </div>
+
+<!-- CSS CHO CLICK TOGGLE -->
+<style>
+.m-menu .main-menu .m-ul-sub,
+.m-menu .main-menu .m-ul-sub-child {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.5s ease-in-out;
+}
+.m-menu .main-menu li.open > .m-ul-sub,
+.m-menu .main-menu li.open > .m-ul-sub-child {
+    max-height: 1000px;
+}
+.m-menu .main-menu li > a i.fa-angle-down {
+    transition: transform 0.3s;
+}
+.m-menu .main-menu li.open > a i.fa-angle-down {
+    transform: rotate(180deg);
+}
+
+</style>
+
+<!-- JS CHO CLICK TOGGLE -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('.main-menu li.li-group > a').forEach(item => {
+        item.addEventListener('click', function(e) {
+            e.preventDefault();
+            const parentLi = this.parentElement;
+            if(parentLi.classList.contains('open')){
+                parentLi.classList.remove('open');
+            } else {
+                document.querySelectorAll('.main-menu li.li-group').forEach(li => li.classList.remove('open'));
+                parentLi.classList.add('open');
+            }
+        });
+    });
+
+    document.querySelectorAll('.m-ul-sub li:has(.m-ul-sub-child) > a').forEach(item => {
+        item.addEventListener('click', function(e) {
+            e.preventDefault();
+            this.parentElement.classList.toggle('open');
+        });
+    });
+});
+</script>

@@ -121,7 +121,7 @@
             @endforeach
 
             <!--Ly do-->
-            <div class="cl-dv-lydo" data-aos="zoom-in" data-aos-duration="3000">
+            {{-- <div class="cl-dv-lydo" data-aos="zoom-in" data-aos-duration="3000">
                 <div class="row">
                     <div class="col-12 col-sm-12 cl-info ">
                         <h4>LÝ DO NÊN CHỌN PHẪU THUẬT THẨM MỸ TẠI DR. ĐẠT</h4>
@@ -143,7 +143,7 @@
                         @endforeach
                     @endforeach
                 </div>
-            </div>
+            </div> --}}
         </div>
 
         <div class="cl-sec02" data-aos="zoom-in" data-aos-duration="3000">
@@ -165,7 +165,7 @@
                     </div>
                 </div>
 
-                <div class="row" style="padding:35px 0;">
+                {{-- <div class="row" style="padding:35px 0;">
                     @foreach($processesQuyTrinh as $process)
                         @foreach($process->processImages as $index => $image)
                             <div class="col-12 col-sm-3 cl-colItem" data-aos="zoom-in" data-aos-duration="{{ ($index + 1) * 1000 }}">
@@ -187,60 +187,39 @@
                             </div>
                         @endforeach
                     @endforeach
-            </div>
+            </div> --}}
         </div>
 
-        <div class="cl-dv-camnhan">
+         <div class="cl-dv-camnhan">
             <div class="container">
                 <div class="cl-bg-camnhan">
                     <div class="row">
-                        <div class="col-12 col-sm-4 cl-img-vertical" data-aos="zoom-in" data-aos-duration="1000">
-                            <img src="{{ asset('images/dichvu/camnhan_1.png') }}" />
-                        </div>
-                        <div class="col-12 col-sm-8">
-                            <div class="row">
-                                <div class="col-12 col-sm-6" data-aos="fade-left">
-                                    <div class="col-item">
-                                        <div class="cl-img">
-                                            <img src="{{ asset('images/dichvu/camnhan_2.png') }}" />
+                        @foreach ($advertisements as $advertisement)
+                            @php
+                                $subImages = json_decode($advertisement->sub_images, true) ?? [];
+                                $titles = json_decode($advertisement->titles, true) ?? [];
+                                $contents = json_decode($advertisement->contents, true) ?? [];
+                            @endphp
+                            <div class="col-12 col-sm-4 cl-img-vertical" data-aos="zoom-in" data-aos-duration="1000">
+                                <img src="{{ Storage::url($advertisement->main_image) }}" />
+                            </div>
+                            <div class="col-12 col-sm-8">
+                                <div class="row">
+                                    @for ($i = 0; $i < count($subImages); $i++)
+                                        <div class="col-12 col-sm-6" data-aos="fade-left"
+                                            data-aos-duration="{{ ($i + 1) * 1000 }}">
+                                            <div class="col-item">
+                                                <div class="cl-img">
+                                                    <img src="{{ Storage::url($subImages[$i]) }}" />
+                                                </div>
+                                                <h3>{{ $titles[$i] ?? '' }}</h3>
+                                                <p>{{ $contents[$i] ?? '' }}</p>
+                                            </div>
                                         </div>
-                                        <h3>Vóc dáng thon gọn</h3>
-                                        <p>Sau khi hút mỡ, các vùng mỡ thừa sẽ được loại bỏ, giúp bạn sở hữu vóc dáng thon
-                                            gọn và săn chắc hơn.</p>
-                                    </div>
-                                </div>
-                                <div class="col-12 col-sm-6" data-aos="fade-left" data-aos-duration="1000">
-                                    <div class="col-item">
-                                        <div class="cl-img">
-                                            <img src="{{ asset('images/dichvu/camnhan_3.png') }}" />
-                                        </div>
-                                        <h3>Cải thiện diện mạo</h3>
-                                        <p>Cấy mỡ vào các vùng mặt hoặc cơ thể giúp tạo hình hài hòa, tự nhiên và trẻ trung
-                                            hơn.</p>
-                                    </div>
-                                </div>
-                                <div class="col-12 col-sm-6" data-aos="fade-left" data-aos-duration="2000">
-                                    <div class="col-item">
-                                        <div class="cl-img">
-                                            <img src="{{ asset('images/dichvu/camnhan_4.png') }}" />
-                                        </div>
-                                        <h3>Hiệu quả lâu dài</h3>
-                                        <p>Các kết quả sau phẫu thuật duy trì lâu dài, bạn sẽ không phải lo lắng về mỡ thừa
-                                            hay sự biến đổi bất ngờ.</p>
-                                    </div>
-                                </div>
-                                <div class="col-12 col-sm-6" data-aos="fade-left" data-aos-duration="3000">
-                                    <div class="col-item">
-                                        <div class="cl-img">
-                                            <img src="{{ asset('images/dichvu/camnhan_5.png') }}" />
-                                        </div>
-                                        <h3>Phục hồi nhanh chóng</h3>
-                                        <p>Với các phương pháp hiện đại, thời gian phục hồi nhanh chóng, giúp bạn quay lại
-                                            với công việc và các hoạt động bình thường.</p>
-                                    </div>
+                                    @endfor
                                 </div>
                             </div>
-                        </div>
+                        @endforeach
                     </div>
                 </div>
             </div>

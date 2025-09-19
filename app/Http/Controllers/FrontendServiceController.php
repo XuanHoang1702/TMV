@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\About;
+use App\Models\AboutUs;
 use App\Models\Service;
 use App\Models\Category;
 use App\Models\Process;
@@ -19,9 +20,7 @@ class FrontendServiceController extends Controller
             ->orderBy('sort_order')
             ->get();
 
-        \Log::info('Services in index:', $services->map(function($s) {
-            return ['id' => $s->id, 'name' => $s->name, 'slug' => $s->slug, 'is_active' => $s->is_active, 'parent_id' => $s->parent_id];
-        })->toArray());
+
 
         $servicesBanner = \App\Models\PageContent::where('page', 'services_banner')->first();
 
@@ -40,8 +39,6 @@ class FrontendServiceController extends Controller
         ->where('is_active', true)
         ->with(['children', 'category'])
         ->first();
-
-       \Log::info('Service show request:', ['slug' => $slug, 'service_found' => $service ? ['id' => $service->id, 'name' => $service->name, 'is_active' => $service->is_active, 'parent_id' => $service->parent_id] : null]);
 
     $serviceBanner = \App\Models\PageContent::where('page', 'services_banner')->first();
 
@@ -69,27 +66,9 @@ class FrontendServiceController extends Controller
             ->where('is_active', true)
             ->orderBy('order')
             ->get();
+        
 
         $pageTitle = $service->title ?? $service->name;
-
-        // Debug chi tiết hơn
-        [
-            'service_id' => $service->id,
-            'service_slug' => $service->slug,
-            'service_name' => $service->name,
-            'li_do_count' => $processesLiDo->count(),
-            'quy_trinh_count' => $processesQuyTrinh->count(),
-            'li_do_orders' => $processesLiDo->pluck('order')->toArray(),
-            'li_do_data' => $processesLiDo->map(function($item) {
-                return [
-                    'id' => $item->id,
-                    'title' => $item->title,
-                    'order' => $item->order,
-                    'description' => $item->description ? substr($item->description, 0, 50) . '...' : 'NULL',
-                    'images_count' => $item->processImages->count()
-                ];
-            })->toArray()
-        ];
 
         return view('layouts.services.show', compact(
             'service',
@@ -109,8 +88,6 @@ class FrontendServiceController extends Controller
                 $query->where('is_active', true)->with('children');
             }])
             ->first();
-
-
 
         if (!$category) {
             abort(404);
@@ -151,6 +128,9 @@ class FrontendServiceController extends Controller
     public function about()
     {
         $abouts = About::all();
+        $aboutUs1 = AboutUs::with('icons')->where('section', 'Phần 1')->first();
+
+         $aboutUs2 = AboutUs::with('icons')->where('section', 'Phần 2')->first();
         $pageContent = \App\Models\PageContent::where('page', 'about_banner')->first();
         $bannersSection1 = \App\Models\Banner::where('section', '1')
             ->where('page', 'about')
@@ -162,6 +142,6 @@ class FrontendServiceController extends Controller
             ->where('is_active', true)
             ->orderBy('order')
             ->get();
-        return view('abouts', compact('abouts', 'pageContent', 'bannersSection1', 'bannersSection2'));
+        return view('abouts', compact('abouts', 'aboutUs1', 'aboutUs2', 'pageContent', 'bannersSection1', 'bannersSection2'));
     }
 }

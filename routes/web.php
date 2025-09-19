@@ -26,7 +26,7 @@ use App\Http\Controllers\Admin\AdvertisementController;
 use App\Http\Controllers\Admin\ProcessController;
 use App\Models\News;
 use App\Models\PageContent;
-
+use App\Http\Controllers\GoogleMapsController;
 use App\Http\Controllers\Admin\EmailNotificationController;
 
 
@@ -200,15 +200,13 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::get('appointments-export', [AppointmentController::class, 'export'])->name('appointments.export');
 
     // Contacts Management
-    Route::resource('contacts', ContactController::class)->except(['create', 'store', 'edit', 'update']);
-    Route::post('contacts/{contact}/reply', [ContactController::class, 'reply'])->name('contacts.reply');
-    Route::post('contacts/{contact}/mark-read', [ContactController::class, 'markAsRead'])->name('contacts.mark-read');
-    Route::post('contacts/bulk-mark-read', [ContactController::class, 'bulkMarkAsRead'])->name('contacts.bulk-mark-read');
+    // Route::resource('contacts', ContactController::class)->except(['create', 'store', 'edit', 'update']);
+    // Route::post('contacts/{contact}/reply', [ContactController::class, 'reply'])->name('contacts.reply');
+    // Route::post('contacts/{contact}/mark-read', [ContactController::class, 'markAsRead'])->name('contacts.mark-read');
+    // Route::post('contacts/bulk-mark-read', [ContactController::class, 'bulkMarkAsRead'])->name('contacts.bulk-mark-read');
 
     // Media Management
-    Route::get('media', [MediaController::class, 'index'])->name('media.index');
-    Route::post('media/upload', [MediaController::class, 'upload'])->name('media.upload');
-    Route::delete('media/delete', [MediaController::class, 'delete'])->name('media.delete');
+
 
     // Settings
     Route::get('settings', [SettingController::class, 'index'])->name('settings.index');
@@ -269,8 +267,25 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::delete('reason/{process}', [ProcessController::class, 'reasonDestroy'])->name('reason.destroy');
 
     // About Management
-    Route::resource('abouts', \App\Http\Controllers\Admin\AboutController::class);
+     Route::resource('abouts', \App\Http\Controllers\Admin\AboutController::class);
+    Route::resource('about-us', \App\Http\Controllers\Admin\AboutUsController::class);
+    Route::get('test-map', function () {
+    return view('admin.informations.test-map');
+})->name('admin.informations.test-map');
 
+
+// Debug route - chỉ dùng để test
+Route::get('/admin/debug-geocode/{lat}/{lng}', function($lat, $lng) {
+    $controller = new \App\Http\Controllers\Admin\InformationController();
+    $address = $controller->getRealAddressFromCoordinates($lat, $lng);
+
+    return response()->json([
+        'coordinates' => "({$lat}, {$lng})",
+        'address' => $address,
+        'cache_key' => "real_address_{$lat}_{$lng}",
+        'timestamp' => now()->toDateTimeString()
+    ]);
+})->name('admin.debug.geocode');
 });
 
 require __DIR__.'/auth.php';
