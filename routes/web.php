@@ -47,11 +47,23 @@ Route::middleware(['auth'])->group(function () {
 });
 
 // Language Route
-Route::get('lang/{locale}', function ($locale) {
-    session(['locale' => $locale]);
-    app()->setLocale($locale);
+Route::get('lang/vi', function () {
+    session(['locale' => 'vi']);
+    app()->setLocale('vi');
+
     return redirect()->back();
 });
+
+Route::get('lang/en', function () {
+    session(['locale' => 'en']);
+    app()->setLocale('en');
+
+    return redirect()->back();
+});
+
+
+
+
 
 
 //Frontend Routes
