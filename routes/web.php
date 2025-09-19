@@ -45,6 +45,15 @@ Route::middleware(['auth'])->group(function () {
     Volt::route('settings/password', 'settings.password')->name('settings.password');
     Volt::route('settings/appearance', 'settings.appearance')->name('settings.appearance');
 });
+
+// Language Route
+Route::get('lang/{locale}', function ($locale) {
+    session(['locale' => $locale]);
+    app()->setLocale($locale);
+    return redirect()->back();
+});
+
+
 //Frontend Routes
 // Home route
 Route::get('/', function () {
