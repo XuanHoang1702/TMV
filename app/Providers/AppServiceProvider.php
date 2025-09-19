@@ -28,12 +28,8 @@ class AppServiceProvider extends ServiceProvider
             ->orderBy('order')
             ->get());
 
-
-
-    // if (!app()->environment('local')) {
-    //     \URL::forceScheme('https');
-    // }
-
+        // Language    
+        app()->setLocale(session('locale', 'vi'));
     }
 
 }
