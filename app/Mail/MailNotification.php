@@ -13,40 +13,41 @@ class MailNotification extends Mailable
     use Queueable, SerializesModels;
 
     public $user;
+    public $title;
+    public $body;
+    public $url;
 
-    /**
-     * Create a new message instance.
-     */
-    public function __construct($user)
+    public function __construct($user, $title, $body, $url)
     {
         $this->user = $user;
+        $this->title = $title;
+        $this->body = $body;
+        $this->url = $url;
     }
 
-    /**
-     * Get the message envelope.
-     */
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Chương trình mới dành cho bạn',
+            subject: $this->title
         );
     }
 
-    /**
-     * Get the message content definition.
-     */
     public function content(): Content
     {
-        return new Content(text: 'admin.email');    
+        return new Content(
+            view: 'admin.email',
+            with: [
+                'user' => $this->user,
+                'title' => $this->title,
+                'body'  => $this->body,
+                'url'   => $this->url,
+            ]
+        );
     }
 
-    /**
-     * Get the attachments for the message.
-     *
-     * @return array<int, \Illuminate\Mail\Mailables\Attachment>
-     */
     public function attachments(): array
     {
         return [];
     }
 }
+
