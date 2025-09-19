@@ -7,15 +7,16 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>@yield('title', 'Admin Panel') - {{ config('app.name') }}</title>
 
-    <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"
-        crossorigin="anonymous">
+    <!-- Bootstrap CSS 5.3.3 (không có integrity để tránh lỗi) -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
     <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
-        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
     <!-- Custom CSS -->
     <link rel="stylesheet" href="{{ asset('css/admin.css') }}">
     @stack('styles')
+    
 </head>
 
 <body>
@@ -27,34 +28,42 @@
             </div>
             <ul class="sidebar-menu list-unstyled">
                 @foreach ($adminMenu as $item)
-                <li class="{{ (isset($item['route']) && request()->routeIs($item['route'])) || (isset($item['children']) && collect($item['children'])->contains(function($child) { return isset($child['route']) && request()->routeIs($child['route']); })) ? 'active bg-primary' : '' }} rounded mb-2">
-                    @if(isset($item['children']) && count($item['children']) > 0)
-                    <a href="#" class="d-flex align-items-center text-white text-decoration-none px-3 py-2" data-bs-toggle="collapse" data-bs-target="#submenu-{{ $loop->index }}" aria-expanded="false">
-                        <i class="{{ $item['icon'] }} me-2"></i>
-                        <span>{{ $item['label'] }}</span>
-                        <i class="fas fa-chevron-down ms-auto"></i>
-                    </a>
-                    <ul class="collapse list-unstyled ms-3" id="submenu-{{ $loop->index }}">
-                        @foreach ($item['children'] as $child)
-                        <li class="{{ isset($child['route']) && request()->routeIs($child['route']) ? 'active bg-primary' : '' }} rounded mb-1">
-                            <a href="{{ $child['link'] }}" class="d-flex align-items-center text-white text-decoration-none px-3 py-2">
-                                <i class="{{ $child['icon'] }} me-2"></i>
-                                <span>{{ $child['label'] }}</span>
+                    <li
+                        class="{{ (isset($item['route']) && request()->routeIs($item['route'])) || (isset($item['children']) && collect($item['children'])->contains(function ($child) { return isset($child['route']) && request()->routeIs($child['route']); })) ? 'active bg-primary' : '' }} rounded mb-2">
+                        @if (isset($item['children']) && count($item['children']) > 0)
+                            <a href="#"
+                                class="d-flex align-items-center text-white text-decoration-none px-3 py-2"
+                                data-bs-toggle="collapse" data-bs-target="#submenu-{{ $loop->index }}"
+                                aria-expanded="false">
+                                <i class="{{ $item['icon'] }} me-2"></i>
+                                <span>{{ $item['label'] }}</span>
+                                <i class="fas fa-chevron-down ms-auto"></i>
                             </a>
-                        </li>
-                        @endforeach
-                    </ul>
-                    @else
-                    <a href="{{ $item['link'] }}" class="d-flex align-items-center text-white text-decoration-none px-3 py-2">
-                        <i class="{{ $item['icon'] }} me-2"></i>
-                        <span>{{ $item['label'] }}</span>
-                    </a>
-                    @endif
-                </li>
+                            <ul class="collapse list-unstyled ms-3" id="submenu-{{ $loop->index }}">
+                                @foreach ($item['children'] as $child)
+                                    <li
+                                        class="{{ isset($child['route']) && request()->routeIs($child['route']) ? 'active bg-primary' : '' }} rounded mb-1">
+                                        <a href="{{ $child['link'] }}"
+                                            class="d-flex align-items-center text-white text-decoration-none px-3 py-2">
+                                            <i class="{{ $child['icon'] }} me-2"></i>
+                                            <span>{{ $child['label'] }}</span>
+                                        </a>
+                                    </li>
+                                @endforeach
+                            </ul>
+                        @else
+                            <a href="{{ $item['link'] }}"
+                                class="d-flex align-items-center text-white text-decoration-none px-3 py-2">
+                                <i class="{{ $item['icon'] }} me-2"></i>
+                                <span>{{ $item['label'] }}</span>
+                            </a>
+                        @endif
+                    </li>
                 @endforeach
 
                 <li class="{{ request()->routeIs('admin.menus.*') ? 'active bg-primary' : '' }} rounded mb-2">
-                    <a href="{{ route('admin.menus.index') }}" class="d-flex align-items-center text-white text-decoration-none px-3 py-2">
+                    <a href="{{ route('admin.menus.index') }}"
+                        class="d-flex align-items-center text-white text-decoration-none px-3 py-2">
                         <i class="fas fa-bars me-2"></i>
                         <span>Quản lý Menu</span>
                     </a>
@@ -119,19 +128,66 @@
         </div>
     </div>
 
-    <!-- Bootstrap JS Bundle -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous">
-    </script>
+    <!-- jQuery (load trước Bootstrap JS) -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <!-- Custom JS -->
 
+    <!-- Bootstrap JS 5.3.3 (chỉ load 1 lần, cuối body, không có integrity) -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Custom JS -->
     <script>
+        // CSRF Token cho AJAX requests
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+
         function toggleSidebar() {
             const sidebar = document.querySelector('.admin-sidebar');
+            const adminMain = document.querySelector('.admin-main');
+
             sidebar.classList.toggle('d-none');
+            adminMain.classList.toggle('full-width');
         }
+
+        // Active menu highlight
+        document.addEventListener('DOMContentLoaded', function() {
+            // Highlight active menu item
+            const currentPath = window.location.pathname;
+            const menuLinks = document.querySelectorAll('.sidebar-menu a[href]');
+
+            menuLinks.forEach(link => {
+                if (link.getAttribute('href') === currentPath ||
+                    (currentPath.startsWith(link.getAttribute('href')) && link.getAttribute('href') !== '/')) {
+                    link.closest('li').classList.add('active', 'bg-primary');
+                    link.closest('.collapse')?.classList.add('show');
+                    link.closest('a[data-bs-toggle="collapse"]')?.setAttribute('aria-expanded', 'true');
+                }
+            });
+
+            // Auto-close alerts after 5 seconds
+            const alerts = document.querySelectorAll('.alert');
+            alerts.forEach(alert => {
+                setTimeout(() => {
+                    const bsAlert = new bootstrap.Alert(alert);
+                    bsAlert.close();
+                }, 5000);
+            });
+        });
+
+        // Responsive sidebar toggle
+        window.addEventListener('resize', function() {
+            const sidebar = document.querySelector('.admin-sidebar');
+            const adminMain = document.querySelector('.admin-main');
+
+            if (window.innerWidth > 768) {
+                sidebar.classList.remove('d-none');
+                adminMain.classList.remove('full-width');
+            }
+        });
     </script>
+
     @stack('scripts')
 </body>
-
 </html>

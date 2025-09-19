@@ -50,131 +50,103 @@
 
 
             <div class="cl-aboutUs-1">
-
-
-                <div class="row" data-aos="fade-up" data-aos-duration="2000">
-                    <div class="col-12 col-sm-12">
-                        <h4 class="cl-title">
-                            Đội ngũ nhân sự<br />
-                            vững chuyên môn, giàu tâm đức
-                        </h4>
+                @if ($aboutUs1)
+                    <div class="row" data-aos="fade-up" data-aos-duration="2000">
+                        <div class="col-12 col-sm-12">
+                            <h4 class="cl-title">
+                                {!! nl2br(e($aboutUs1->title)) !!}
+                            </h4>
+                        </div>
+                        <div class="col-12 col-sm-12 cl-desc">
+                            <p>
+                                {!! nl2br(e($aboutUs1->description)) !!}
+                            </p>
+                        </div>
                     </div>
-                    <div class="col-12 col-sm-12 cl-desc">
-                        <p>
-                            Đội ngũ bác sĩ tại Dr. Đạt đều có chứng chỉ hành nghề chuyên khoa được cấp phép bởi Bộ Y Tế và
-                            luôn lấy “tận tâm”
-                            làm kim chỉ nam hoạt động, hướng tới triết lý làm nghề: Chuyên nghiệp - Tận tâm - Thấu hiểu
-                        </p>
-                    </div>
-                </div>
+                @endif
             </div>
 
             <div class="cl-aboutUs-2">
                 <div class="row">
-                    <div class="col-12 col-sm-4">
-                        <div class="cl-item" data-aos="flip-right" data-aos-duration="3000">
-                            <div class="cl-icon">
-                                <img src="images/home/icon_sec01_1.png" />
+                    @if ($aboutUs1 && $aboutUs1->icons->count())
+                        @foreach ($aboutUs1->icons as $icon)
+                            <div class="col-12 col-sm-4">
+                                <div class="cl-item" data-aos="flip-right" data-aos-duration="3000">
+                                    <div class="cl-icon">
+                                        <img src="{{ asset('storage/' . $icon->icon) }}" alt="{{ $icon->icon_title }}">
+                                    </div>
+                                    <h2>{{ $icon->icon_title }}</h2>
+                                    <p>{{ $icon->icon_content }}</p>
+                                </div>
                             </div>
-                            <h2>Chuyên nghiệp</h2>
-                            <p>
-                                Bằng kinh nghiệm chuyên môn vững vàng, công nghệ, máy móc hiện đại và tiêu chí chuẩn y khoa,
-                                Dr. Đạt cùng đội ngũ luôn mang đến những dịch vụ chuyên nghiệp và đẳng cấp hàng đầu.
-                            </p>
-                        </div>
-                    </div>
-                    <div class="col-12 col-sm-4">
-                        <div class="cl-item" data-aos="flip-right" data-aos-duration="3000">
-                            <div class="cl-icon">
-                                <img src="images/home/icon_sec01_2.png" />
-                            </div>
-                            <h2>Tận tâm</h2>
-                            <p>
-                                Không chỉ phụ trách khoa phẫu thuật tạo hình thẩm mỹ, Dr. Đạt còn là người trực tiếp tư vấn
-                                và đồng hành cùng khách
-                                hàng xuyên suốt hành trình tìm lại sự tự tin.
-                            </p>
-                        </div>
-                    </div>
-                    <div class="col-12 col-sm-4">
-                        <div class="cl-item" data-aos="flip-right" data-aos-duration="3000">
-                            <div class="cl-icon">
-                                <img src="images/home/icon_sec01_3.png" />
-                            </div>
-                            <h2>Thấu hiểu</h2>
-                            <p>
-                                Tận tuỵ lắng nghe để thấu hiểu mong muốn của từng khách hàng. Đó chính là phong cách làm
-                                việc đặc trưng của
-                                “Bác sĩ thẩm mỹ tận tâm” Dr. Đạt.
-                            </p>
-                        </div>
-                    </div>
+                        @endforeach
+                    @endif
                 </div>
             </div>
+
 
             <div class="cl-aboutUs-3">
                 <div class="row">
                     <div class="col-12 col-sm-12 cl-image">
-                        @if($bannersSection1->count() > 0)
-                            @foreach($bannersSection1 as $banner)
+                        @if ($bannersSection1->count() > 0)
+                            @foreach ($bannersSection1 as $banner)
                                 <img src="{{ asset('storage/' . $banner->image_path) }}" alt="{{ $banner->title }}" />
                             @endforeach
-                        @else
-                            <img src="images/veDrDat/image_no.png" />
+
                         @endif
                     </div>
                 </div>
             </div>
 
             <div class="cl-aboutUs-1">
-                <div class="row" data-aos="fade-up" data-aos-duration="2000">
-                    <div class="col-12 col-sm-12">
-                        <h4 class="cl-title">
-                            Dịch vụ chuẩn Y Khoa <br />
-                            Chăm sóc chuyên nghiệp, trải nghiệm an tâm
-                        </h4>
+                @if ($aboutUs2)
+                    <div class="row" data-aos="fade-up" data-aos-duration="2000">
+                        <div class="col-12 col-sm-12">
+                            <h4 class="cl-title">
+                                {!! nl2br(e($aboutUs2->title)) !!}
+                            </h4>
+                        </div>
+                        <div class="col-12 col-sm-12 cl-desc">
+                            <p>
+                                {!! nl2br(e($aboutUs2->description)) !!}
+                            </p>
+                        </div>
                     </div>
-                    <div class="col-12 col-sm-12 cl-desc">
-                        <p>
-                            Tại Dr. Đạt, tất cả các quy trình thẩm mỹ đều được các bác sĩ trực tiếp thăm khám và tư vấn, kết
-                            hợp với trang thiết bị hiện đại cùng kỹ thuật cao và cập nhật mới nhất,
-                            đảm bảo khách hàng sẽ nhận được sự chăm sóc tận tình, chuyên nghiệp và an tâm tuyệt đối.
-                        </p>
-                    </div>
-                </div>
+                @endif
             </div>
 
             <div class="cl-aboutUs-1" data-aos="zoom-in" data-aos-duration="2000">
                 <div class="cl-aboutUs-4">
-                    <label class="dv-title">Chúng tôi cam kết</label>
+                    <label class="dv-title">{{ $aboutUs2->sub_title ?? 'Chúng tôi cam kết' }}</label>
                     <div class="cl-content">
                         <ul class="cl-ul-lists">
-                            <li>
-                                <i class="cl-icon"><img src="images/icon/icon_check.png" /></i>
-                                <label>Quy trình chuẩn y khoa – Bảo đảm tiêu chuẩn chuyên môn cao nhất trong mọi ca phẫu
-                                    thuật.</label>
-                            </li>
-                            <li>
-                                <i class="cl-icon"><img src="images/icon/icon_check.png" /></i>
-                                <label>Dịch vụ tận tâm – Tư vấn kỹ lưỡng, theo sát từng giai đoạn điều trị, cá nhân hoá
-                                    phương pháp theo nhu cầu riêng biệt.</label>
-                            </li>
-                            <li>
-                                <i class="cl-icon"><img src="images/icon/icon_check.png" /></i>
-                                <label>Kết quả được bảo chứng – Bằng sự hài lòng thực tế từ hàng trăm khách hàng đã làm đẹp
-                                    thành công.</label>
-                            </li>
+                            @if ($aboutUs2 && $aboutUs2->icons->count())
+                                @foreach ($aboutUs2->icons as $icon)
+                                    <li>
+                                        <i class="cl-icon">
+                                            <img src="{{ asset('storage/' . $icon->icon) }}"
+                                                alt="{{ $icon->icon_title }}">
+                                        </i>
+                                        <label>{{ $icon->icon_content }}</label>
+                                    </li>
+                                @endforeach
+                            @else
+                                {{-- fallback nếu chưa có data --}}
+                                <li><i class="cl-icon"><img src="images/icon/icon_check.png" /></i><label>Quy trình chuẩn y
+                                        khoa…</label></li>
+                            @endif
                         </ul>
                     </div>
                 </div>
             </div>
 
 
+
             <div class="cl-aboutUs-3">
                 <div class="row">
                     <div class="col-12 col-sm-12 cl-image" style="padding-bottom: 70px;">
-                        @if($bannersSection2->count() > 0)
-                            @foreach($bannersSection2 as $banner)
+                        @if ($bannersSection2->count() > 0)
+                            @foreach ($bannersSection2 as $banner)
                                 <img src="{{ asset('storage/' . $banner->image_path) }}" alt="{{ $banner->title }}" />
                             @endforeach
                         @else

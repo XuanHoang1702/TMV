@@ -154,9 +154,9 @@
                                 <div class="col-item">
                                     <div class="cl-img">
                                         @if ($process->processImages->count() > 0)
-                                            {{-- Sử dụng image_path từ database --}}
-                                            <img src="{{ Storage::url($process->processImages->first()->image_path) }}"
-                                                alt="{{ $process->processImages->first()->alt_text ?? $process->title }}"
+                                            {{-- Sử dụng image từ database --}}
+                                            <img src="{{ Storage::url($process->processImages->first()->image) }}"
+                                                alt="{{ $process->processImages->first()->title ?? $process->title }}"
                                                 class="img-fluid" />
                                         @else
                                             {{-- Fallback static image theo index --}}
@@ -220,8 +220,8 @@
                                     <div class="cl-img">
                                         @if ($process->processImages->count() > 0)
                                             {{-- SỬA: dùng image_path thay vì image --}}
-                                            <img src="{{ Storage::url($process->processImages->first()->image_path) }}"
-                                                alt="{{ $process->processImages->first()->alt_text ?? $process->title }}" />
+                                            <img src="{{ Storage::url($process->processImages->first()->image) }}"
+                                                alt="{{ $process->processImages->first()->title ?? $process->title }}" />
                                         @else
                                             <img src="{{ asset('images/dichvu/img_qt' . $quyTrinhIndex . '.png') }}" />
                                         @endif
@@ -239,7 +239,7 @@
             <div class="container">
                 <div class="cl-bg-camnhan">
                     <div class="row">
-                        @foreach($advertisements as $advertisement)
+                        @foreach ($advertisements as $advertisement)
                             @php
                                 $subImages = json_decode($advertisement->sub_images, true) ?? [];
                                 $titles = json_decode($advertisement->titles, true) ?? [];
@@ -250,8 +250,9 @@
                             </div>
                             <div class="col-12 col-sm-8">
                                 <div class="row">
-                                    @for($i = 0; $i < count($subImages); $i++)
-                                        <div class="col-12 col-sm-6" data-aos="fade-left" data-aos-duration="{{ ($i + 1) * 1000 }}">
+                                    @for ($i = 0; $i < count($subImages); $i++)
+                                        <div class="col-12 col-sm-6" data-aos="fade-left"
+                                            data-aos-duration="{{ ($i + 1) * 1000 }}">
                                             <div class="col-item">
                                                 <div class="cl-img">
                                                     <img src="{{ Storage::url($subImages[$i]) }}" />
