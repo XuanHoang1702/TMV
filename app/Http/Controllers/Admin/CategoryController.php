@@ -137,7 +137,7 @@ class CategoryController extends Controller
     }
 
 
-  
+
 
     $category->update($validated);
 
@@ -148,18 +148,21 @@ class CategoryController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Category $category)
-    {
-        // Check if category has children
-        if ($category->hasChildren()) {
-            return back()->with('error', 'Không thể xóa danh mục có danh mục con');
+   public function destroy(Category $category)
+{
+    // Nếu category có children, xóa luôn children
+    if ($category->children()->count() > 0) {
+        foreach ($category->children as $child) {
+            $child->delete(); // xóa con
         }
-
-        $category->delete();
-
-        return redirect()->route('admin.categories.index', ['type' => $category->type])
-            ->with('success', 'Danh mục đã được xóa thành công');
     }
+
+    $category->delete(); // xóa chính nó
+
+    return redirect()->route('admin.categories.index', ['type' => $category->type])
+        ->with('success', 'Danh mục và các danh mục con đã được xóa thành công');
+}
+
 
     /**
      * Toggle category status

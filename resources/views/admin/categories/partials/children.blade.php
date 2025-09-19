@@ -1,7 +1,7 @@
 @foreach($categories as $category)
     <tr>
         <td>{{ $category->id }}</td>
-       
+
         <td>
             <div style="padding-left: {{ ($depth ?? 1) * 20 }}px;">
                 @if($category->hasChildren())
@@ -42,3 +42,12 @@
         @include('admin.categories.partials.children', ['categories' => $category->children, 'depth' => ($depth ?? 1) + 1])
     @endif
 @endforeach
+
+<!-- JS confirm delete -->
+<script>
+function confirmDelete(id, name) {
+    if (confirm(`Bạn có chắc muốn xóa danh mục "${name}" không?`)) {
+        document.getElementById(`delete-form-${id}`).submit();
+    }
+}
+</script>

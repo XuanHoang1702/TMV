@@ -827,19 +827,6 @@ ul.ul-ribon ul {
 .d-Mobile div.cl-header .m-menu .main-menu li a {}
 
 
-/* Ẩn dropdown mặc định */
-.d-Mobile div.cl-header .m-menu .main-menu li .m-ul-sub {
-    position: unset;
-    max-height: 0;          /* ẩn dropdown */
-    overflow: hidden;       /* không hiển thị nội dung */
-    transition: max-height 0.4s ease-in-out; /* animation mở */
-    width: 100%;            /* full width */
-}
-
-/* Khi li có class 'open', dropdown sẽ hiện */
-.d-Mobile div.cl-header .m-menu .main-menu li.open > .m-ul-sub {
-    max-height: 1000px;     /* bật dropdown */
-}
 
 
 /*-- About Dat*/

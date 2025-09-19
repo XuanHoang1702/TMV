@@ -32,6 +32,8 @@
     <script src="{{ asset('js/lib/aos.js') }}"></script>
     <script src="{{ asset('js/_jquery.js') }}"></script>
     <script src="{{ asset('js/lib/slide-slick.js') }}"></script>
+    <script src="{{ asset('js/menu.js') }}"></script>
+
     <!--Fonts inter-->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -150,7 +152,7 @@
     </div>
 
     @yield('scripts')
-     @yield('meta')  
+     @yield('meta')
 </body>
 
 </html>

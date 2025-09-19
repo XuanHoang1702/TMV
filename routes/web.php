@@ -199,16 +199,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::get('appointments-calendar', [AppointmentController::class, 'calendar'])->name('appointments.calendar');
     Route::get('appointments-export', [AppointmentController::class, 'export'])->name('appointments.export');
 
-    // Contacts Management
-    // Route::resource('contacts', ContactController::class)->except(['create', 'store', 'edit', 'update']);
-    // Route::post('contacts/{contact}/reply', [ContactController::class, 'reply'])->name('contacts.reply');
-    // Route::post('contacts/{contact}/mark-read', [ContactController::class, 'markAsRead'])->name('contacts.mark-read');
-    // Route::post('contacts/bulk-mark-read', [ContactController::class, 'bulkMarkAsRead'])->name('contacts.bulk-mark-read');
-
-    // Media Management
-
-
-    // Settings
+   
     Route::get('settings', [SettingController::class, 'index'])->name('settings.index');
     Route::post('settings', [SettingController::class, 'update'])->name('settings.update');
 
@@ -269,23 +260,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
     // About Management
      Route::resource('abouts', \App\Http\Controllers\Admin\AboutController::class);
     Route::resource('about-us', \App\Http\Controllers\Admin\AboutUsController::class);
-    Route::get('test-map', function () {
-    return view('admin.informations.test-map');
-})->name('admin.informations.test-map');
 
-
-// Debug route - chỉ dùng để test
-Route::get('/admin/debug-geocode/{lat}/{lng}', function($lat, $lng) {
-    $controller = new \App\Http\Controllers\Admin\InformationController();
-    $address = $controller->getRealAddressFromCoordinates($lat, $lng);
-
-    return response()->json([
-        'coordinates' => "({$lat}, {$lng})",
-        'address' => $address,
-        'cache_key' => "real_address_{$lat}_{$lng}",
-        'timestamp' => now()->toDateTimeString()
-    ]);
-})->name('admin.debug.geocode');
 });
 
 require __DIR__.'/auth.php';

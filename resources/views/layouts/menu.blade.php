@@ -22,12 +22,12 @@
                         @endif
                     @endforeach
 
-                    {{-- Dịch vụ --}}
+                    {{-- Dịch vụ - Desktop: Click toggle, Mobile: Click toggle --}}
                     @php $serviceMenu = $frontendMenu->firstWhere('route', 'services.index'); @endphp
                     @if ($serviceMenu)
                         <li class="li-group {{ request()->routeIs('services.*') ? 'active' : '' }}">
-                            <a href="{{ route('services.index') }}"><span>{{ $serviceMenu['label'] }}</span><i class="fa fa-angle-down"></i></a>
-                            <ul class="m-ul-sub">
+                            <a href="javascript:void(0)" class="toggle-only"><span>{{ $serviceMenu['label'] }}</span><i class="fa fa-angle-down"></i></a>
+                            <ul class="m-ul-sub services-dropdown">
                                 @if (isset($categories))
                                     @foreach ($categories->where('type', 'services')->where('parent_id', null) as $parentCategory)
                                         <li>
@@ -49,16 +49,16 @@
                         </li>
                     @endif
 
-                    {{-- Tin tức --}}
+                    {{-- Tin tức - Desktop: Hover dropdown + Click chuyển trang, Mobile: Click chuyển trang --}}
                     @php $newsMenu = $frontendMenu->firstWhere('route', 'news.index'); @endphp
                     @if ($newsMenu)
-                        <li class="li-group {{ request()->routeIs('news.*') ? 'active' : '' }}">
-                            <a href="{{ route('news.index') }}"><span>{{ $newsMenu['label'] }}</span><i class="fa fa-angle-down"></i></a>
-                            <ul class="m-ul-sub">
+                        <li class="li-group {{ request()->routeIs('news.*') ? 'active' : '' }} news-menu">
+                            <a href="{{ route('news.index') }}" class="navigate-link"><span>{{ $newsMenu['label'] }}</span><i class="fa fa-angle-down"></i></a>
+                            <ul class="m-ul-sub news-dropdown">
                                 @if (isset($categories))
                                     @foreach ($categories->where('type', 'news')->where('parent_id', null) as $category)
                                         <li>
-                                            <a href="{{ route('news.category', $category->slug ?? '#') }}"><span>{{ $category->name }}</span></a>
+                                            <a href="{{ route('news.category', $category->slug ?? '#') }}" class="category-link"><span>{{ $category->name }}</span></a>
                                         </li>
                                     @endforeach
                                 @endif
@@ -66,13 +66,6 @@
                         </li>
                     @endif
 
-                    {{-- Liên hệ --}}
-                    @php $contactMenu = $frontendMenu->firstWhere('route', 'contact'); @endphp
-                    @if($contactMenu)
-                        <li class="{{ request()->routeIs('contact') ? 'active' : '' }}">
-                            <a href="{{ route('contact') }}"><span>{{ $contactMenu['label'] }}</span></a>
-                        </li>
-                    @endif
                 </ul>
             </div>
             <div class="col-md-3 col-center-item menu-icon">
@@ -115,48 +108,4 @@
     </div>
 </div>
 
-<!-- CSS CHO CLICK TOGGLE -->
-<style>
-.m-menu .main-menu .m-ul-sub,
-.m-menu .main-menu .m-ul-sub-child {
-    max-height: 0;
-    overflow: hidden;
-    transition: max-height 0.5s ease-in-out;
-}
-.m-menu .main-menu li.open > .m-ul-sub,
-.m-menu .main-menu li.open > .m-ul-sub-child {
-    max-height: 1000px;
-}
-.m-menu .main-menu li > a i.fa-angle-down {
-    transition: transform 0.3s;
-}
-.m-menu .main-menu li.open > a i.fa-angle-down {
-    transform: rotate(180deg);
-}
 
-</style>
-
-<!-- JS CHO CLICK TOGGLE -->
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    document.querySelectorAll('.main-menu li.li-group > a').forEach(item => {
-        item.addEventListener('click', function(e) {
-            e.preventDefault();
-            const parentLi = this.parentElement;
-            if(parentLi.classList.contains('open')){
-                parentLi.classList.remove('open');
-            } else {
-                document.querySelectorAll('.main-menu li.li-group').forEach(li => li.classList.remove('open'));
-                parentLi.classList.add('open');
-            }
-        });
-    });
-
-    document.querySelectorAll('.m-ul-sub li:has(.m-ul-sub-child) > a').forEach(item => {
-        item.addEventListener('click', function(e) {
-            e.preventDefault();
-            this.parentElement.classList.toggle('open');
-        });
-    });
-});
-</script>
