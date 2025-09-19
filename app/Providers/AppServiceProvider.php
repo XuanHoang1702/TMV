@@ -27,9 +27,5 @@ class AppServiceProvider extends ServiceProvider
             ->where('is_active', true)
             ->orderBy('order')
             ->get());
-
-        // Language    
-        app()->setLocale(session('locale', 'vi'));
     }
-
 }
