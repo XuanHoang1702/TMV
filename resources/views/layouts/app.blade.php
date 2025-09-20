@@ -4,19 +4,22 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="{{ $meta_description ?? 'Thẩm mỹ Dr.DAT - Dịch vụ thẩm mỹ chuyên nghiệp với đội ngũ bác sĩ giàu kinh nghiệm.' }}">
+    <meta name="description"
+        content="{{ $meta_description ?? 'Thẩm mỹ Dr.DAT - Dịch vụ thẩm mỹ chuyên nghiệp với đội ngũ bác sĩ giàu kinh nghiệm.' }}">
     <meta name="keywords" content="{{ $meta_keywords ?? 'thẩm mỹ, dr dat, phẫu thuật thẩm mỹ, làm đẹp, spa, clinic' }}">
     <meta name="author" content="Thẩm mỹ Dr.DAT">
     <!-- Open Graph -->
-    <meta property="og:title" content="{{ $og_title ?? $title ?? 'Thẩm mỹ Dr.DAT' }}">
-    <meta property="og:description" content="{{ $og_description ?? $meta_description ?? 'Thẩm mỹ Dr.DAT - Dịch vụ thẩm mỹ chuyên nghiệp.' }}">
+    <meta property="og:title" content="{{ $og_title ?? ($title ?? 'Thẩm mỹ Dr.DAT') }}">
+    <meta property="og:description"
+        content="{{ $og_description ?? ($meta_description ?? 'Thẩm mỹ Dr.DAT - Dịch vụ thẩm mỹ chuyên nghiệp.') }}">
     <meta property="og:image" content="{{ $og_image ?? asset('images/logo_Dr_Dat.png') }}">
     <meta property="og:url" content="{{ url()->current() }}">
     <meta property="og:type" content="website">
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="{{ $og_title ?? $title ?? 'Thẩm mỹ Dr.DAT' }}">
-    <meta name="twitter:description" content="{{ $og_description ?? $meta_description ?? 'Thẩm mỹ Dr.DAT - Dịch vụ thẩm mỹ chuyên nghiệp.' }}">
+    <meta name="twitter:title" content="{{ $og_title ?? ($title ?? 'Thẩm mỹ Dr.DAT') }}">
+    <meta name="twitter:description"
+        content="{{ $og_description ?? ($meta_description ?? 'Thẩm mỹ Dr.DAT - Dịch vụ thẩm mỹ chuyên nghiệp.') }}">
     <meta name="twitter:image" content="{{ $og_image ?? asset('images/logo_Dr_Dat.png') }}">
     <!--Lib-->
     <title>{{ $title ?? 'Thẩm mỹ Dr.DAT' }}</title>
@@ -37,7 +40,9 @@
     <!--Fonts inter-->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap"
+        rel="stylesheet">
     @yield('fonts')
 
 </head>
@@ -58,24 +63,26 @@
 
                         <div class="col-md-3">
                             <div class="head-seach">
-                                <div class="head-input-g">
-                                    <input type="text" placeholder="Nhập từ khoá tìm kiếm" class="cl-input-seach" />
-                                    <i class="fa fa-search" aria-hidden="true"></i>
-                                </div>
+                                <form action="{{ route('search') }}" method="GET" class="head-input-g">
+                                    <input type="text" name="q" placeholder="Nhập từ khoá tìm kiếm" class="cl-input-seach" />
+                                    <button type="submit" style="background: none; border: none; padding: 0;">
+                                        <i class="fa fa-search" aria-hidden="true"></i>
+                                    </button>
+                                </form>
                             </div>
                         </div>
                         <div class="col-md-2" style="padding:0 5px;">
                             <div class="head-sel-g">
                                 <ul class="ul-lang">
                                     <li class="li-group">
-                                        <a href="#" onclick="onChange_Lang(this)">
+                                        <a href="{{ url('lang/en') }}" onclick="onChange_Lang(this)">
                                             <img class="icon-flag" src="{{ asset('images/icon/Flage_vn.png') }}" />
                                             <span>Tiếng Việt</span>
                                             <i class="fa fa-angle-down"></i>
                                         </a>
                                         <ul class="m-ul-sub" style="width:180px; top:30px; left:-15px;">
                                             <li class="active">
-                                                <a href="#">
+                                                <a href="{{ url('lang/vi') }}">
                                                     <img class="icon-flag"
                                                         src="{{ asset('images/icon/icon_flag_vn.png') }}" />
                                                     <span>Tiếng Việt</span>
@@ -84,7 +91,7 @@
                                                 </a>
                                             </li>
                                             <li>
-                                                <a href="#">
+                                                <a href="{{ url('lang/en') }}">
                                                     <img class="icon-flag"
                                                         src="{{ asset('images/icon/icon_flag_en.png') }}" />
                                                     <span>Tiếng Anh</span>
@@ -152,7 +159,7 @@
     </div>
 
     @yield('scripts')
-     @yield('meta')
+    @yield('meta')
 </body>
 
 </html>

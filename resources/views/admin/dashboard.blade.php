@@ -109,7 +109,7 @@
             </div>
             <div class="card-body">
                 @forelse($recentContacts as $contact)
-                    <a href="{{ route('admin.information.show', $contact->id) }}" class="d-block text-decoration-none text-dark">
+                    <a href="{{ route('admin.informations.edit', $contact->id) }}" class="d-block text-decoration-none text-dark">
                         <div class="contact-item">
                             <div class="contact-info">
                                 <strong>{{ $contact->name }}</strong>

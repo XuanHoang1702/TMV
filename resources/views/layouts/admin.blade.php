@@ -11,12 +11,13 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 
     <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
 
     <!-- Custom CSS -->
     <link rel="stylesheet" href="{{ asset('css/admin.css') }}">
     @stack('styles')
-    
+
 </head>
 
 <body>
@@ -29,7 +30,7 @@
             <ul class="sidebar-menu list-unstyled">
                 @foreach ($adminMenu as $item)
                     <li
-                        class="{{ (isset($item['route']) && request()->routeIs($item['route'])) || (isset($item['children']) && collect($item['children'])->contains(function ($child) { return isset($child['route']) && request()->routeIs($child['route']); })) ? 'active bg-primary' : '' }} rounded mb-2">
+                        class="{{ (isset($item['route']) && request()->routeIs($item['route'])) ||(isset($item['children']) &&collect($item['children'])->contains(function ($child) {return isset($child['route']) && request()->routeIs($child['route']);}))? 'active bg-primary': '' }} rounded mb-2">
                         @if (isset($item['children']) && count($item['children']) > 0)
                             <a href="#"
                                 class="d-flex align-items-center text-white text-decoration-none px-3 py-2"
@@ -159,7 +160,8 @@
 
             menuLinks.forEach(link => {
                 if (link.getAttribute('href') === currentPath ||
-                    (currentPath.startsWith(link.getAttribute('href')) && link.getAttribute('href') !== '/')) {
+                    (currentPath.startsWith(link.getAttribute('href')) && link.getAttribute('href') !== '/')
+                    ) {
                     link.closest('li').classList.add('active', 'bg-primary');
                     link.closest('.collapse')?.classList.add('show');
                     link.closest('a[data-bs-toggle="collapse"]')?.setAttribute('aria-expanded', 'true');
@@ -190,4 +192,5 @@
 
     @stack('scripts')
 </body>
+
 </html>

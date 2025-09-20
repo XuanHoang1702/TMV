@@ -18,6 +18,7 @@
                         @if ($menuItem['route'] !== 'services.index' && $menuItem['route'] !== 'news.index')
                             <li class="{{ request()->routeIs($menuItem['route']) ? 'active' : '' }}">
                                 <a href="{{ route($menuItem['route']) }}"><span>{{ $menuItem['label'] }}</span></a>
+
                             </li>
                         @endif
                     @endforeach
@@ -26,18 +27,21 @@
                     @php $serviceMenu = $frontendMenu->firstWhere('route', 'services.index'); @endphp
                     @if ($serviceMenu)
                         <li class="li-group {{ request()->routeIs('services.*') ? 'active' : '' }}">
-                            <a href="javascript:void(0)" class="toggle-only"><span>{{ $serviceMenu['label'] }}</span><i class="fa fa-angle-down"></i></a>
+                            <a href="javascript:void(0)" class="toggle-only"><span>{{ $serviceMenu['label'] }}</span><i
+                                    class="fa fa-angle-down"></i></a>
                             <ul class="m-ul-sub services-dropdown">
                                 @if (isset($categories))
                                     @foreach ($categories->where('type', 'services')->where('parent_id', null) as $parentCategory)
                                         <li>
-                                            <a href="{{ route('services.detail', $parentCategory->slug ?? '#') }}"><span>{{ $parentCategory->name }}</span></a>
+                                            <a
+                                                href="{{ route('services.detail', $parentCategory->slug ?? '#') }}"><span>{{ $parentCategory->name }}</span></a>
                                             @php $childCategories = $categories->where('parent_id', $parentCategory->id); @endphp
                                             @if ($childCategories->count() > 0)
                                                 <ul class="m-ul-sub-child">
                                                     @foreach ($childCategories as $childCategory)
                                                         <li>
-                                                            <a href="{{ route('services.detail', $childCategory->slug ?? '#') }}"><span>{{ $childCategory->name }}</span></a>
+                                                            <a
+                                                                href="{{ route('services.detail', $childCategory->slug ?? '#') }}"><span>{{ $childCategory->name }}</span></a>
                                                         </li>
                                                     @endforeach
                                                 </ul>
@@ -53,12 +57,15 @@
                     @php $newsMenu = $frontendMenu->firstWhere('route', 'news.index'); @endphp
                     @if ($newsMenu)
                         <li class="li-group {{ request()->routeIs('news.*') ? 'active' : '' }} news-menu">
-                            <a href="{{ route('news.index') }}" class="navigate-link"><span>{{ $newsMenu['label'] }}</span><i class="fa fa-angle-down"></i></a>
+                            <a href="{{ route('news.index') }}"
+                                class="navigate-link"><span>{{ $newsMenu['label'] }}</span><i
+                                    class="fa fa-angle-down"></i></a>
                             <ul class="m-ul-sub news-dropdown">
                                 @if (isset($categories))
                                     @foreach ($categories->where('type', 'news')->where('parent_id', null) as $category)
                                         <li>
-                                            <a href="{{ route('news.category', $category->slug ?? '#') }}" class="category-link"><span>{{ $category->name }}</span></a>
+                                            <a href="{{ route('news.category', $category->slug ?? '#') }}"
+                                                class="category-link"><span>{{ $category->name }}</span></a>
                                         </li>
                                     @endforeach
                                 @endif
@@ -87,14 +94,14 @@
                         </a>
                         <ul class="m-ul-sub" style="width:180px; top:45px; right:0; z-index:10;">
                             <li class="active">
-                                <a href="#">
+                                <a href="{{ url('lang/vi') }}">
                                     <img class="icon-flag" src="{{ asset('images/icon/icon_flag_vn.png') }}" />
                                     <span>Tiếng Việt</span>
                                     <img class="icon-check" src="{{ asset('images/icon/icon_lang_check.png') }}" />
                                 </a>
                             </li>
                             <li>
-                                <a href="#">
+                                <a href="{{ url('lang/en') }}">
                                     <img class="icon-flag" src="{{ asset('images/icon/icon_flag_en.png') }}" />
                                     <span>Tiếng Anh</span>
                                     <img class="icon-check" src="{{ asset('images/icon/icon_lang_check.png') }}" />
@@ -107,5 +114,3 @@
         </div>
     </div>
 </div>
-
-

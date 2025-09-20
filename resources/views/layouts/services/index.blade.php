@@ -44,6 +44,8 @@
                 </div>
             </div>
 
+
+
             <!--contents-->
             @foreach ($services as $service)
                 <div class="cl-panel-list">

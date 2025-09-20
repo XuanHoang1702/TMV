@@ -87,17 +87,21 @@
                                                     </ul>
                                                     <div class="row">
                                                         <div class="col-12 col-sm-5">
-                                                            <a class="cl-btn-full" href="#">
+                                                            <a class="cl-btn-full" href="javascript:void(0)"
+                                                                onclick="onOpen_Popup2()">
                                                                 <i class="icon-cal"><img
                                                                         src="{{ asset('images/icon/icon_support.png') }}" /></i>
                                                                 <span>Gọi lại cho tôi</span>
                                                             </a>
                                                         </div>
                                                         <div class="col-12 col-sm-5">
-                                                            <a class="cl-btn-full-2" href="#">
-                                                                <i class="icon-cal"><img
-                                                                        src="{{ asset('images/icon/icon_newPage.png') }}" /></i>
-                                                                <span>Gọi lại cho tôi</span>
+                                                            <a class="cl-btn-full-2"
+                                                                href="{{ route('services.detail', $service->slug) }}">
+                                                                <i class="icon-cal">
+                                                                    <img
+                                                                        src="{{ asset('images/icon/icon_newPage.png') }}" />
+                                                                </i>
+                                                                <span>Xem chi tiết</span>
                                                             </a>
                                                         </div>
                                                     </div>
@@ -134,39 +138,7 @@
         <!--end body-->
 
         <!--Sec 4 - dat lich kham ngay-->
-        <div class="cl-sec04">
-            <div class="container">
-                <div class="row">
-                    <div class="col-12 col-sm-6">
-                        <div class="h-sec4-info">
-                            <h4>ĐẶT LỊCH KHÁM NGAY!</h4>
-                            <p>Để được tư vấn trực tiếp bởi Dr. Đạt, hãy để lại thông tin của bạn ngay tại đây nhé!</p>
-                        </div>
-                    </div>
-                    <div class="col-12 col-sm-6 h-sec4-form">
-                        <div class="row">
-                            <div class="col-12 col-sm-4">
-                                <input type="text" placeholder="Họ & tên" class="ctr-h-input" />
-                            </div>
-                            <div class="col-12 col-sm-4">
-                                <input type="text" placeholder="Email" class="ctr-h-input" />
-                            </div>
-                            <div class="col-12 col-sm-4">
-                                <input type="text" placeholder="Số điện thoại" class="ctr-h-input" />
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-12 col-sm-12">
-                                <a class="cl-btn-full" href="#">
-                                    <span>Gọi lại cho tôi</span>
-                                    <i class="fa fa-angle-right"></i>
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+        @include('layouts.booking.booking_Popup_DatLichKham')
 
         <!--footer-->
 
