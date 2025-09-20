@@ -107,8 +107,9 @@
                     </div>
 
                     <div class="dropdown m-3">
-                        <button class="btn btn-link dropdown-toggle p-0" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            <i class="fas fa-globe"></i>{{ session('locale') }} / {{ app()->getLocale() }}
+                        <button class="btn btn-link dropdown-toggle p-0" type="button" data-bs-toggle="dropdown"
+                            aria-expanded="false">
+                            <i class="fas fa-globe"></i>{{ app()->getLocale() }}
                         </button>
                         <ul class="dropdown-menu dropdown-menu-end">
                             <li>
@@ -182,7 +183,7 @@
             menuLinks.forEach(link => {
                 if (link.getAttribute('href') === currentPath ||
                     (currentPath.startsWith(link.getAttribute('href')) && link.getAttribute('href') !== '/')
-                    ) {
+                ) {
                     link.closest('li').classList.add('active', 'bg-primary');
                     link.closest('.collapse')?.classList.add('show');
                     link.closest('a[data-bs-toggle="collapse"]')?.setAttribute('aria-expanded', 'true');

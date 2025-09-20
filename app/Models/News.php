@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 
 class News extends Model
 {
@@ -88,6 +89,7 @@ class News extends Model
             ->take(4)
             ->get();
     }
+
     protected function relatedNews(): Attribute
     {
         return Attribute::make(

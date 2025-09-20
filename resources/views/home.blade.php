@@ -19,7 +19,6 @@
 @endsection
 
 @section('content')
-
     <!-- Banners -->
     @if (isset($banners) && $banners->isNotEmpty())
         @include('layouts.banners', ['banners' => $banners])

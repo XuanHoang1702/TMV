@@ -31,13 +31,14 @@
                         <!--Danh mục-->
                         <div class="row">
                             <div class="col-12">
-                                <a class="cl-btn-full" href="{{ route('news.index') }}">
+                                <a class="cl-btn-full {{ !request('category') ? 'active' : '' }}" href="{{ route('news.index') }}">
                                     <span>Tất cả</span>
                                 </a>
                             </div>
                             @foreach ($newsCategories as $category)
                                 <div class="col-12">
-                                    <a class="cl-btn-full-2" href="{{ route('news.category', $category->slug) }}">
+                                    <a class="cl-btn-full-2 {{ request('category') == $category->id ? 'active' : '' }}"
+                                       href="{{ route('news.index', ['category' => $category->id]) }}">
                                         <span>{{ $category->name }}</span>
                                     </a>
                                 </div>
@@ -57,6 +58,8 @@
 
                     <!--Right Content-->
                     <div class="col-12 col-sm-9">
+
+
                         <div class="row">
                             @forelse($newsList as $news)
                                 <div class="col-12 col-sm-4 mb-4">

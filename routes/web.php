@@ -28,6 +28,8 @@ use App\Models\News;
 use App\Models\PageContent;
 use App\Http\Controllers\GoogleMapsController;
 use App\Http\Controllers\Admin\EmailNotificationController;
+use App\Http\Controllers\Admin\PricingFooterController;
+use App\Http\Controllers\SearchController;
 
 
 Route::get('/', function () {
@@ -49,15 +51,11 @@ Route::middleware(['auth'])->group(function () {
 // Language Route
 Route::get('lang/vi', function () {
     session(['locale' => 'vi']);
-    app()->setLocale('vi');
-
     return redirect()->back();
 });
 
 Route::get('lang/en', function () {
     session(['locale' => 'en']);
-    app()->setLocale('en');
-
     return redirect()->back();
 });
 
@@ -192,8 +190,13 @@ Route::get('/service-detail/{slug}', [FrontendServiceController::class, 'show'])
 Route::get('/abouts', [FrontendServiceController::class, 'about'])->name('abouts');
 
 Route::get('/bao-gia', function () {
-    $pricingBanner = \App\Models\PageContent::where('page', 'pricing_banner')->first();
-    return view('pricing', compact('pricingBanner'));
+        $pricingBanner = \App\Models\PageContent::where('page', 'pricing_banner')->first();
+    $pricingFooterItems = \App\Models\PricingFooter::where('is_active', true)
+        ->orderBy('sort_order')
+        ->get();
+    return view('pricing', compact('pricingBanner', 'pricingFooterItems'));
+
+
 })->name('pricing');
 Route::get('/tin-tuc', function (){
 
@@ -217,8 +220,7 @@ Route::get('/tin-tuc/{slug}', function ($slug) {
 })->name('news.detail.old');
 
 // Use NewsController for news detail to get proper related news functionality
-Route::get('/tin-tuc/{categorySlug}/{newsSlug}', [\App\Http\Controllers\NewsController::class, 'show'])->name('news.detail');
-
+Route::get('/tin-tuc/{category}/{slug}', [NewsController::class, 'show'])->name('news.detail');
 Route::get('/tin-tuc/danh-muc/{category}', function ($category) {
    $categories = \App\Models\Category::where('type', 'news')
         ->whereIn('slug', ['chuyen-mon', 'dao-tao', 'tu-thien', 'bao-chi-truyen-thong'])
@@ -248,6 +250,9 @@ Route::get('/lien-he', function () {
 // Email Notification
 Route::resource('email-notification', EmailNotificationController::class)->only(['store']);
 
+// Search Routes
+Route::get('/tim-kiem', [SearchController::class, 'index'])->name('search.index');
+Route::post('/tim-kiem', [SearchController::class, 'search'])->name('search.results');
 
 Route::post('/dat-lich', [\App\Http\Controllers\Admin\AppointmentController::class, 'storeFrontend'])->name('appointments.store');
 
@@ -352,6 +357,9 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::get('zalo', [\App\Http\Controllers\Admin\ZaloController::class, 'index'])->name('zalo.index');
     Route::post('zalo', [\App\Http\Controllers\Admin\ZaloController::class, 'store'])->name('zalo.store');
     Route::put('zalo', [\App\Http\Controllers\Admin\ZaloController::class, 'update'])->name('zalo.update');
+        // Pricing Footer
+     Route::resource('pricing_footer', PricingFooterController::class);
+Route::post('pricing_footer/{pricingFooter}/toggle-status', [PricingFooterController::class, 'toggleStatus'])->name('pricing_footer.toggle-status');
 
 });
 

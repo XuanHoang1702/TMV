@@ -4,14 +4,15 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\App;
 
 class SetLocale
 {
-    public function handle(Request $request, Closure $next)
+    public function handle($request, Closure $next)
     {
         if ($locale = session('locale')) {
             \Log::info("Middleware SetLocale: " . $locale);
-            app()->setLocale($locale);
+            App::setLocale($locale);
         } else {
             \Log::info("Middleware SetLocale: không có session");
         }

@@ -121,12 +121,9 @@
                                 </div>
                                 <div class="col-12 col-sm-9 cl-info">
                                     <ul class="ul-info">
-                                        <li>Các mức giá trên chỉ mang tính tham khảo. Giá cụ thể có thể thay đổi tùy theo
-                                            tình trạng và yêu cầu của từng khách hàng.</li>
-                                        <li>Tư vấn miễn phí: Dr. Đạt cam kết luôn tư vấn tận tình và đưa ra giải pháp tối ưu
-                                            cho từng trường hợp cụ thể của khách hàng.</li>
-                                        <li>Thanh toán linh hoạt: Dr. Đạt hỗ trợ nhiều phương thức thanh toán linh hoạt để
-                                            bạn dễ dàng lựa chọn.</li>
+                                        @foreach($pricingFooterItems as $item)
+                                            <li>{{ $item->content }}</li>
+                                        @endforeach
                                     </ul>
                                 </div>
                             </div>

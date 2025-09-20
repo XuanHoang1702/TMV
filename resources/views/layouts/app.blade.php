@@ -37,7 +37,8 @@
     <script src="{{ asset('js/lib/aos.js') }}"></script>
     <script src="{{ asset('js/_jquery.js') }}"></script>
     <script src="{{ asset('js/lib/slide-slick.js') }}"></script>
-    
+    <script src="{{ asset('js/menu.js') }}"></script>
+
 
     <!--Fonts inter-->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -46,7 +47,12 @@
         href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap"
         rel="stylesheet">
     @yield('fonts')
-
+    <!-- Flatpickr CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <!-- Flatpickr JS -->
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <!-- Vietnamese locale -->
+    <script src="https://npmcdn.com/flatpickr/dist/l10n/vi.js"></script>
 </head>
 
 <body>
@@ -62,17 +68,7 @@
                             </h3>
                         </div>
 
-
-                        <div class="col-md-3">
-                            <div class="head-seach">
-
-                                <div class="head-input-g">
-                                    <input type="text" placeholder="Nhập từ khoá tìm kiếm" class="cl-input-seach" />
-                                    <i class="fa fa-search" aria-hidden="true"></i>
-
-                            </div>
-                            </div>
-                        </div>
+                        @include('search.index')
                         <div class="col-md-2" style="padding:0 5px;">
                             <div class="head-sel-g">
                                 <ul class="ul-lang">
@@ -159,115 +155,115 @@
         </ul>
     </div>
 
-<script>
-// Dynamic Contact System - Updated to support all three contact methods
-let contactData = null;
+    <script>
+        // Dynamic Contact System - Updated to support all three contact methods
+        let contactData = null;
 
-async function loadContactData() {
-    if (!contactData) {
-        try {
-            const response = await fetch('/api/zalo-contact');
-            contactData = await response.json();
-        } catch (error) {
-            // Fallback data
-            contactData = {
-                zalo: {
-                    contact: '0367881230',
-                    type: 'phone',
-                    icon: 'fas fa-comment',
-                    url: 'https://zalo.me/0367881230',
-                },
-                messenger: {
-                    contact: 'drdatclinic',
-                    type: 'facebook',
-                    icon: 'fab fa-facebook-messenger',
-                    url: 'https://m.me/drdatclinic',
-                },
-                call: {
-                    contact: '0367881230',
-                    type: 'phone',
-                    icon: 'fas fa-phone',
-                    url: 'tel:0367881230',
+        async function loadContactData() {
+            if (!contactData) {
+                try {
+                    const response = await fetch('/api/zalo-contact');
+                    contactData = await response.json();
+                } catch (error) {
+                    // Fallback data
+                    contactData = {
+                        zalo: {
+                            contact: '0367881230',
+                            type: 'phone',
+                            icon: 'fas fa-comment',
+                            url: 'https://zalo.me/0367881230',
+                        },
+                        messenger: {
+                            contact: 'drdatclinic',
+                            type: 'facebook',
+                            icon: 'fab fa-facebook-messenger',
+                            url: 'https://m.me/drdatclinic',
+                        },
+                        call: {
+                            contact: '0367881230',
+                            type: 'phone',
+                            icon: 'fas fa-phone',
+                            url: 'tel:0367881230',
+                        }
+                    };
                 }
-            };
+            }
+            return contactData;
         }
-    }
-    return contactData;
-}
 
-async function openZaloChat(event) {
-    event.preventDefault();
+        async function openZaloChat(event) {
+            event.preventDefault();
 
-    const data = await loadContactData();
-    const zaloUrl = data.zalo.url;
+            const data = await loadContactData();
+            const zaloUrl = data.zalo.url;
 
-    // Kiểm tra mobile
-    const isMobile = /Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+            // Kiểm tra mobile
+            const isMobile = /Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
 
-    if (isMobile) {
-        // Mobile: thử mở app Zalo
-        const phoneNumber = zaloUrl.match(/zalo\.me\/(\d+)/)?.[1];
-        if (phoneNumber) {
-            window.location.href = `zalo://chat?phone=${phoneNumber}`;
-            setTimeout(() => window.open(zaloUrl, '_blank'), 1500);
-        } else {
-            window.open(zaloUrl, '_blank');
+            if (isMobile) {
+                // Mobile: thử mở app Zalo
+                const phoneNumber = zaloUrl.match(/zalo\.me\/(\d+)/)?.[1];
+                if (phoneNumber) {
+                    window.location.href = `zalo://chat?phone=${phoneNumber}`;
+                    setTimeout(() => window.open(zaloUrl, '_blank'), 1500);
+                } else {
+                    window.open(zaloUrl, '_blank');
+                }
+            } else {
+                // Desktop: mở web
+                window.open(zaloUrl, '_blank');
+            }
         }
-    } else {
-        // Desktop: mở web
-        window.open(zaloUrl, '_blank');
-    }
-}
 
-async function showMessengerModal(event) {
-    event.preventDefault();
+        async function showMessengerModal(event) {
+            event.preventDefault();
 
-    const data = await loadContactData();
-    const messengerUrl = data.messenger.url;
+            const data = await loadContactData();
+            const messengerUrl = data.messenger.url;
 
-    window.open(messengerUrl, '_blank');
-}
+            window.open(messengerUrl, '_blank');
+        }
 
-async function openCall(event) {
-    event.preventDefault();
+        async function openCall(event) {
+            event.preventDefault();
 
-    const data = await loadContactData();
-    const callUrl = data.call.url;
+            const data = await loadContactData();
+            const callUrl = data.call.url;
 
-    window.location.href = callUrl;
-}
+            window.location.href = callUrl;
+        }
 
-function scrollToTop() {
-    window.scrollTo({
-        top: 0,
-        behavior: 'smooth'
-    });
-}
+        function scrollToTop() {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        }
 
-function show_hide_ribon(element) {
-    const subRibon = element.parentElement.querySelector('.cl-sub-ribon');
-    const parentLi = element.parentElement;
+        function show_hide_ribon(element) {
+            const subRibon = element.parentElement.querySelector('.cl-sub-ribon');
+            const parentLi = element.parentElement;
 
-    if (subRibon.style.display === 'none' || !subRibon.style.display) {
-        subRibon.style.display = 'flex';
-        element.classList.add('active');
-    } else {
-        subRibon.style.display = 'none';
-        element.classList.remove('active');
-    }
-}
+            if (subRibon.style.display === 'none' || !subRibon.style.display) {
+                subRibon.style.display = 'flex';
+                element.classList.add('active');
+            } else {
+                subRibon.style.display = 'none';
+                element.classList.remove('active');
+            }
+        }
 
-// GIỮ NGUYÊN INITIALIZE
-document.addEventListener('DOMContentLoaded', function() {
-    const subRibon = document.querySelector('.cl-sub-ribon');
-    if (subRibon) {
-        subRibon.style.display = 'none';
-    }
-});
-</script>
+        // GIỮ NGUYÊN INITIALIZE
+        document.addEventListener('DOMContentLoaded', function() {
+            const subRibon = document.querySelector('.cl-sub-ribon');
+            if (subRibon) {
+                subRibon.style.display = 'none';
+            }
+        });
+    </script>
 
-@yield('scripts')
-@yield('meta')
+    @yield('scripts')
+    @yield('meta')
 </body>
 
 </html>
