@@ -37,7 +37,7 @@
                                 data-bs-toggle="collapse" data-bs-target="#submenu-{{ $loop->index }}"
                                 aria-expanded="false">
                                 <i class="{{ $item['icon'] }} me-2"></i>
-                                <span>{{ $item['label'] }}</span>
+                                <span>{{ gtranslate($item['label']) }}</span>
                                 <i class="fas fa-chevron-down ms-auto"></i>
                             </a>
                             <ul class="collapse list-unstyled ms-3" id="submenu-{{ $loop->index }}">
@@ -47,7 +47,7 @@
                                         <a href="{{ $child['link'] }}"
                                             class="d-flex align-items-center text-white text-decoration-none px-3 py-2">
                                             <i class="{{ $child['icon'] }} me-2"></i>
-                                            <span>{{ $child['label'] }}</span>
+                                            <span>{{ gtranslate($child['label']) }}</span>
                                         </a>
                                     </li>
                                 @endforeach
@@ -105,7 +105,28 @@
                             </li>
                         </ul>
                     </div>
+
+                    <div class="dropdown m-3">
+                        <button class="btn btn-link dropdown-toggle p-0" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="fas fa-globe"></i>{{ session('locale') }} / {{ app()->getLocale() }}
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li>
+                                <a class="dropdown-item" href="{{ url('lang/vi') }}">
+                                    🇻🇳 Tiếng Việt
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" href="{{ url('lang/en') }}">
+                                    en English
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
+
+
+
             </header>
 
             <!-- Page Content -->

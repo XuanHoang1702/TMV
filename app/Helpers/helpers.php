@@ -3,10 +3,12 @@
 use Stichoza\GoogleTranslate\GoogleTranslate;
 
 if (!function_exists('gtranslate')) {
-    function gtranslate($text, $locale = 'en')
+    function gtranslate($text, $locale = null)
     {
         try {
-            $tr = new GoogleTranslate($locale);
+            $locale = $locale ?? session('locale', 'vi');
+
+            $tr = new \Stichoza\GoogleTranslate\GoogleTranslate($locale);
             $tr->setSource(null);
             return $tr->translate($text);
         } catch (\Exception $e) {
@@ -14,3 +16,4 @@ if (!function_exists('gtranslate')) {
         }
     }
 }
+
