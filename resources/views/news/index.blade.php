@@ -62,45 +62,84 @@
                                 <div class="col-12 col-sm-4 mb-4">
                                     <div class="cl-item-new" data-aos="zoom-in" data-aos-duration="1000">
                                         <div class="dv-img">
-                                            <img src="{{ $news->images[0] ? asset('storage/' . $news->images[0]) : asset('images/default-news.png') }}" />
+                                            {{-- Sửa lỗi array offset on null --}}
+                                            @php
+                                                $firstImage = null;
+                                                if ($news->images && is_array($news->images) && count($news->images) > 0) {
+                                                    $firstImage = $news->images[0];
+                                                }
+                                            @endphp
+                                            <img src="{{ $firstImage ? asset('storage/' . $firstImage) : asset('images/default-news.png') }}"
+                                                 alt="{{ Str::limit($news->title, 50) }}"
+                                                 class="img-fluid" />
                                         </div>
                                         <div class="dv-info">
                                             <h2>{{ Str::limit($news->title, 70) }}</h2>
-                                            <p class="cl-info-date"><label>{{ $news->category->name ?? 'Chưa phân loại' }}</label><i>{{ $news->published_at ? $news->published_at->format('H:i, d/m/Y') : 'Bản nháp' }}</i></p>
-                                            <p class="cl-desc">{{ Str::limit($news->summary, 120) }}</p>
-                                            <a href="{{ route('news.detail', $news->slug) }}" class="btn-more">xem thêm</a>
+                                            <p class="cl-info-date">
+                                                <label>{{ $news->category ? $news->category->name : 'Chưa phân loại' }}</label>
+                                                <i>{{ $news->published_at ? $news->published_at->format('H:i, d/m/Y') : 'Bản nháp' }}</i>
+                                            </p>
+                                            <p class="cl-desc">{{ Str::limit($news->summary ?? '', 120) }}</p>
+                                             <a href="{{ route('news.detail', [$news->category->slug ?? 'chuyen-mon', $news->slug]) }}"
+                                                       class="btn-more">xem thêm</a>
                                         </div>
                                     </div>
                                 </div>
                             @empty
-                                <p>Chưa có tin tức nào.</p>
+                                <div class="col-12">
+                                    <div class="text-center py-5">
+                                        <h4>Chưa có tin tức nào.</h4>
+                                        <p>Vui lòng quay lại sau để xem các tin tức mới nhất.</p>
+                                    </div>
+                                </div>
                             @endforelse
                         </div>
 
                         <!--Phân trang-->
-                        <div class="row">
-                            <div class="col-12">
-                                <ul class="cl-pagging">
-                                    @if ($newsList->onFirstPage())
-                                        <li class="p-first disabled"><a href="#"><img src="{{ asset('images/icon/icon_btn_left.png') }}" /></a></li>
-                                    @else
-                                        <li class="p-first"><a href="{{ $newsList->previousPageUrl() }}"><img src="{{ asset('images/icon/icon_btn_left.png') }}" /></a></li>
-                                    @endif
+                        @if ($newsList->hasPages())
+                            <div class="row">
+                                <div class="col-12">
+                                    <ul class="cl-pagging">
+                                        @if ($newsList->onFirstPage())
+                                            <li class="p-first disabled">
+                                                <a href="#" aria-disabled="true">
+                                                    <img src="{{ asset('images/icon/icon_btn_left.png') }}" alt="Trang trước" />
+                                                </a>
+                                            </li>
+                                        @else
+                                            <li class="p-first">
+                                                <a href="{{ $newsList->previousPageUrl() }}" rel="prev">
+                                                    <img src="{{ asset('images/icon/icon_btn_left.png') }}" alt="Trang trước" />
+                                                </a>
+                                            </li>
+                                        @endif
 
-                                    @foreach ($newsList->getUrlRange(1, $newsList->lastPage()) as $page => $url)
-                                        <li class="{{ $page == $newsList->currentPage() ? 'active' : '' }}">
-                                            <a href="{{ $url }}"><span>{{ $page }}</span></a>
-                                        </li>
-                                    @endforeach
+                                        @foreach ($newsList->getUrlRange(1, $newsList->lastPage()) as $page => $url)
+                                            <li class="{{ $page == $newsList->currentPage() ? 'active' : '' }}">
+                                                <a href="{{ $url }}"
+                                                   {{ $page == $newsList->currentPage() ? 'aria-current="page"' : '' }}>
+                                                    <span>{{ $page }}</span>
+                                                </a>
+                                            </li>
+                                        @endforeach
 
-                                    @if ($newsList->hasMorePages())
-                                        <li class="p-last"><a href="{{ $newsList->nextPageUrl() }}"><img src="{{ asset('images/icon/icon_btn_right.png') }}" /></a></li>
-                                    @else
-                                        <li class="p-last disabled"><a href="#"><img src="{{ asset('images/icon/icon_btn_right.png') }}" /></a></li>
-                                    @endif
-                                </ul>
+                                        @if ($newsList->hasMorePages())
+                                            <li class="p-last">
+                                                <a href="{{ $newsList->nextPageUrl() }}" rel="next">
+                                                    <img src="{{ asset('images/icon/icon_btn_right.png') }}" alt="Trang sau" />
+                                                </a>
+                                            </li>
+                                        @else
+                                            <li class="p-last disabled">
+                                                <a href="#" aria-disabled="true">
+                                                    <img src="{{ asset('images/icon/icon_btn_right.png') }}" alt="Trang sau" />
+                                                </a>
+                                            </li>
+                                        @endif
+                                    </ul>
+                                </div>
                             </div>
-                        </div>
+                        @endif
                     </div>
                 </div>
 

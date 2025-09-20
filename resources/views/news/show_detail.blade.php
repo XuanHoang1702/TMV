@@ -7,61 +7,101 @@
 @endsection
 
 @section('content')
-<div class="cl-body-bg">
-    <div class="container">
+    <div class="cl-body-bg">
+        <div class="container">
 
-        <!-- Banner -->
-        @if ($newsBanner)
-        <div class="cl-jCenter">
-            <div class="row cl-sec01" data-aos="zoom-in" data-aos-duration="3000">
-                <div class="col-12">
-                    <h4 class="cl-title">{{ $newsBanner->title }}</h4>
+            <!-- Banner -->
+            @if ($newsBanner)
+                <div class="cl-jCenter">
+                    <div class="row cl-sec01" data-aos="zoom-in" data-aos-duration="3000">
+                        <div class="col-12">
+                            <h4 class="cl-title">{{ $newsBanner->title }}</h4>
+                        </div>
+                        <div class="col-12 cl-desc">
+                            <p>{!! nl2br(e($newsBanner->content)) !!}</p>
+                        </div>
+                    </div>
                 </div>
-                <div class="col-12 cl-desc">
-                    <p>{!! nl2br(e($newsBanner->content)) !!}</p>
-                </div>
-            </div>
-        </div>
-        @endif
+            @endif
 
-        <!-- News detail -->
- <div class="cl-ct-new-Details">
-            <div class="dv-info">
-                <h4>{{ $news->title }}</h4>
-                <p class="cl-info-date">
-                    <label>{{ $news->category->name ?? 'Chưa phân loại' }}</label>
-                    <i>{{ $news->published_at->format('H:i, d/m/Y') }}</i>
-                </p>
-            </div>
-            <div class="dv-desc">
-                {!! $news->content !!}
-            </div>
-        </div>
-
-        <!-- Related News -->
-        @if ($relatedNews->count() > 0)
-        <div class="row mt-4">
-            <div class="col-12">
-                <h5>Tin tức liên quan</h5>
+            <!-- News Section -->
+            <div class="cl-news">
                 <div class="row">
-                    @foreach ($relatedNews as $related)
-                    <div class="col-12 col-md-3 mb-3">
-                        <div class="card">
-                            @if ($related->images && count($related->images) > 0)
-                                <img src="{{ Storage::url($related->images[0]) }}" class="card-img-top" alt="{{ $related->title }}">
-                            @endif
-                            <div class="card-body">
-                                <h6 class="card-title"><a href="{{ route('news.detail', $related->slug) }}">{{ $related->title }}</a></h6>
-                                <p class="card-text">{{ Str::limit($related->excerpt, 100) }}</p>
+
+                    <!-- Left Column - News Detail -->
+                    <div class="col-12 col-sm-9">
+
+                        <!-- News detail -->
+                        <div class="cl-ct-new-Details">
+                            <div class="dv-info">
+                                <h4>{{ $news->title }}</h4>
+                                <p class="cl-info-date">
+                                    <label>{{ $news->category->name ?? 'Chưa phân loại' }}</label>
+                                    <i>{{ $news->published_at->format('H:i, d/m/Y') }}</i>
+                                </p>
+                            </div>
+                            <div class="dv-desc">
+                                {!! $news->content !!}
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <!-- Right Column - Related News -->
+                    <div class="col-12 col-sm-3">
+                        <!--div button-->
+                        <div class="row">
+                            <div class="col-12 col-sm-12">
+                                <h3 class="cl-title">Bài viết liên quan</h3>
+                            </div>
+                        </div>
+                        <!--Form-->
+                        <div class="cl-ct-news-left">
+                            <div class="row">
+                                @if ($relatedNews->count() > 0)
+                                    @foreach ($relatedNews as $related)
+                                        <div class="col-12 col-sm-12">
+                                            <div class="cl-item-new" data-aos="zoom-in" data-aos-duration="1000">
+                                                <div class="dv-img">
+                                                    @if ($related->images && is_array($related->images) && count($related->images) > 0)
+                                                        <img src="{{ Storage::url($related->images[0]) }}"
+                                                            alt="{{ $related->title }}" />
+                                                    @else
+                                                        <img src="{{ asset('images/tintuc/tin-tuc_img_default.png') }}"
+                                                            alt="Default Image" />
+                                                    @endif
+                                                </div>
+                                                <div class="dv-info">
+                                                    <h2>{{ $related->title }}</h2>
+                                                    <p class="cl-info-date">
+                                                        <label>{{ $related->category->name ?? 'Chuyên môn' }}</label>
+                                                        <i>{{ $related->created_at->format('H:i, d/m/Y') }}</i>
+                                                    </p>
+                                                    <p class="cl-desc">
+                                                        {{ Str::limit($related->summary ?: strip_tags($related->content), 120) }}
+                                                    </p>
+                                                    <a href="{{ route('news.detail', [$related->category->slug ?? 'chuyen-mon', $related->slug]) }}"
+                                                        class="btn-more">xem thêm</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    @endforeach
+                                @else
+                                    <!-- Fallback content when no related news -->
+                                    <div class="col-12 col-sm-12">
+                                        <div class="text-center py-4">
+                                            <p>Chưa có bài viết liên quan</p>
+                                        </div>
+                                    </div>
+                                @endif
                             </div>
                         </div>
                     </div>
-                    @endforeach
+
                 </div>
             </div>
-        </div>
-        @endif
 
+        </div>
     </div>
-</div>
+    </div>
 @endsection

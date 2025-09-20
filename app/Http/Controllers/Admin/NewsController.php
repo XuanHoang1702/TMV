@@ -56,7 +56,9 @@ class NewsController extends Controller
             'published_at' => 'nullable|date',
             'is_active' => 'boolean',
             'meta_title' => 'nullable|string|max:255',
-            'meta_description' => 'nullable|string|max:500'
+            'meta_description' => 'nullable|string|max:500',
+            'related_news' => 'nullable|array',
+            'related_news.*' => 'exists:news,id'
         ]);
 
         // Handle multiple images
@@ -66,6 +68,21 @@ class NewsController extends Controller
                 $imagePaths[] = $file->store('news', 'public');
             }
             $validated['images'] = $imagePaths;
+        }
+
+        // Handle meta fields - ensure they're not null
+        if (empty($validated['meta_title'])) {
+            $validated['meta_title'] = $validated['title']; // Use title as default meta title
+        }
+        if (empty($validated['meta_description'])) {
+            $validated['meta_description'] = Str::limit(strip_tags($validated['summary'] ?: $validated['content']), 160);
+        }
+
+        // Handle related news
+        if ($request->has('related_news')) {
+            $validated['related_news'] = array_filter($request->related_news); // Remove empty values
+        } else {
+            $validated['related_news'] = [];
         }
 
         if ($request->has('published_at')) {
@@ -92,11 +109,20 @@ class NewsController extends Controller
             ->with('success', 'Tin tức đã được tạo thành công');
     }
 
-    public function edit(News $news)
-    {
-        $categories = \App\Models\Category::ofType('news')->active()->get();
-        return view('admin.news.edit', compact('news', 'categories'));
+   public function edit(News $news)
+{
+    // Đảm bảo related_news là array
+    if (is_string($news->related_news)) {
+        $news->setAttribute('related_news', json_decode($news->related_news, true) ?? []);
+    } elseif (!is_array($news->related_news)) {
+        $news->setAttribute('related_news', []);
     }
+
+    // Load categories
+    $categories = \App\Models\Category::all(); // hoặc query phù hợp
+
+    return view('admin.news.edit', compact('news', 'categories'));
+}
 
     public function update(Request $request, News $news)
     {
@@ -113,20 +139,21 @@ class NewsController extends Controller
             'published_at' => 'nullable|date',
             'is_active' => 'boolean',
             'meta_title' => 'nullable|string|max:255',
-            'meta_description' => 'nullable|string|max:500'
+            'meta_description' => 'nullable|string|max:500',
+            'related_news' => 'nullable|array',
+            'related_news.*' => 'exists:news,id'
         ]);
 
         // Remove selected images
         $currentImages = $news->images ?? [];
-       if ($request->filled('removed_images')) {
-    foreach ($request->removed_images as $removedImage) {
-        if (Storage::disk('public')->exists($removedImage)) {
-            Storage::disk('public')->delete($removedImage);
+        if ($request->filled('removed_images')) {
+            foreach ($request->removed_images as $removedImage) {
+                if (Storage::disk('public')->exists($removedImage)) {
+                    Storage::disk('public')->delete($removedImage);
+                }
+                $currentImages = array_filter($currentImages, fn($img) => $img !== $removedImage);
+            }
         }
-        $currentImages = array_filter($currentImages, fn($img) => $img !== $removedImage);
-    }
-}
-
 
         // Append new uploaded images
         if ($request->hasFile('images')) {
@@ -136,6 +163,13 @@ class NewsController extends Controller
         }
 
         $validated['images'] = array_values($currentImages); // Reindex
+
+        // Handle related news
+        if ($request->has('related_news')) {
+            $validated['related_news'] = array_filter($request->related_news); // Remove empty values
+        } else {
+            $validated['related_news'] = [];
+        }
 
         $news->update($validated);
 
@@ -173,36 +207,47 @@ class NewsController extends Controller
 
         return back()->with('success', 'Tin tức đã được gỡ xuất bản');
     }
+
     public function show(News $news)
-{
+    {
+        $relatedNews = $news->getRelatedNews();
 
-    $relatedNews = News::where('category_id', $news->category_id)
-        ->where('id', '!=', $news->id)
-        ->whereNotNull('published_at')
-        ->orderBy('published_at', 'desc')
-        ->take(4)
-        ->get();
-
-    return view('admin.news.show', compact('news', 'relatedNews'));
-}
-public function removeImage(News $news, Request $request)
-{
-    $imagePath = $request->image;
-
-    if ($imagePath && in_array($imagePath, $news->images)) {
-        // Xóa file khỏi storage
-        if (\Storage::disk('public')->exists($imagePath)) {
-            \Storage::disk('public')->delete($imagePath);
-        }
-
-        // Cập nhật lại mảng images
-        $updatedImages = array_values(array_filter($news->images, fn($img) => $img !== $imagePath));
-        $news->update(['images' => $updatedImages]);
-
-        return response()->json(['success' => true]);
+        return view('admin.news.show', compact('news', 'relatedNews'));
     }
 
-    return response()->json(['success' => false], 400);
-}
+    public function removeImage(News $news, Request $request)
+    {
+        $imagePath = $request->image;
 
+        if ($imagePath && in_array($imagePath, $news->images)) {
+            // Xóa file khỏi storage
+            if (\Storage::disk('public')->exists($imagePath)) {
+                \Storage::disk('public')->delete($imagePath);
+            }
+
+            // Cập nhật lại mảng images
+            $updatedImages = array_values(array_filter($news->images, fn($img) => $img !== $imagePath));
+            $news->update(['images' => $updatedImages]);
+
+            return response()->json(['success' => true]);
+        }
+
+        return response()->json(['success' => false], 400);
+    }
+
+    public function uploadImage(Request $request)
+    {
+        $request->validate([
+            'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048'
+        ]);
+
+        $image = $request->file('image');
+        $imageName = time() . '_' . uniqid() . '.' . $image->getClientOriginalExtension();
+        $imagePath = $image->storeAs('news/content', $imageName, 'public');
+
+        return response()->json([
+            'success' => true,
+            'url' => asset('storage/' . $imagePath)
+        ]);
+    }
 }

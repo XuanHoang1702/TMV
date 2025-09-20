@@ -25,11 +25,7 @@ class NewsController extends Controller
 
         $newsList = $query->orderBy('published_at', 'desc')->paginate(12);
 
-        $newsBanner = \App\Models\Banner::where('section', '1')
-            ->where('page', 'news')
-            ->where('is_active', true)
-            ->orderBy('order')
-            ->first();
+        $newsBanner = \App\Models\PageContent::where('page', 'news_banner')->first();
 
         return view('news.index', compact('newsCategories', 'newsList', 'newsBanner'));
     }
@@ -52,11 +48,7 @@ class NewsController extends Controller
             ->orderBy('published_at', 'desc')
             ->paginate(12);
 
-        $newsBanner = \App\Models\Banner::where('section', '1')
-            ->where('page', 'news')
-            ->where('is_active', true)
-            ->orderBy('order')
-            ->first();
+        $newsBanner = \App\Models\PageContent::where('page', 'news_banner')->first();
 
         return view('news.category', compact('category', 'newsCategories', 'newsList', 'newsBanner'));
     }
@@ -71,14 +63,10 @@ class NewsController extends Controller
             ->where('is_active', true)
             ->firstOrFail();
 
-        $relatedNews = News::where('category_id', $news->category_id)
-            ->where('id', '!=', $news->id)
-            ->whereNotNull('published_at')
-            ->where('is_active', true)
-            ->orderBy('published_at', 'desc')
-            ->take(4)
-            ->get();
+        // Use the model's getRelatedNews() method for consistent behavior
+        $relatedNews = $news->getRelatedNews();
 
-        return view('news.show_detail', compact('news', 'relatedNews'));
+        $newsBanner = \App\Models\PageContent::where('page', 'news_banner')->first();
+        return view('news.show_detail', compact('news', 'relatedNews', 'newsBanner'));
     }
 }

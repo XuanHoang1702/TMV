@@ -19,6 +19,7 @@
 @endsection
 
 @section('content')
+
     <!-- Banners -->
     @if (isset($banners) && $banners->isNotEmpty())
         @include('layouts.banners', ['banners' => $banners])
@@ -80,40 +81,7 @@
         </div>
 
         <!-- Section 4 -->
-        <div class="cl-sec04">
-            <div class="container">
-                <div class="row">
-                    <div class="col-12 col-sm-6">
-                        <div class="h-sec4-info">
-                            <h4>ĐẶT LỊCH KHÁM NGAY!</h4>
-                            <p>Để được tư vấn trực tiếp bởi Dr. Đạt, hãy để lại thông tin của bạn ngay tại đây nhé!</p>
-                        </div>
-                    </div>
-                    <div class="col-12 col-sm-6 h-sec4-form">
-                        <div class="row">
-                            <div class="col-12 col-sm-4">
-                                <input type="text" placeholder="Họ & tên" class="ctr-h-input" />
-                            </div>
-                            <div class="col-12 col-sm-4">
-                                <input type="text" placeholder="Email" class="ctr-h-input" />
-                            </div>
-                            <div class="col-12 col-sm-4">
-                                <input type="text" placeholder="Số điện thoại" class="ctr-h-input" />
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-12 col-sm-12">
-                                <a class="cl-btn-full" href="#">
-                                    <span>Gọi lại cho tôi</span>
-                                    <i class="fa fa-angle-right"></i>
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
+        @include('layouts.booking.booking_Popup_DatLichKham')
         <!-- Section 5 (News) -->
         <div class="cl-sec5">
             <div class="container" data-aos="zoom-in" data-aos-duration="2000">

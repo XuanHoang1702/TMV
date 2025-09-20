@@ -21,6 +21,8 @@
     <meta name="twitter:description"
         content="{{ $og_description ?? ($meta_description ?? 'Thẩm mỹ Dr.DAT - Dịch vụ thẩm mỹ chuyên nghiệp.') }}">
     <meta name="twitter:image" content="{{ $og_image ?? asset('images/logo_Dr_Dat.png') }}">
+    <!-- CSRF Token -->
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <!--Lib-->
     <title>{{ $title ?? 'Thẩm mỹ Dr.DAT' }}</title>
     <link rel="stylesheet" href="{{ asset('css/lib/bootstrap.min.css') }}">
@@ -35,7 +37,7 @@
     <script src="{{ asset('js/lib/aos.js') }}"></script>
     <script src="{{ asset('js/_jquery.js') }}"></script>
     <script src="{{ asset('js/lib/slide-slick.js') }}"></script>
-    <script src="{{ asset('js/menu.js') }}"></script>
+    
 
     <!--Fonts inter-->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -63,12 +65,12 @@
 
                         <div class="col-md-3">
                             <div class="head-seach">
-                                <form action="{{ route('search') }}" method="GET" class="head-input-g">
-                                    <input type="text" name="q" placeholder="Nhập từ khoá tìm kiếm" class="cl-input-seach" />
-                                    <button type="submit" style="background: none; border: none; padding: 0;">
-                                        <i class="fa fa-search" aria-hidden="true"></i>
-                                    </button>
-                                </form>
+
+                                <div class="head-input-g">
+                                    <input type="text" placeholder="Nhập từ khoá tìm kiếm" class="cl-input-seach" />
+                                    <i class="fa fa-search" aria-hidden="true"></i>
+
+                            </div>
                             </div>
                         </div>
                         <div class="col-md-2" style="padding:0 5px;">
@@ -121,45 +123,151 @@
     </div>
 
     @include('layouts.booking.booking-popup')
-
-
     @include('layouts.booking.booking_Popup_TuVan')
+
     <!--ribon fix-->
     <div class="cl-ribon">
         <ul class="ul-ribon">
             <li class="cl-group">
                 <ul class="cl-sub-ribon">
                     <li>
-                        <a>
-                            <img src="{{ asset('images/icon/icon_zalo.png') }}" />
+                        <a href="#" class="zalo-link" onclick="openZaloChat(event)">
+                            <img id="zalo-icon" src="images/icon/icon_zalo.png" alt="Zalo" />
                         </a>
                     </li>
                     <li>
-                        <a>
-                            <img src="{{ asset('images/icon/icon_mess.png') }}" />
+                        <a href="#" onclick="showMessengerModal(event)">
+                            <img id="messenger-icon" src="images/icon/icon_mess.png" alt="Messenger" />
                         </a>
                     </li>
                     <li>
-                        <a>
-                            <img src="{{ asset('images/icon/icon_call.png') }}" />
+                        <a href="#" onclick="openCall(event)">
+                            <img id="call-icon" src="images/icon/icon_call.png" alt="Call" />
                         </a>
                     </li>
                 </ul>
                 <a class="show-hide-child" onclick="show_hide_ribon(this)">
-                    <img class="cl-icon-plus" src="{{ asset('images/icon/icon_plus.png') }}" />
-                    <img class="cl-icon-minus" src="{{ asset('images/icon/icon_minus.png') }}" />
+                    <img class="cl-icon-plus" src="images/icon/icon_plus.png" />
+                    <img class="cl-icon-minus" src="images/icon/icon_minus.png" />
                 </a>
             </li>
             <li class="cl-scroll-top">
-                <a href="#">
-                    <img src="{{ asset('images/icon/icon_scroll_top.png') }}" />
+                <a href="#" onclick="scrollToTop()">
+                    <img src="images/icon/icon_scroll_top.png" alt="Scroll Top" />
                 </a>
             </li>
         </ul>
     </div>
 
-    @yield('scripts')
-    @yield('meta')
+<script>
+// Dynamic Contact System - Updated to support all three contact methods
+let contactData = null;
+
+async function loadContactData() {
+    if (!contactData) {
+        try {
+            const response = await fetch('/api/zalo-contact');
+            contactData = await response.json();
+        } catch (error) {
+            // Fallback data
+            contactData = {
+                zalo: {
+                    contact: '0367881230',
+                    type: 'phone',
+                    icon: 'fas fa-comment',
+                    url: 'https://zalo.me/0367881230',
+                },
+                messenger: {
+                    contact: 'drdatclinic',
+                    type: 'facebook',
+                    icon: 'fab fa-facebook-messenger',
+                    url: 'https://m.me/drdatclinic',
+                },
+                call: {
+                    contact: '0367881230',
+                    type: 'phone',
+                    icon: 'fas fa-phone',
+                    url: 'tel:0367881230',
+                }
+            };
+        }
+    }
+    return contactData;
+}
+
+async function openZaloChat(event) {
+    event.preventDefault();
+
+    const data = await loadContactData();
+    const zaloUrl = data.zalo.url;
+
+    // Kiểm tra mobile
+    const isMobile = /Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+
+    if (isMobile) {
+        // Mobile: thử mở app Zalo
+        const phoneNumber = zaloUrl.match(/zalo\.me\/(\d+)/)?.[1];
+        if (phoneNumber) {
+            window.location.href = `zalo://chat?phone=${phoneNumber}`;
+            setTimeout(() => window.open(zaloUrl, '_blank'), 1500);
+        } else {
+            window.open(zaloUrl, '_blank');
+        }
+    } else {
+        // Desktop: mở web
+        window.open(zaloUrl, '_blank');
+    }
+}
+
+async function showMessengerModal(event) {
+    event.preventDefault();
+
+    const data = await loadContactData();
+    const messengerUrl = data.messenger.url;
+
+    window.open(messengerUrl, '_blank');
+}
+
+async function openCall(event) {
+    event.preventDefault();
+
+    const data = await loadContactData();
+    const callUrl = data.call.url;
+
+    window.location.href = callUrl;
+}
+
+function scrollToTop() {
+    window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+    });
+}
+
+function show_hide_ribon(element) {
+    const subRibon = element.parentElement.querySelector('.cl-sub-ribon');
+    const parentLi = element.parentElement;
+
+    if (subRibon.style.display === 'none' || !subRibon.style.display) {
+        subRibon.style.display = 'flex';
+        element.classList.add('active');
+    } else {
+        subRibon.style.display = 'none';
+        element.classList.remove('active');
+    }
+}
+
+// GIỮ NGUYÊN INITIALIZE
+document.addEventListener('DOMContentLoaded', function() {
+    const subRibon = document.querySelector('.cl-sub-ribon');
+    if (subRibon) {
+        subRibon.style.display = 'none';
+    }
+});
+</script>
+
+@yield('scripts')
+@yield('meta')
 </body>
 
 </html>

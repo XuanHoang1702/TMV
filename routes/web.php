@@ -68,6 +68,78 @@ Route::get('lang/en', function () {
 
 //Frontend Routes
 // Home route
+Route::get('/api/zalo-contact', function () {
+    try {
+        $zalo = \App\Models\ZaloSetting::getCurrent();
+
+        if (!$zalo) {
+            // Fallback nếu chưa có data
+            return response()->json([
+                'zalo' => [
+                    'contact' => '0367881230',
+                    'type' => 'phone',
+                    'icon' => 'fas fa-comment',
+                    'url' => 'https://zalo.me/0367881230',
+                ],
+                'messenger' => [
+                    'contact' => 'drdatclinic',
+                    'type' => 'facebook',
+                    'icon' => 'fab fa-facebook-messenger',
+                    'url' => 'https://m.me/drdatclinic',
+                ],
+                'call' => [
+                    'contact' => '0367881230',
+                    'type' => 'phone',
+                    'icon' => 'fas fa-phone',
+                    'url' => 'tel:0367881230',
+                ]
+            ]);
+        }
+
+        return response()->json([
+            'zalo' => [
+                'contact' => $zalo->zalo_contact,
+                'type' => $zalo->zalo_type ?? 'phone',
+                'icon' => $zalo->zalo_icon ?? 'fas fa-comment',
+                'url' => $zalo->zalo_url,
+            ],
+            'messenger' => [
+                'contact' => $zalo->messenger_contact,
+                'type' => $zalo->messenger_type ?? 'facebook',
+                'icon' => $zalo->messenger_icon ?? 'fab fa-facebook-messenger',
+                'url' => $zalo->messenger_url,
+            ],
+            'call' => [
+                'contact' => $zalo->call_contact,
+                'type' => $zalo->call_type ?? 'phone',
+                'icon' => $zalo->call_icon ?? 'fas fa-phone',
+                'url' => $zalo->call_url,
+            ]
+        ]);
+    } catch (\Exception $e) {
+        // Fallback nếu có lỗi
+        return response()->json([
+            'zalo' => [
+                'contact' => '0367881230',
+                'type' => 'phone',
+                'icon' => 'fas fa-comment',
+                'url' => 'https://zalo.me/0367881230',
+            ],
+            'messenger' => [
+                'contact' => 'drdatclinic',
+                'type' => 'facebook',
+                'icon' => 'fab fa-facebook-messenger',
+                'url' => 'https://m.me/drdatclinic',
+            ],
+            'call' => [
+                'contact' => '0367881230',
+                'type' => 'phone',
+                'icon' => 'fas fa-phone',
+                'url' => 'tel:0367881230',
+            ]
+        ], 200); // Trả về 200 để frontend không crash
+    }
+});
 Route::get('/', function () {
     $currentPage = Route::currentRouteName() ?: 'home';
     $banners = \App\Models\Banner::where('section', '1')
@@ -134,25 +206,18 @@ Route::get('/tin-tuc', function (){
     return view('news.index', compact('newsBanner', 'newsCategories', 'newsList'));
 })->name('news.index');
 
-
+// Support both URL formats for backward compatibility
 Route::get('/tin-tuc/{slug}', function ($slug) {
-$news = \App\Models\News::with('category')
-        ->where('slug', $slug)
+    $news = News::where('slug', $slug)
         ->where('is_active', true)
-        ->whereNotNull('published_at') // bài chưa xuất bản sẽ trả 404
+        ->whereNotNull('published_at')
         ->firstOrFail();
 
-    $newsBanner = PageContent::where('page', 'news_banner')->first();
-     $relatedNews = \App\Models\News::where('category_id', $news->category_id)
-        ->where('id', '!=', $news->id)
-        ->where('is_active', true)
-        ->whereNotNull('published_at') // chỉ lấy bài đã xuất bản
-        ->orderBy('created_at', 'desc')
-        ->take(4)
-        ->get();
+    return redirect()->route('news.detail', [$news->category->slug, $news->slug]);
+})->name('news.detail.old');
 
-    return view('news.show_detail', compact('news', 'newsBanner', 'relatedNews'));
-})->name('news.detail');
+// Use NewsController for news detail to get proper related news functionality
+Route::get('/tin-tuc/{categorySlug}/{newsSlug}', [\App\Http\Controllers\NewsController::class, 'show'])->name('news.detail');
 
 Route::get('/tin-tuc/danh-muc/{category}', function ($category) {
    $categories = \App\Models\Category::where('type', 'news')
@@ -204,7 +269,8 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::delete('services/details/{detail}', [ServiceController::class, 'destroyDetail'])->name('services.details.destroy');
 
     // News Management
-    Route::resource('news', NewsController::class);
+    Route::resource('news', \App\Http\Controllers\Admin\NewsController::class);
+
     // Xuất bản tin tức
     Route::post('news/{news}/publish', [NewsController::class, 'publish'])->name('news.publish');
 
@@ -212,6 +278,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::post('news/{news}/unpublish', [NewsController::class, 'unpublish'])->name('news.unpublish');
 
     Route::delete('news/{news}/remove-image', [NewsController::class, 'removeImage'])->name('news.removeImage');
+    Route::post('news/upload-image', [NewsController::class, 'uploadImage'])->name('news.upload-image');
 
 
     // Appointments Management
@@ -220,7 +287,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::get('appointments-calendar', [AppointmentController::class, 'calendar'])->name('appointments.calendar');
     Route::get('appointments-export', [AppointmentController::class, 'export'])->name('appointments.export');
 
-   
+
     Route::get('settings', [SettingController::class, 'index'])->name('settings.index');
     Route::post('settings', [SettingController::class, 'update'])->name('settings.update');
 
@@ -281,6 +348,10 @@ Route::prefix('admin')->name('admin.')->group(function () {
     // About Management
      Route::resource('abouts', \App\Http\Controllers\Admin\AboutController::class);
     Route::resource('about-us', \App\Http\Controllers\Admin\AboutUsController::class);
+    // Zalo Settings
+    Route::get('zalo', [\App\Http\Controllers\Admin\ZaloController::class, 'index'])->name('zalo.index');
+    Route::post('zalo', [\App\Http\Controllers\Admin\ZaloController::class, 'store'])->name('zalo.store');
+    Route::put('zalo', [\App\Http\Controllers\Admin\ZaloController::class, 'update'])->name('zalo.update');
 
 });
 
