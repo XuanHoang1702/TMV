@@ -30,6 +30,7 @@
     <link rel="stylesheet" href="{{ asset('css/lib/aos.css') }}" />
     <link rel="stylesheet" href="{{ asset('css/lib/slick_slider.css') }}" />
     <link rel="stylesheet" href="{{ asset('css/site.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/dichvu.css') }}">
     @yield('styles')
     <script src="{{ asset('js/lib/jquery.min.js') }}"></script>
     <script src="{{ asset('js/lib/popper.min.js') }}"></script>

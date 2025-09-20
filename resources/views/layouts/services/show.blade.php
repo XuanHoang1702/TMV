@@ -19,13 +19,6 @@
     <meta name="twitter:card" content="summary_large_image" />
 @endsection
 
-@section('styles')
-    <link rel="stylesheet" href="{{ asset('css/dichvu.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/lib/bootstrap.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/font-awesome.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/lib/aos.css') }}" />
-    <link rel="stylesheet" href="{{ asset('css/site.css') }}">
-@endsection
 
 @section('content')
     <div class="cl-body-bg">
