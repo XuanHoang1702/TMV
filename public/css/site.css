@@ -222,6 +222,7 @@ html {
 .ul-lang li.li-group {
     position: relative;
 }
+
 /* Submenu mặc định đóng */
 .m-menu .main-menu .m-ul-sub,
 .m-menu .main-menu .m-ul-sub-child {
@@ -231,9 +232,10 @@ html {
 }
 
 /* Khi menu mở */
-.m-menu .main-menu li.open > .m-ul-sub,
-.m-menu .main-menu li.open > .m-ul-sub-child {
-    max-height: 1000px; /* đủ dài cho submenu */
+.m-menu .main-menu li.open>.m-ul-sub,
+.m-menu .main-menu li.open>.m-ul-sub-child {
+    max-height: 1000px;
+    /* đủ dài cho submenu */
 }
 
 
@@ -610,7 +612,7 @@ ul.ul-ribon ul {
 .ul-ribon li.cl-scroll-top {}
 
 
-.ul-ribon li.show-ribon a img.cl-icon-plus,
+.ul-ribon li.show-ribon a img.slide,
 .ul-ribon li.cl-group .cl-icon-minus {
     display: none;
 }
@@ -618,6 +620,7 @@ ul.ul-ribon ul {
 .ul-ribon li.show-ribon a>img.cl-icon-minus {
     display: block;
 }
+
 
 
 /*icon header*/

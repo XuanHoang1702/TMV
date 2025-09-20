@@ -245,7 +245,7 @@
             const parentLi = element.parentElement;
 
             if (subRibon.style.display === 'none' || !subRibon.style.display) {
-                subRibon.style.display = 'flex';
+                subRibon.style.display = 'block';
                 element.classList.add('active');
             } else {
                 subRibon.style.display = 'none';
