@@ -11,7 +11,7 @@ class MenuController extends Controller
 {
    public function index(Request $request)
 {
-    $menus = Menu::with('children')->paginate(10); 
+    $menus = Menu::with('children')->paginate(10);
     if ($request->ajax()) {
         return view('admin.menus._table', compact('menus'));
     }
@@ -61,7 +61,7 @@ class MenuController extends Controller
         $request->validate([
             'label' => 'required|string|max:255',
             'icon' => 'nullable|string|max:255',
-            'route' => 'required|string|max:255',
+            // 'route' => 'required|string|max:255',
             'parent_id' => 'nullable|exists:menus,id',
             'order' => 'nullable|integer',
             'type' => 'required|in:admin,frontend',

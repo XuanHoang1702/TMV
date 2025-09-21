@@ -4,10 +4,10 @@
             <th>ID</th>
             <th>Label</th>
             <th>Icon</th>
-            <th>Route</th>
+            {{-- <th>Route</th> --}}
             <th>Order</th>
             <th>Type</th>
-            <th>Status</th>
+            {{-- <th>Status</th> --}}
             <th>Actions</th>
         </tr>
     </thead>
@@ -17,14 +17,14 @@
                 <td>{{ $menu->id }}</td>
                 <td>{{ $menu->label }}</td>
                 <td>{{ $menu->icon }}</td>
-                <td>{{ $menu->route }}</td>
+                {{-- <td>{{ $menu->route }}</td> --}}
                 <td>{{ $menu->order }}</td>
                 <td>{{ $menu->type }}</td>
-                <td>
+                {{-- <td>
                     <span class="badge {{ $menu->is_active ? 'badge-success' : 'badge-danger' }}">
                         {{ $menu->is_active ? 'Active' : 'Inactive' }}
                     </span>
-                </td>
+                </td> --}}
                 <td>
                     <a href="{{ route('admin.menus.edit', $menu) }}"
                         class="btn btn-warning btn-sm">

@@ -49,11 +49,7 @@
         rel="stylesheet">
     @yield('fonts')
     <!-- Flatpickr CSS -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
-    <!-- Flatpickr JS -->
-    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
-    <!-- Vietnamese locale -->
-    <script src="https://npmcdn.com/flatpickr/dist/l10n/vi.js"></script>
+
 </head>
 
 <body>
@@ -81,7 +77,8 @@
                                         </a>
                                         <ul class="m-ul-sub" style="width:180px; top:30px; left:-15px;">
                                             <li>
-                                                <a href="javascript:void(0)" onclick="translateLanguage('vi');changeLanguageUI(this, 'vi')">
+                                                <a href="javascript:void(0)"
+                                                    onclick="translateLanguage('vi');changeLanguageUI(this, 'vi')">
                                                     <img class="icon-flag"
                                                         src="{{ asset('images/icon/icon_flag_vn.png') }}" />
                                                     <span>Tiếng Việt</span>
@@ -90,7 +87,8 @@
                                                 </a>
                                             </li>
                                             <li>
-                                                <a href="javascript:void(0)" onclick="translateLanguage('en'); changeLanguageUI(this, 'en')">
+                                                <a href="javascript:void(0)"
+                                                    onclick="translateLanguage('en'); changeLanguageUI(this, 'en')">
                                                     <img class="icon-flag"
                                                         src="{{ asset('images/icon/icon_flag_en.png') }}" />
                                                     <span>English</span>
@@ -299,29 +297,29 @@
 
             trySelect();
         };
-         function changeLanguageUI(el, lang) {
-    // Bỏ active tất cả
-    $(el).closest("ul").find("li").removeClass("active");
 
-    // Active cái đang chọn
-    $(el).parent().addClass("active");
+        function changeLanguageUI(el, lang) {
+            // Bỏ active tất cả
+            $(el).closest("ul").find("li").removeClass("active");
 
-    // Ẩn tất cả dấu tích
-    $(el).closest("ul").find(".icon-check").hide();
+            // Active cái đang chọn
+            $(el).parent().addClass("active");
 
-    // Hiện dấu tích cho cái đang chọn
-    $(el).find(".icon-check").show();
+            // Ẩn tất cả dấu tích
+            $(el).closest("ul").find(".icon-check").hide();
 
-    // Đổi cờ trên nút chính
-    var selectedFlag = $(el).find(".icon-flag").attr("src");
-    var $mainBtn = $(el).closest(".li-group").children("a");
-    $mainBtn.find(".icon-flag").attr("src", selectedFlag);
+            // Hiện dấu tích cho cái đang chọn
+            $(el).find(".icon-check").show();
 
-    // Đổi text nút chính (nếu muốn)
-    var selectedText = $(el).find("span").text();
-    $mainBtn.find("span").text(selectedText);
-}
+            // Đổi cờ trên nút chính
+            var selectedFlag = $(el).find(".icon-flag").attr("src");
+            var $mainBtn = $(el).closest(".li-group").children("a");
+            $mainBtn.find(".icon-flag").attr("src", selectedFlag);
 
+            // Đổi text nút chính (nếu muốn)
+            var selectedText = $(el).find("span").text();
+            $mainBtn.find("span").text(selectedText);
+        }
     </script>
 
     <!-- Google Translate script (async từ Google) -->

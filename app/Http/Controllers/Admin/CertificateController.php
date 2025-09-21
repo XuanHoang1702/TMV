@@ -59,7 +59,7 @@ class CertificateController extends Controller
         ]);
 
         return redirect()->route('admin.certificates.index')
-            ->with('success', 'Chứng chỉ đã được tạo thành công');
+            ->with('success', 'Certificate created');
     }
 
     public function show(Certificate $certificate)
@@ -106,7 +106,7 @@ class CertificateController extends Controller
         ]);
 
         return redirect()->route('admin.certificates.index')
-            ->with('success', 'Chứng chỉ đã được cập nhật thành công');
+            ->with('success', 'Certificate updated');
     }
 
     public function destroy(Certificate $certificate)
@@ -119,7 +119,7 @@ class CertificateController extends Controller
         $certificate->delete();
 
         return redirect()->route('admin.certificates.index')
-            ->with('success', 'Chứng chỉ đã được xóa thành công');
+            ->with('success', 'Certificate deleted');
     }
 
     /**

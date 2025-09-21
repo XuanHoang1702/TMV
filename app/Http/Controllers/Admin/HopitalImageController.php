@@ -43,7 +43,7 @@ class HopitalImageController extends Controller
         $total = HopitalImage::count();
 
         if ($total >= 5) {
-            return redirect()->back()->withErrors(['error' => 'Không thể tạo thêm ảnh vì số lượng ảnh tối đa là 5.']);
+            return redirect()->back()->withErrors(['error' => 'Can not add image, because max quantity is 5.']);
         }
 
         $validator = Validator::make($request->all(), [

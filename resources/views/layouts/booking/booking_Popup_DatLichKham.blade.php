@@ -67,12 +67,8 @@
                 },
                 body: formData
             })
-            .then(async res => {
-                if (!res.ok) throw await res.json();
-                return res.json();
-            })
             .then(data => {
-                if (data.success) {
+                if (data) {
                     Swal.fire({
                         icon: 'success',
                         title: 'Thành công',
@@ -85,23 +81,12 @@
             })
             .catch(async err => {
                 // Nếu có lỗi validation từ Laravel
-                if (err.errors) {
-                    Object.keys(err.errors).forEach(field => {
-                        const errorDiv = document.getElementById('error_' + field);
-                        if (errorDiv) {
-                            errorDiv.innerText = err.errors[field][0];
-                        }
-                    });
-                } else {
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Lỗi',
-                        text: 'Không thể gửi form!'
-                    });
-                }
-            })
-            .finally(() => {
-                submitBtn.disabled = false;
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Lỗi',
+                    text: 'Không thể gửi form!'
+                });
+
             });
     });
 </script>

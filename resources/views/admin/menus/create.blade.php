@@ -1,4 +1,4 @@
-@extends('layouts.admin')
+{{-- @extends('layouts.admin')
 
 @section('title', 'Thêm Menu')
 
@@ -29,7 +29,7 @@
                             <label for="parent_id">Parent Menu</label>
                             <select class="form-control" id="parent_id" name="parent_id">
                                 <option value="">None</option>
-                                @foreach($parentMenus as $parent)
+                                @foreach ($parentMenus as $parent)
                                     <option value="{{ $parent->id }}">{{ $parent->label }}</option>
                                 @endforeach
                             </select>
@@ -61,4 +61,4 @@
         </div>
     </div>
 </div>
-@endsection
+@endsection --}}

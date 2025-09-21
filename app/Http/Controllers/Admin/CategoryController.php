@@ -81,7 +81,7 @@ class CategoryController extends Controller
     Category::create($validated);
 
     return redirect()->route('admin.categories.index', ['type' => $validated['type']])
-        ->with('success', 'Danh mục đã được tạo thành công');
+        ->with('success', 'Category create successfully');
 }
 
     /**
@@ -142,7 +142,7 @@ class CategoryController extends Controller
     $category->update($validated);
 
     return redirect()->route('admin.categories.index', ['type' => $validated['type']])
-        ->with('success', 'Danh mục đã được cập nhật thành công');
+        ->with('success', 'Category update successfully');
 }
 
     /**
@@ -160,7 +160,7 @@ class CategoryController extends Controller
     $category->delete(); // xóa chính nó
 
     return redirect()->route('admin.categories.index', ['type' => $category->type])
-        ->with('success', 'Danh mục và các danh mục con đã được xóa thành công');
+        ->with('success', 'Category and child-category deleted');
 }
 
 
@@ -195,6 +195,6 @@ class CategoryController extends Controller
             Category::where('id', $categoryData['id'])->update(['order' => $categoryData['order']]);
         }
 
-        return response()->json(['success' => true, 'message' => 'Thứ tự đã được cập nhật']);
+        return response()->json(['success' => true, 'message' => 'Order updated']);
     }
 }

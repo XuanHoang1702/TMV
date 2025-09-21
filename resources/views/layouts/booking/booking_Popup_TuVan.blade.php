@@ -91,7 +91,7 @@
         let name = document.querySelector('[name="customer_name"]').value.trim();
         let email = document.querySelector('[name="customer_email"]').value.trim();
         let phone = document.querySelector('[name="customer_phone"]').value.trim();
-        let notes = document.querySelector('[name="notes"]').value.trim();
+
 
         // Validate tên
         if (!name) {
@@ -124,14 +124,6 @@
             hasError = true;
         }
 
-        // Validate ghi chú
-        if (!notes) {
-            document.getElementById('error_notes').innerText = 'Ghi chú không được để trống';
-            hasError = true;
-        } else if (notes.length > 1000) {
-            document.getElementById('error_notes').innerText = 'Ghi chú tối đa 1000 ký tự';
-            hasError = true;
-        }
 
         if (hasError) e.preventDefault();
     });

@@ -234,9 +234,17 @@
                     <div class="row">
                         @foreach ($advertisements as $advertisement)
                             @php
-                                $subImages = json_decode($advertisement->sub_images, true) ?? [];
-                                $titles = json_decode($advertisement->titles, true) ?? [];
-                                $contents = json_decode($advertisement->contents, true) ?? [];
+                                $subImages = is_string($advertisement->sub_images)
+                                    ? json_decode($advertisement->sub_images, true)
+                                    : $advertisement->sub_images ?? [];
+
+                                $titles = is_string($advertisement->titles)
+                                    ? json_decode($advertisement->titles, true)
+                                    : $advertisement->titles ?? [];
+
+                                $contents = is_string($advertisement->contents)
+                                    ? json_decode($advertisement->contents, true)
+                                    : $advertisement->contents ?? [];
                             @endphp
                             <div class="col-12 col-sm-4 cl-img-vertical" data-aos="zoom-in" data-aos-duration="1000">
                                 <img src="{{ Storage::url($advertisement->main_image) }}" />
