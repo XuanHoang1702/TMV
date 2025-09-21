@@ -51,5 +51,10 @@ class Category extends Model
     return $this->hasMany(Service::class, 'category_id');
 }
 
+  public function news()
+{
+    return $this->hasMany(News::class, 'category_id');
+}
+
 
 }

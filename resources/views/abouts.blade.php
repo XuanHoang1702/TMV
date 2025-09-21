@@ -132,7 +132,7 @@
                                 @endforeach
                             @else
                                 {{-- fallback nếu chưa có data --}}
-                                <li><i class="cl-icon"><img src="images/icon/icon_check.png" /></i><label>Quy trình chuẩn y
+                                <li><i class="cl-icon"><img src="{{ asset('images/icon/icon_check.png') }}" /></i><label>Quy trình chuẩn y
                                         khoa…</label></li>
                             @endif
                         </ul>

@@ -209,6 +209,9 @@ Route::get('/tin-tuc', function (){
     return view('news.index', compact('newsBanner', 'newsCategories', 'newsList'));
 })->name('news.index');
 
+// News category route
+Route::get('/tin-tuc/{categorySlug}', [\App\Http\Controllers\NewsController::class, 'category'])->name('news.category');
+
 // Support both URL formats for backward compatibility
 Route::get('/tin-tuc/{slug}', function ($slug) {
     $news = News::where('slug', $slug)
@@ -220,26 +223,8 @@ Route::get('/tin-tuc/{slug}', function ($slug) {
 })->name('news.detail.old');
 
 // Use NewsController for news detail to get proper related news functionality
-Route::get('/tin-tuc/{category}/{slug}', [NewsController::class, 'show'])->name('news.detail');
-Route::get('/tin-tuc/danh-muc/{category}', function ($category) {
-   $categories = \App\Models\Category::where('type', 'news')
-        ->whereIn('slug', ['chuyen-mon', 'dao-tao', 'tu-thien', 'bao-chi-truyen-thong'])
-        ->get()
-        ->keyBy('slug');
+Route::get('/tin-tuc/{category}/{slug}', [\App\Http\Controllers\NewsController::class, 'show'])->name('news.detail');
 
-    $newsCategories = \App\Models\Category::where('type', 'news')->where('is_active', true)->orderBy('order')->get();
-
-    $newsByCategory = [];
-    foreach ($categories as $slug => $cat) {
-        $newsByCategory[$slug] = \App\Models\News::where('category_id', $cat->id)
-            ->where('is_active', true)
-            ->whereNotNull('published_at')
-            ->orderBy('published_at', 'desc')
-            ->take(6)
-            ->get();
-    }
-    return view('news.category', compact('category', 'newsCategories', 'newsByCategory'));
-})->name('news.category');
 Route::get('/lien-he', function () {
     $hospitalImages = \App\Models\HopitalImage::latest()->take(5)->get();
     $information = \App\Models\Information::first();
@@ -274,15 +259,21 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::delete('services/details/{detail}', [ServiceController::class, 'destroyDetail'])->name('services.details.destroy');
 
     // News Management
-    Route::resource('news', \App\Http\Controllers\Admin\NewsController::class);
+    Route::get('news', [\App\Http\Controllers\Admin\NewsController::class, 'index'])->name('news.index');
+    Route::get('news/create', [\App\Http\Controllers\Admin\NewsController::class, 'create'])->name('news.create');
+    Route::post('news', [\App\Http\Controllers\Admin\NewsController::class, 'store'])->name('news.store');
+    Route::get('news/{slug}', [\App\Http\Controllers\Admin\NewsController::class, 'show'])->name('news.show');
+    Route::get('news/{slug}/edit', [\App\Http\Controllers\Admin\NewsController::class, 'edit'])->name('news.edit');
+    Route::put('news/{slug}', [\App\Http\Controllers\Admin\NewsController::class, 'update'])->name('news.update');
+    Route::delete('news/{slug}', [\App\Http\Controllers\Admin\NewsController::class, 'destroy'])->name('news.destroy');
 
     // Xuất bản tin tức
-    Route::post('news/{news}/publish', [NewsController::class, 'publish'])->name('news.publish');
+    Route::post('news/{slug}/publish', [NewsController::class, 'publish'])->name('news.publish');
 
     // Gỡ xuất bản tin tức
-    Route::post('news/{news}/unpublish', [NewsController::class, 'unpublish'])->name('news.unpublish');
+    Route::post('news/{slug}/unpublish', [NewsController::class, 'unpublish'])->name('news.unpublish');
 
-    Route::delete('news/{news}/remove-image', [NewsController::class, 'removeImage'])->name('news.removeImage');
+    Route::delete('news/{slug}/remove-image', [NewsController::class, 'removeImage'])->name('news.removeImage');
     Route::post('news/upload-image', [NewsController::class, 'uploadImage'])->name('news.upload-image');
 
 

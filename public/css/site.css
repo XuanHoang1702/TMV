@@ -119,7 +119,13 @@ html {
     display: flex;
 }
 
-.icon-flag {}
+.icon-flag {
+     width: 18px;       /* fix kích thước */
+    height: 12px;      /* giữ tỉ lệ lá cờ */
+    object-fit: cover; /* tránh méo ảnh */
+    margin-right: 6px;
+    vertical-align: middle;
+}
 
 /*main Menu*/
 .col-center-item {
@@ -301,8 +307,8 @@ html {
 
 .ul-lang .m-ul-sub li .icon-flag,
 .ul-lang .m-ul-sub li .icon-check {
-    max-width: 20px;
-    max-height: 20px;
+    max-width: 18px;
+    max-height: 18px;
 }
 
 .ul-lang .m-ul-sub li .icon-check {
@@ -712,6 +718,9 @@ ul.ul-ribon ul {
 /*Moblie*/
 .btn-miniMenu {
     display: none;
+
+    cursor: pointer;
+
 }
 
 
@@ -749,8 +758,20 @@ ul.ul-ribon ul {
     top: 0;
     width: 100vW;
     z-index: 1;
+    height: 1000px;
+}
+.d-Mobile .main-menu {
+    display: none; /* Ẩn mặc định */
+    max-height: 0; /* Chiều cao ban đầu là 0 */
+
+    transition: max-height 0.3s ease-in-out; /* Hiệu ứng mượt mà */
 }
 
+.d-Mobile .main-menu.mini-show {
+    display: block; /* Hiển thị khi có class mini-show */
+    max-height: 1000px; /* Chiều cao tối đa khi mở, điều chỉnh theo nội dung */
+
+}
 .d-Mobile div.cl-header .m-head {
     display: none;
 }

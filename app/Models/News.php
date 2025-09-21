@@ -27,6 +27,14 @@ class News extends Model
         'meta_description',
     ];
 
+    /**
+     * Get the route key for the model.
+     */
+    public function getRouteKeyName()
+    {
+        return 'slug';
+    }
+
     protected $casts = [
 
         'is_featured' => 'boolean',

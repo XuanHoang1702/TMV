@@ -30,6 +30,23 @@ class NewsController extends Controller
         return view('news.index', compact('newsCategories', 'newsList', 'newsBanner'));
     }
 
+    public function show($categorySlug, $newsSlug)
+    {
+        $news = News::where('slug', $newsSlug)
+            ->whereHas('category', function ($query) use ($categorySlug) {
+                $query->where('slug', $categorySlug);
+            })
+            ->whereNotNull('published_at')
+            ->where('is_active', true)
+            ->firstOrFail();
+
+        // Use the model's getRelatedNews() method for consistent behavior
+        $relatedNews = $news->getRelatedNews();
+
+        $newsBanner = \App\Models\PageContent::where('page', 'news_banner')->first();
+        return view('news.detail', compact('news', 'relatedNews', 'newsBanner'));
+    }
+
     public function category($categorySlug)
     {
         $category = Category::where('slug', $categorySlug)
@@ -50,23 +67,6 @@ class NewsController extends Controller
 
         $newsBanner = \App\Models\PageContent::where('page', 'news_banner')->first();
 
-        return view('news.category', compact('category', 'newsCategories', 'newsList', 'newsBanner'));
-    }
-
-    public function show($categorySlug, $newsSlug)
-    {
-        $news = News::where('slug', $newsSlug)
-            ->whereHas('category', function ($query) use ($categorySlug) {
-                $query->where('slug', $categorySlug);
-            })
-            ->whereNotNull('published_at')
-            ->where('is_active', true)
-            ->firstOrFail();
-
-        // Use the model's getRelatedNews() method for consistent behavior
-        $relatedNews = $news->getRelatedNews();
-
-        $newsBanner = \App\Models\PageContent::where('page', 'news_banner')->first();
-        return view('news.show_detail', compact('news', 'relatedNews', 'newsBanner'));
+        return view('news.index', compact('newsCategories', 'newsList', 'newsBanner', 'category'));
     }
 }

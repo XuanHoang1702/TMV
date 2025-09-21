@@ -56,7 +56,7 @@
                         <div class="d-flex justify-content-between">
                             <a href="{{ route('admin.news.show', $item) }}" class="btn btn-primary btn-sm">Xem thêm</a>
                             <div>
-                                <a href="{{ route('admin.news.edit', $item) }}" class="btn btn-sm btn-warning">Sửa</a>
+                                <a href="{{ route('admin.news.edit', $news->id) }}" class="btn btn-sm btn-warning">Sửa</a>
                                 <form action="{{ route('admin.news.destroy', $item) }}" method="POST"
                                     style="display:inline;">
                                     @csrf

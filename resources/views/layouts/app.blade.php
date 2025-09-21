@@ -74,14 +74,14 @@
                             <div class="head-sel-g">
                                 <ul class="ul-lang">
                                     <li class="li-group">
-                                        <a href="{{ url('lang/en') }}" onclick="onChange_Lang(this)">
+                                        <a onclick="onChange_Lang(this)">
                                             <img class="icon-flag" src="{{ asset('images/icon/Flage_vn.png') }}" />
-                                            <span>Tiếng Việt</span>
+                                            <span>Ngôn ngữ</span>
                                             <i class="fa fa-angle-down"></i>
                                         </a>
                                         <ul class="m-ul-sub" style="width:180px; top:30px; left:-15px;">
-                                            <li class="active">
-                                                <a href="{{ url('lang/vi') }}">
+                                            <li>
+                                                <a href="javascript:void(0)" onclick="translateLanguage('vi');changeLanguageUI(this, 'vi')">
                                                     <img class="icon-flag"
                                                         src="{{ asset('images/icon/icon_flag_vn.png') }}" />
                                                     <span>Tiếng Việt</span>
@@ -90,16 +90,19 @@
                                                 </a>
                                             </li>
                                             <li>
-                                                <a href="{{ url('lang/en') }}">
+                                                <a href="javascript:void(0)" onclick="translateLanguage('en'); changeLanguageUI(this, 'en')">
                                                     <img class="icon-flag"
                                                         src="{{ asset('images/icon/icon_flag_en.png') }}" />
-                                                    <span>Tiếng Anh</span>
+                                                    <span>English</span>
                                                     <img class="icon-check"
                                                         src="{{ asset('images/icon/icon_lang_check.png') }}" />
                                                 </a>
                                             </li>
                                         </ul>
                                     </li>
+                                    <div id="google_translate_element" style="display:none;"></div>
+
+
                                 </ul>
                             </div>
                         </div>
@@ -129,28 +132,28 @@
                 <ul class="cl-sub-ribon">
                     <li>
                         <a href="#" class="zalo-link" onclick="openZaloChat(event)">
-                            <img id="zalo-icon" src="images/icon/icon_zalo.png" alt="Zalo" />
+                            <img id="zalo-icon" src="{{ asset('images/icon/icon_zalo.png') }}" alt="Zalo" />
                         </a>
                     </li>
                     <li>
                         <a href="#" onclick="showMessengerModal(event)">
-                            <img id="messenger-icon" src="images/icon/icon_mess.png" alt="Messenger" />
+                            <img id="messenger-icon" src="{{ asset('images/icon/icon_mess.png') }}" alt="Messenger" />
                         </a>
                     </li>
                     <li>
                         <a href="#" onclick="openCall(event)">
-                            <img id="call-icon" src="images/icon/icon_call.png" alt="Call" />
+                            <img id="call-icon" src="{{ asset('images/icon/icon_call.png') }}" alt="Call" />
                         </a>
                     </li>
                 </ul>
                 <a class="show-hide-child" onclick="show_hide_ribon(this)">
-                    <img class="cl-icon-plus" src="images/icon/icon_plus.png" />
-                    <img class="cl-icon-minus" src="images/icon/icon_minus.png" />
+                    <img class="cl-icon-plus" src="{{ asset('images/icon/icon_plus.png') }}" />
+                    <img class="cl-icon-minus" src="{{ asset('images/icon/icon_minus.png') }}" />
                 </a>
             </li>
             <li class="cl-scroll-top">
                 <a href="#" onclick="scrollToTop()">
-                    <img src="images/icon/icon_scroll_top.png" alt="Scroll Top" />
+                    <img src="{{ asset('images/icon/icon_scroll_top.png') }}" alt="Scroll Top" />
                 </a>
             </li>
         </ul>
@@ -262,6 +265,67 @@
             }
         });
     </script>
+    <!-- Google Translate init + robust translateLanguage -->
+    <script>
+        // expose init function globally (required by google script cb)
+        window.googleTranslateElementInit = function() {
+            new google.translate.TranslateElement({
+                pageLanguage: 'vi',
+                includedLanguages: 'vi,en',
+                autoDisplay: false
+            }, 'google_translate_element');
+        };
+
+        // expose translateLanguage on window so onclick attr can find it
+        window.translateLanguage = function(lang) {
+            var tries = 0;
+
+            function trySelect() {
+                var selectField = document.querySelector(".goog-te-combo");
+                if (selectField) {
+                    // set value and fire change
+                    selectField.value = lang;
+                    selectField.dispatchEvent(new Event("change"));
+                    return;
+                }
+                tries++;
+                if (tries < 25) {
+                    // thử lại mỗi 200ms (tổng ~5s)
+                    setTimeout(trySelect, 200);
+                } else {
+                    console.warn("translateLanguage: .goog-te-combo not found");
+                }
+            }
+
+            trySelect();
+        };
+         function changeLanguageUI(el, lang) {
+    // Bỏ active tất cả
+    $(el).closest("ul").find("li").removeClass("active");
+
+    // Active cái đang chọn
+    $(el).parent().addClass("active");
+
+    // Ẩn tất cả dấu tích
+    $(el).closest("ul").find(".icon-check").hide();
+
+    // Hiện dấu tích cho cái đang chọn
+    $(el).find(".icon-check").show();
+
+    // Đổi cờ trên nút chính
+    var selectedFlag = $(el).find(".icon-flag").attr("src");
+    var $mainBtn = $(el).closest(".li-group").children("a");
+    $mainBtn.find(".icon-flag").attr("src", selectedFlag);
+
+    // Đổi text nút chính (nếu muốn)
+    var selectedText = $(el).find("span").text();
+    $mainBtn.find("span").text(selectedText);
+}
+
+    </script>
+
+    <!-- Google Translate script (async từ Google) -->
+    <script src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 
     @yield('scripts')
     @yield('meta')

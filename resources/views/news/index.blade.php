@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Tin tức - Thẩm mỹ Dr.DAT')
+@section('title', isset($category) ? $category->name . ' - Thẩm mỹ Dr.DAT' : 'Tin tức - Thẩm mỹ Dr.DAT')
 
 @section('styles')
     <link rel="stylesheet" href="{{ asset('css/tintuc.css') }}">
@@ -31,26 +31,42 @@
                         <!--Danh mục-->
                         <div class="row">
                             <div class="col-12">
-                                <a class="cl-btn-full {{ !request('category') ? 'active' : '' }}" href="{{ route('news.index') }}">
+                                <a class="cl-btn-full {{ !request('category') && !isset($category) ? 'active' : '' }}" href="{{ route('news.index') }}">
                                     <span>Tất cả</span>
                                 </a>
                             </div>
-                            @foreach ($newsCategories as $category)
+                            @foreach ($newsCategories as $cat)
                                 <div class="col-12">
-                                    <a class="cl-btn-full-2 {{ request('category') == $category->id ? 'active' : '' }}"
-                                       href="{{ route('news.index', ['category' => $category->id]) }}">
-                                        <span>{{ $category->name }}</span>
+                                    <a class="cl-btn-full-2 {{ (request('category') == $cat->id || (isset($category) && $category->id == $cat->id)) ? 'active' : '' }}"
+                                       href="{{ isset($cat->slug) ? route('news.category', $cat->slug) : route('news.index', ['category' => $cat->id]) }}">
+                                        <span>{{ $cat->name }}</span>
                                     </a>
                                 </div>
                             @endforeach
                         </div>
 
                         <!--Ảnh quảng cáo-->
-                        <div class="row cl-img-left mt-4">
-                            <div class="col-12">
-                                <img src="{{ asset('images/tintuc/tin-tuc-banner_1.png') }}" alt="Banner">
+                        @if(isset($sidebarBanners) && $sidebarBanners->count() > 0)
+                            <div class="row cl-img-left mt-4">
+                                <div class="col-12">
+                                    @foreach($sidebarBanners as $banner)
+                                        @if($banner->link)
+                                            <a href="{{ $banner->link }}" target="_blank" rel="noopener noreferrer">
+                                                <img src="{{ asset('storage/' . $banner->image_path) }}" alt="{{ $banner->title ?? 'Banner' }}">
+                                            </a>
+                                        @else
+                                            <img src="{{ asset('storage/' . $banner->image_path) }}" alt="{{ $banner->title ?? 'Banner' }}">
+                                        @endif
+                                    @endforeach
+                                </div>
                             </div>
-                        </div>
+                        @else
+                            <div class="row cl-img-left mt-4">
+                                <div class="col-12">
+                                    <img src="{{ asset('images/tintuc/tin-tuc-banner_1.png') }}" alt="Banner">
+                                </div>
+                            </div>
+                        @endif
 
                         <!--Form tư vấn-->
                         @include('layouts.booking.tuvan_no_popup')
@@ -58,7 +74,17 @@
 
                     <!--Right Content-->
                     <div class="col-12 col-sm-9">
-
+                        <!-- Category Title -->
+                        @if(isset($category))
+                            <div class="row mb-4">
+                                <div class="col-12">
+                                    <h1 class="category-title">{{ $category->name }}</h1>
+                                    @if($category->description)
+                                        
+                                    @endif
+                                </div>
+                            </div>
+                        @endif
 
                         <div class="row">
                             @forelse($newsList as $news)
@@ -91,7 +117,7 @@
                             @empty
                                 <div class="col-12">
                                     <div class="text-center py-5">
-                                        <h4>Chưa có tin tức nào.</h4>
+                                        <h4>{{ isset($category) ? 'Chưa có tin tức nào trong danh mục này.' : 'Chưa có tin tức nào.' }}</h4>
                                         <p>Vui lòng quay lại sau để xem các tin tức mới nhất.</p>
                                     </div>
                                 </div>

@@ -57,26 +57,30 @@ function onClose_Popup2() {
     $("#booking_Popup_TuVan").modal('hide');
 }
 
-function onChange_Lang(el) {
-    $(el).parent().find("ul.m-ul-sub").toggleClass("active");
+function onChange_Lang(el, lang) {
+    let $submenu = $(el).siblings("ul.m-ul-sub");
+    let $icon = $(el).children("i.fa");
 
-    if ($(el).parent().find("ul.m-ul-sub").hasClass("active")) {
-        $("body").append("<div class='cl-mask' onclick='onClickBody()'></div>");
+    $submenu.toggleClass("active");
+    $icon.toggleClass("fa-angle-up fa-angle-down");
 
-        $(el).find("i.fa").removeClass("fa-angle-down");
-        $(el).find("i.fa").addClass("fa-angle-up");
+    if ($submenu.hasClass("active")) {
+        if (!$("body .cl-mask").length) {
+            $("body").append("<div class='cl-mask' onclick='onClickBody()'></div>");
+        }
+    } else {
+        $("body .cl-mask").remove();
     }
-    else {
-        $("body").find("div.cl-mask").remove();
-        $(el).find("i.fa").removeClass("fa-angle-up");
-        $(el).find("i.fa").addClass("fa-angle-down");
-        
-    }
 
+    // 🔥 Gọi Google Translate
+    if (lang) {
+        translateLanguage(lang);
+    }
 }
 
+
 function onClickBody() {
-    $("ul.m-ul-sub").removeClass("active");   
+    $("ul.m-ul-sub").removeClass("active");
     $("body").find("div.cl-mask").remove();
     $("ul.ul-lang .li-group a").find("i.fa").removeClass("fa-angle-up");
     $("ul.ul-lang .li-group a").find("i.fa").addClass("fa-angle-down");
@@ -108,7 +112,7 @@ function onShowHide_search(el) {
 }
 
 function show_miniMenu() {
-    $("ul.main-menu").toggleClass("mini-show");    
+    $("ul.main-menu").toggleClass("mini-show");
 }
 
 $(window).resize(function () {
@@ -154,6 +158,6 @@ $(document).ready(function () {
             }]
         });
         onHoverChange_img();
-       
+
     }, 200);
 });

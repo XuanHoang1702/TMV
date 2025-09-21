@@ -109,8 +109,10 @@ class NewsController extends Controller
             ->with('success', 'Tin tức đã được tạo thành công');
     }
 
-   public function edit(News $news)
+   public function edit($slug)
 {
+    $news = News::where('slug', $slug)->firstOrFail();
+
     // Đảm bảo related_news là array
     if (is_string($news->related_news)) {
         $news->setAttribute('related_news', json_decode($news->related_news, true) ?? []);
@@ -124,8 +126,10 @@ class NewsController extends Controller
     return view('admin.news.edit', compact('news', 'categories'));
 }
 
-    public function update(Request $request, News $news)
+    public function update(Request $request, $slug)
     {
+        $news = News::where('slug', $slug)->firstOrFail();
+
         $validated = $request->validate([
             'title' => 'required|string|max:255',
             'slug' => 'required|string|unique:news,slug,' . $news->id,
@@ -176,8 +180,10 @@ class NewsController extends Controller
         return redirect()->route('admin.news.index')->with('success', 'Tin tức đã được cập nhật thành công');
     }
 
-    public function destroy(News $news)
+    public function destroy($slug)
     {
+        $news = News::where('slug', $slug)->firstOrFail();
+
         // Delete multiple images
         if ($news->images) {
             foreach ($news->images as $imagePath) {
@@ -191,8 +197,9 @@ class NewsController extends Controller
             ->with('success', 'Tin tức đã được xóa thành công');
     }
 
-    public function publish(News $news)
+    public function publish($slug)
     {
+        $news = News::where('slug', $slug)->firstOrFail();
         $news->update([
             'published_at' => now(),
             'is_active' => true
@@ -201,22 +208,48 @@ class NewsController extends Controller
         return back()->with('success', 'Tin tức đã được xuất bản');
     }
 
-    public function unpublish(News $news)
+    public function unpublish($slug)
     {
+        $news = News::where('slug', $slug)->firstOrFail();
         $news->update(['published_at' => null]);
 
         return back()->with('success', 'Tin tức đã được gỡ xuất bản');
     }
 
-    public function show(News $news)
+    public function show($categoryOrSlug, $slug = null)
     {
-        $relatedNews = $news->getRelatedNews();
+        // Check if this is called from frontend (with category and slug) or admin (with just slug)
+        if ($slug === null) {
+            // Admin route: /admin/news/{slug}
+            $news = News::where('slug', $categoryOrSlug)
+                ->where('is_active', true)
+                ->firstOrFail();
 
-        return view('admin.news.show', compact('news', 'relatedNews'));
+            $relatedNews = $news->getRelatedNews();
+
+            return view('admin.news.show', compact('news', 'relatedNews'));
+        } else {
+            // Frontend route: /tin-tuc/{category}/{slug}
+            $news = News::where('slug', $slug)
+                ->whereHas('category', function($query) use ($categoryOrSlug) {
+                    $query->where('slug', $categoryOrSlug);
+                })
+                ->where('is_active', true)
+                ->whereNotNull('published_at')
+                ->firstOrFail();
+
+            $relatedNews = $news->getRelatedNews();
+
+            // Add newsBanner for frontend view
+            $newsBanner = \App\Models\PageContent::where('page', 'news_banner')->first();
+
+            return view('news.detail', compact('news', 'relatedNews', 'newsBanner'));
+        }
     }
 
-    public function removeImage(News $news, Request $request)
+    public function removeImage($slug, Request $request)
     {
+        $news = News::where('slug', $slug)->firstOrFail();
         $imagePath = $request->image;
 
         if ($imagePath && in_array($imagePath, $news->images)) {
