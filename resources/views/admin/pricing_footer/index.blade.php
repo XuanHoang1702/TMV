@@ -23,9 +23,9 @@
                     <thead>
                         <tr>
                             <th>STT</th>
-                            <th>Tiêu đề</th>
+
                             <th>Nội dung</th>
-                            <th>Icon</th>
+
                             <th>Trạng thái</th>
                             <th>Thứ tự</th>
                             <th>Thao tác</th>
@@ -35,15 +35,9 @@
                         @forelse($pricingFooters as $index => $footer)
                         <tr>
                             <td>{{ $index + 1 }}</td>
-                            <td>{{ $footer->title ?? 'N/A' }}</td>
+
                             <td>{{ Str::limit($footer->content, 50) }}</td>
-                            <td>
-                                @if($footer->icon)
-                                    <img src="{{ asset('storage/' . $footer->icon) }}" alt="Icon" width="40" height="40">
-                                @else
-                                    <span class="text-muted">Không có</span>
-                                @endif
-                            </td>
+                            
                             <td>
                                 <span class="badge {{ $footer->is_active ? 'bg-success' : 'bg-danger' }}">
                                     {{ $footer->is_active ? 'Hiển thị' : 'Ẩn' }}

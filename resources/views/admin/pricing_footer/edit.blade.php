@@ -22,14 +22,7 @@
                         @csrf
                         @method('PUT')
 
-                        <div class="mb-3">
-                            <label for="title" class="form-label">Tiêu đề <span class="text-muted">(không bắt buộc)</span></label>
-                            <input type="text" class="form-control" id="title" name="title"
-                                   value="{{ old('title', $pricingFooter->title) }}" placeholder="Nhập tiêu đề">
-                            @error('title')
-                                <div class="text-danger small">{{ $message }}</div>
-                            @enderror
-                        </div>
+
 
                         <div class="mb-3">
                             <label for="content" class="form-label">Nội dung <span class="text-danger">*</span></label>
@@ -40,24 +33,7 @@
                             @enderror
                         </div>
 
-                        <div class="mb-3">
-                            <label for="icon" class="form-label">Icon</label>
-                            <input type="file" class="form-control" id="icon" name="icon"
-                                   accept="image/*" onchange="previewImage(this)">
-                            <div class="form-text">Chọn file ảnh mới để thay thế (JPEG, PNG, JPG, GIF, SVG, tối đa 2MB). Để trống nếu không muốn thay đổi.</div>
-                            @error('icon')
-                                <div class="text-danger small">{{ $message }}</div>
-                            @enderror
-                            @if($pricingFooter->icon)
-                                <div class="mt-2">
-                                    <label class="form-label">Icon hiện tại:</label><br>
-                                    <img src="{{ asset('storage/' . $pricingFooter->icon) }}" alt="Current Icon" style="max-width: 200px; max-height: 200px;">
-                                </div>
-                            @endif
-                            <div id="imagePreview" class="mt-2" style="display: none;">
-                                <img id="previewImg" src="" alt="Preview" style="max-width: 200px; max-height: 200px;">
-                            </div>
-                        </div>
+                       
 
                         <div class="mb-3">
                             <label for="sort_order" class="form-label">Thứ tự hiển thị</label>

@@ -4,7 +4,7 @@
 
 @section('content')
 <div class="d-flex justify-content-between align-items-center mb-3">
-   
+
     <div>
         <a href="{{ route('admin.pricing_footer.edit', $pricingFooter) }}" class="btn btn-warning mr-2">
             <i class="fas fa-edit"></i> Sửa
@@ -48,18 +48,7 @@
                     </div>
                 </div>
 
-                <!-- Icon -->
-                @if($pricingFooter->icon)
-                <div class="mt-4">
-                    <h6 class="mb-3"><i class="fas fa-image text-primary"></i> Icon:</h6>
-                    <div class="text-center">
-                        <img src="{{ asset('storage/' . $pricingFooter->icon) }}"
-                             class="img-fluid rounded border"
-                             alt="Icon"
-                             style="max-height: 100px; max-width: 200px;">
-                    </div>
-                </div>
-                @endif
+
 
                 <!-- Meta information -->
                 <div class="mt-4 p-3 bg-light rounded">
@@ -93,11 +82,7 @@
                     <li class="mb-2">
                         <strong>Thứ tự:</strong> <span class="text-muted">{{ $pricingFooter->sort_order }}</span>
                     </li>
-                    @if($pricingFooter->title)
-                    <li class="mb-2">
-                        <strong>Tiêu đề:</strong> <span class="text-muted">{{ $pricingFooter->title }}</span>
-                    </li>
-                    @endif
+                   
                 </ul>
             </div>
         </div>

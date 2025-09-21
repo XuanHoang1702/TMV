@@ -39,20 +39,10 @@
                             @error('name')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
-                            <div class="form-text">Nếu chọn "Cho phép xuống dòng", một cửa sổ sẽ hiện ra để chọn vị trí thêm
-                                dấu | cho xuống dòng.</div>
+
                         </div>
 
-                        <div class="mb-3">
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" id="allow_line_breaks"
-                                    name="allow_line_breaks" value="1"
-                                    {{ old('allow_line_breaks', $service->allow_line_breaks ?? false) ? 'checked' : '' }}>
-                                <label class="form-check-label" for="allow_line_breaks">
-                                    Cho phép xuống dòng trong tên dịch vụ
-                                </label>
-                            </div>
-                        </div>
+                        
 
                         <div class="mb-3">
                             <label for="parent_id" class="form-label">Dịch vụ cha</label>

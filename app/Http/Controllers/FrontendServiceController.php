@@ -2,98 +2,87 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\About;
-use App\Models\AboutUs;
 use App\Models\Service;
 use App\Models\Category;
 use App\Models\Process;
 use App\Models\Advertisement;
+use App\Models\PageContent;
+use App\Models\Banner;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class FrontendServiceController extends Controller
 {
-    public function index()
+    public function show($slug)
     {
-        $services = Service::where('is_active', true)
-            ->whereNull('parent_id')
-            ->with(['children', 'category'])
-            ->orderBy('sort_order')
-            ->get();
+        Log::info('Service show method called with slug: ' . $slug);
 
+        // Tìm service trước
+        $service = Service::where('slug', $slug)
+            ->where('is_active', true)
+            ->with(['children' => function($query) {
+                $query->where('is_active', true)->orderBy('sort_order');
+            }, 'category'])
+            ->first();
 
-
-        $servicesBanner = \App\Models\PageContent::where('page', 'services_banner')->first();
-
-        $bannersSection1 = \App\Models\Banner::where('section', '1')
+        // Các biến chung
+        $serviceBanner = PageContent::where('page', 'services_banner')->first();
+        $bannersSection1 = Banner::where('section', '1')
             ->where('page', 'services')
             ->where('is_active', true)
             ->orderBy('order')
             ->get();
 
-        return view('layouts.services.index', compact('services', 'servicesBanner', 'bannersSection1'));
-    }
+        if ($service) {
+            // Xử lý cho SERVICE
+            $processesQuyTrinh = Process::with('processImages')
+                ->where('section', 'quy_trình')
+                ->where('service_id', $service->id)
+                ->orderBy('order')
+                ->get();
 
-    public function show($slug)
-    {
-       $service = Service::where('slug', $slug)
-        ->where('is_active', true)
-        ->with(['children', 'category'])
-        ->first();
+            $processesLiDo = Process::with('processImages')
+                ->where('section', 'lí_do')
+                ->where('service_id', $service->id)
+                ->orderBy('order')
+                ->get();
 
-    $serviceBanner = \App\Models\PageContent::where('page', 'services_banner')->first();
+            $advertisements = Advertisement::where('service_id', $service->id)
+                ->where('is_active', true)
+                ->orderBy('order')
+                ->get();
 
-    $bannersSection1 = \App\Models\Banner::where('section', '1')
-        ->where('page', 'services')
-        ->where('is_active', true)
-        ->orderBy('order')
-        ->get();
+            $pageTitle = $service->title ?? $service->name;
 
-    if ($service) {
-        // Lấy processes theo service_id
-        $processesQuyTrinh = Process::with('processImages')
-            ->where('section', 'quy_trình')
-            ->where('service_id', $service->id)
-            ->orderBy('order')
-            ->get();
+            return view('layouts.services.show', compact(
+                'service',
+                'serviceBanner',
+                'processesQuyTrinh',
+                'processesLiDo',
+                'advertisements',
+                'pageTitle',
+                'bannersSection1'
+            ));
+        }
 
-        $processesLiDo = Process::with('processImages')
-            ->where('section', 'lí_do')
-            ->where('service_id', $service->id)
-            ->orderBy('order')
-            ->get();
-
-        $advertisements = Advertisement::where('service_id', $service->id)
-            ->where('is_active', true)
-            ->orderBy('order')
-            ->get();
-        
-
-        $pageTitle = $service->title ?? $service->name;
-
-        return view('layouts.services.show', compact(
-            'service',
-            'serviceBanner',
-            'processesQuyTrinh',
-            'processesLiDo',
-            'advertisements',
-            'pageTitle',
-            'bannersSection1'
-        ));
-    }
         // Nếu không tìm thấy service, tìm category
         $category = Category::where('slug', $slug)
             ->where('type', 'services')
             ->where('is_active', true)
-            ->with(['children', 'services' => function ($query) {
-                $query->where('is_active', true)->with('children');
+            ->with(['services' => function ($query) {
+                $query->where('is_active', true)
+                      ->whereNull('parent_id')
+                      ->with(['children' => function($childQuery) {
+                          $childQuery->where('is_active', true)->orderBy('sort_order');
+                      }]);
             }])
             ->first();
 
         if (!$category) {
-            abort(404);
+            Log::error('Neither service nor category found for slug: ' . $slug);
+            abort(404, 'Dịch vụ hoặc danh mục không tồn tại.');
         }
 
-        // Lấy processes theo service_ids của category
         $serviceIds = $category->services->pluck('id');
         $processesQuyTrinh = Process::with('processImages')
             ->where('section', 'quy_trình')
@@ -123,25 +112,5 @@ class FrontendServiceController extends Controller
             'pageTitle',
             'bannersSection1'
         ));
-    }
-
-    public function about()
-    {
-        $abouts = About::all();
-        $aboutUs1 = AboutUs::with('icons')->where('section', 'Phần 1')->first();
-
-         $aboutUs2 = AboutUs::with('icons')->where('section', 'Phần 2')->first();
-        $pageContent = \App\Models\PageContent::where('page', 'about_banner')->first();
-        $bannersSection1 = \App\Models\Banner::where('section', '1')
-            ->where('page', 'about')
-            ->where('is_active', true)
-            ->orderBy('order')
-            ->get();
-        $bannersSection2 = \App\Models\Banner::where('section', '2')
-            ->where('page', 'about')
-            ->where('is_active', true)
-            ->orderBy('order')
-            ->get();
-        return view('abouts', compact('abouts', 'aboutUs1', 'aboutUs2', 'pageContent', 'bannersSection1', 'bannersSection2'));
     }
 }

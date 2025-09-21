@@ -52,7 +52,7 @@
                                 <div class="mb-3">
                                     <label for="type" class="form-label">Loại danh mục <span class="text-danger">*</span></label>
                                     <select class="form-select @error('type') is-invalid @enderror" id="type" name="type" required>
-                                        <option value="general" {{ old('type', 'general') == 'general' ? 'selected' : '' }}>Chung</option>
+                                       
                                         <option value="services" {{ old('type') == 'services' ? 'selected' : '' }}>Dịch vụ</option>
                                         <option value="news" {{ old('type') == 'news' ? 'selected' : '' }}>Tin tức</option>
                                     </select>
@@ -84,7 +84,7 @@
                                     @enderror
                                 </div>
 
-                               
+
 
                                 <div class="mb-3">
                                     <div class="form-check">

@@ -22,10 +22,6 @@
             <input type="text" name="page" class="form-control" value="{{ $advertisement->page }}" required placeholder="e.g., home, services, about">
         </div>
 
-        <div class="mb-3">
-            <label>Tiêu đề</label>
-            <input type="text" name="title" class="form-control" value="{{ $advertisement->title ?? '' }}" placeholder="Tên quảng cáo">
-        </div>
 
 
         <div class="mb-3">

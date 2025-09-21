@@ -14,13 +14,7 @@
         <img src="{{ asset('storage/' . $sub) }}" width="100" class="me-2 mb-2">
     @endforeach
 
-    <p><strong>Tiêu đề:</strong></p>
-    <ul>
-        @foreach($advertisement->titles ?? [] as $title)
-            <li>{{ $title }}</li>
-        @endforeach
-    </ul>
-
+    
     <p><strong>Nội dung:</strong></p>
     <ul>
         @foreach($advertisement->contents ?? [] as $content)

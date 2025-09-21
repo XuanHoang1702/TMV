@@ -11,7 +11,7 @@
             <tr>
                 <th>ID</th>
                 <th>Dịch vụ</th>
-                <th>Tiêu đề</th>
+
                 <th>Ảnh</th>
                 <th>ảnh phụ</th>
                 <th>Thứ tự</th>
@@ -24,7 +24,7 @@
             <tr>
                 <td>{{ $advertisement->id }}</td>
                 <td>{{ $advertisement->service ? $advertisement->service->name : 'Tất cả' }}</td>
-                <td>{{ $advertisement->title ?? 'N/A' }}</td>
+               
                 <td>
                     @if($advertisement->main_image)
                         <div class="image-container">

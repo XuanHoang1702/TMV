@@ -224,6 +224,10 @@ class ProcessController extends Controller
         return view('admin.reason.edit', compact('reason', 'services'));
     }
 
+
+    /**
+     * Update the specified reason in storage.
+     */
     public function reasonUpdate(Request $request, string $id)
     {
         $validator = Validator::make($request->all(),[
@@ -245,6 +249,12 @@ class ProcessController extends Controller
 
         $process = Process::findOrFail($id);
 
+        // Delete old images from storage and database
+        foreach ($process->processImages as $processImage) {
+            Storage::disk('public')->delete($processImage->image); // Delete image file from storage
+            $processImage->delete(); // Delete record from database
+        }
+
         $process->update([
             'service_id' => $request->service_id,
             'order' => $request->order,
@@ -252,9 +262,6 @@ class ProcessController extends Controller
             'page' => $request->page,
             'section' => 'lí_do'
         ]);
-
-        // Delete old images
-        $process->processImages()->delete();
 
         // Add new images
         if ($request->hasFile('images')) {
@@ -272,10 +279,20 @@ class ProcessController extends Controller
         return redirect()->route('admin.reason.index')->with('success', 'Cập nhật lý do thành công');
     }
 
+    /**
+     * Remove the specified reason from storage.
+     */
     public function reasonDestroy(string $id)
     {
         $process = Process::findOrFail($id);
-        $process->delete();
+
+        // Delete associated images from storage and database
+        foreach ($process->processImages as $processImage) {
+            Storage::disk('public')->delete($processImage->image); // Delete image file from storage
+            $processImage->delete(); // Delete record from database
+        }
+
+        $process->delete(); // Delete the Process record
         return redirect()->route('admin.reason.index')->with('success', 'Lý do đã được xóa');
     }
 }

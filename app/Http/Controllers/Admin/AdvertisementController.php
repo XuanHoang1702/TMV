@@ -37,11 +37,11 @@ class AdvertisementController extends Controller
             'service_id' => 'nullable|exists:services,id',
             'page' => 'required|string',
             'main_image' => 'required|image|max:2048',
-            'sub_images' => 'nullable|array',
+            'sub_images' => 'nullable|array|max:4', // Giới hạn tối đa 4 ảnh
             'sub_images.*' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
-            'titles' => 'nullable|array',
+            'titles' => 'nullable|array|max:4', // Giới hạn titles tương ứng
             'titles.*' => 'nullable|string',
-            'contents' => 'nullable|array',
+            'contents' => 'nullable|array|max:4', // Giới hạn contents tương ứng
             'contents.*' => 'nullable|string',
             'order' => 'nullable|integer',
             'is_active' => 'nullable|boolean',
@@ -70,7 +70,6 @@ class AdvertisementController extends Controller
         return redirect()->route('admin.advertisement.index')->with('success', 'Advertisement created successfully.');
     }
 
-
     /**
      * Display the specified resource.
      */
@@ -90,6 +89,9 @@ class AdvertisementController extends Controller
         return view('admin.advertisement.edit', compact('advertisement', 'services'));
     }
 
+    /**
+     * Update the specified resource in storage.
+     */
     public function update(Request $request, $id)
     {
         $advertisement = Advertisement::findOrFail($id);
@@ -98,31 +100,44 @@ class AdvertisementController extends Controller
             'service_id' => 'nullable|exists:services,id',
             'page' => 'required|string',
             'main_image' => 'nullable|image|max:2048',
-            'sub_images' => 'nullable|array',
+            'sub_images' => 'nullable|array|max:4', // Giới hạn tối đa 4 ảnh
             'sub_images.*' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
-            'titles' => 'nullable|array',
+            'titles' => 'nullable|array|max:4', // Giới hạn titles tương ứng
             'titles.*' => 'nullable|string',
-            'contents' => 'nullable|array',
+            'contents' => 'nullable|array|max:4', // Giới hạn contents tương ứng
             'contents.*' => 'nullable|string',
             'order' => 'nullable|integer',
             'is_active' => 'nullable|boolean',
         ]);
 
+        // Xóa main_image cũ nếu có main_image mới
         if ($request->hasFile('main_image')) {
+            if ($advertisement->main_image && Storage::disk('public')->exists($advertisement->main_image)) {
+                Storage::disk('public')->delete($advertisement->main_image);
+            }
             $mainImagePath = $request->file('main_image')->store('advertisements', 'public');
             $advertisement->main_image = $mainImagePath;
         }
 
-        $subImagePaths = $advertisement->sub_images ?? [];
+        // Xóa sub_images cũ và cập nhật sub_images mới
         if ($request->hasFile('sub_images')) {
+            if (!empty($advertisement->sub_images)) {
+                foreach ($advertisement->sub_images as $subImage) {
+                    if (Storage::disk('public')->exists($subImage)) {
+                        Storage::disk('public')->delete($subImage);
+                    }
+                }
+            }
+            $subImagePaths = [];
             foreach ($request->file('sub_images') as $subImage) {
                 $subImagePaths[] = $subImage->store('advertisements', 'public');
             }
+            $advertisement->sub_images = $subImagePaths;
         }
 
+        // Cập nhật các trường khác
         $advertisement->service_id = $request->service_id;
         $advertisement->page = $request->page;
-        $advertisement->sub_images = $subImagePaths;
         $advertisement->titles = $request->titles;
         $advertisement->contents = $request->contents;
         $advertisement->order = $request->order ?? 0;
@@ -133,9 +148,28 @@ class AdvertisementController extends Controller
         return redirect()->route('admin.advertisement.index')->with('success', 'Advertisement updated successfully.');
     }
 
+    /**
+     * Remove the specified resource from storage.
+     */
     public function destroy($id)
     {
         $advertisement = Advertisement::findOrFail($id);
+
+        // Xóa main_image từ storage
+        if ($advertisement->main_image && Storage::disk('public')->exists($advertisement->main_image)) {
+            Storage::disk('public')->delete($advertisement->main_image);
+        }
+
+        // Xóa tất cả sub_images từ storage
+        if (!empty($advertisement->sub_images)) {
+            foreach ($advertisement->sub_images as $subImage) {
+                if (Storage::disk('public')->exists($subImage)) {
+                    Storage::disk('public')->delete($subImage);
+                }
+            }
+        }
+
+        // Xóa bản ghi Advertisement
         $advertisement->delete();
 
         return redirect()->route('admin.advertisement.index')->with('success', 'Advertisement deleted successfully.');
