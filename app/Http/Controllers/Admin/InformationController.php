@@ -118,87 +118,60 @@ class InformationController extends Controller
         }
     }
 
-    public function update(Request $request, $id)
-    {
-        $information = Information::findOrFail($id);
+  public function update(Request $request, $id)
+{
+    $information = Information::findOrFail($id);
 
-        $validator = Validator::make($request->all(), [
-            'name' => 'sometimes|required|string|max:255',
-            'address' => 'sometimes|required|string|max:500',
-            'latitude' => 'sometimes|required|numeric|between:-90,90',
-            'longitude' => 'sometimes|required|numeric|between:-180,180',
-            'email' => 'sometimes|required|email|max:255',
-            'hotline' => 'nullable|string|max:20',
-            'website' => 'nullable|url|max:255',
-            'images_address' => 'nullable|array|max:10',
-            'images_address.*' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
-            'working_time' => 'required|array',
-        ]);
+    $validator = Validator::make($request->all(), [
+        'name' => 'required|string|max:255',
+        'address' => 'required|string|max:500',
+        'latitude' => 'nullable|numeric|between:-90,90',
+        'longitude' => 'nullable|numeric|between:-180,180',
+        'email' => 'required|email|max:255',
+        'hotline' => 'nullable|string|max:20',
+        'website' => 'nullable|url|max:255',
+        'working_time' => 'required|array',
+    ]);
 
-        if ($validator->fails()) {
-            return redirect()->back()
-                ->withErrors($validator)
-                ->withInput();
-        }
-
-        try {
-            $data = $request->only([
-                'name', 'address', 'latitude', 'longitude',
-                'email', 'hotline', 'website', 'working_time'
-            ]);
-
-            // Handle working_time
-            $data['working_time'] = json_encode($request->working_time);
-
-            // Handle images
-            if ($request->hasFile('images_address')) {
-                // Delete old images
-                if ($information->images_address) {
-                    $oldImages = json_decode($information->images_address, true) ?? [];
-                    foreach ($oldImages as $oldImage) {
-                        Storage::disk('public')->delete($oldImage);
-                    }
-                }
-
-                $imagePaths = [];
-                $files = $request->file('images_address');
-
-                if (!is_array($files)) {
-                    $files = [$files];
-                }
-
-                foreach ($files as $image) {
-                    if ($image && $image->isValid()) {
-                        $path = $image->store('information_images', 'public');
-                        $imagePaths[] = $path;
-                    }
-                }
-
-                if (!empty($imagePaths)) {
-                    $data['images_address'] = json_encode($imagePaths);
-                }
-            }
-
-            $information->update($data);
-
-            // Clear cache for this location
-            $cacheKey = "real_address_{$data['latitude']}_{$data['longitude']}";
-            cache()->forget($cacheKey);
-
-            return redirect()->route('admin.informations.index')
-                ->with('success', 'Cập nhật thông tin thành công!');
-
-        } catch (\Exception $e) {
-            return redirect()->back()
-                ->with('error', 'Có lỗi xảy ra: ' . $e->getMessage())
-                ->withInput();
-        }
+    if ($validator->fails()) {
+        return redirect()->back()->withErrors($validator)->withInput();
     }
 
+    try {
+        $data = $request->only([
+            'name', 'address', 'latitude', 'longitude',
+            'email', 'hotline', 'website', 'working_time'
+        ]);
+        $data['working_time'] = json_encode($request->working_time);
+
+        // Set latitude and longitude to null if not provided
+        $data['latitude'] = $request->latitude ?? null;
+        $data['longitude'] = $request->longitude ?? null;
+
+        // Preserve existing images_address (no image handling in form)
+        $data['images_address'] = $information->images_address;
+
+        $information->update($data);
+
+        // Clear cache only if latitude and longitude exist
+        if (!empty($data['latitude']) && !empty($data['longitude'])) {
+            $cacheKey = "real_address_{$data['latitude']}_{$data['longitude']}";
+            cache()->forget($cacheKey);
+        }
+
+        return redirect()->route('admin.informations.index')
+            ->with('success', 'Cập nhật thông tin thành công!');
+    } catch (\Exception $e) {
+        return redirect()->back()
+            ->with('error', 'Có lỗi xảy ra: ' . $e->getMessage())
+            ->withInput();
+    }
+}
     public function show($id)
     {
         $information = Information::findOrFail($id);
-        return response()->json($information);
+      return view('admin.informations.show', compact('information'));
+
     }
 
     public function destroy($id)
@@ -225,5 +198,5 @@ class InformationController extends Controller
             ->with('success', 'Xóa thông tin thành công!');
     }
 
-  
+
 }

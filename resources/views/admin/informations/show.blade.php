@@ -47,10 +47,7 @@
                                     <th>Địa chỉ</th>
                                     <td>{{ $information->address ?: 'Chưa có' }}</td>
                                 </tr>
-                                <tr>
-                                    <th>Display Address</th>
-                                    <td>{{ $information->display_address ?: 'Chưa có' }}</td>
-                                </tr>
+                               
                                 <tr>
                                     <th>Tọa độ</th>
                                     <td>
@@ -65,10 +62,7 @@
                                     <th>Giờ làm việc</th>
                                     <td>{{ $information->working_time ?: 'Chưa có' }}</td>
                                 </tr>
-                                <tr>
-                                    <th>Hình ảnh</th>
-                                    <td>{{ $information->images_address ?: 'Chưa có' }}</td>
-                                </tr>
+
                                 <tr>
                                     <th>Ngày tạo</th>
                                     <td>{{ $information->created_at->format('d/m/Y H:i') }}</td>
@@ -79,25 +73,7 @@
                                 </tr>
                             </table>
                         </div>
-                        <div class="col-md-4">
-                            @if($information->images_address)
-                                @php
-                                    $images = json_decode($information->images_address, true);
-                                @endphp
-                                @if($images && count($images) > 0)
-                                    <div class="card">
-                                        <div class="card-header">
-                                            <h5 class="card-title mb-0">Hình ảnh</h5>
-                                        </div>
-                                        <div class="card-body">
-                                            @foreach($images as $image)
-                                                <img src="{{ Storage::url($image) }}" alt="Hình ảnh" class="img-fluid mb-2" style="width: 100%; height: auto;">
-                                            @endforeach
-                                        </div>
-                                    </div>
-                                @endif
-                            @endif
-                        </div>
+
                     </div>
                 </div>
             </div>

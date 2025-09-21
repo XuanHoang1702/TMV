@@ -9,6 +9,7 @@ class Advertisement extends Model
 {
     use HasFactory;
     protected $table = 'advertisement';
+
     protected $fillable = [
         'service_id',
         'page',
@@ -18,6 +19,13 @@ class Advertisement extends Model
         'contents',
         'order',
         'is_active'
+    ];
+
+    protected $casts = [
+        'sub_images' => 'array',
+        'titles' => 'array',
+        'contents' => 'array',
+        'is_active' => 'boolean',
     ];
 
     public function service()

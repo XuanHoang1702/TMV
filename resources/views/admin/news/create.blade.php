@@ -40,13 +40,13 @@
                         </div>
 
                         <div class="mb-3">
-                            <label for="slug" class="form-label">Slug <span class="text-danger">*</span></label>
+                            <label for="slug" class="form-label">Đường dẫn <span class="text-danger">*</span></label>
                             <input type="text" class="form-control @error('slug') is-invalid @enderror" id="slug"
                                 name="slug" value="{{ old('slug') }}" required>
                             @error('slug')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
-                            <div class="form-text">Slug sẽ được sử dụng trong URL</div>
+                            <div class="form-text">đường dẫn sẽ được sử dụng trong URL</div>
                         </div>
 
                         <div class="mb-3">
@@ -63,32 +63,10 @@
                             @error('content')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
-                            <button type="button" class="btn btn-outline-primary mt-2" data-toggle="modal"
-                                data-target="#fullscreenEditorModal">
-                                Mở toàn màn hình
-                            </button>
+
                         </div>
 
                         <!-- Modal Fullscreen -->
-                        <div class="modal fade" id="fullscreenEditorModal" tabindex="-1" role="dialog" aria-labelledby="fullscreenModalLabel" aria-hidden="true">
-                            <div class="modal-dialog modal-fullscreen" role="document">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h5 class="modal-title" id="fullscreenModalLabel">Soạn thảo nội dung</h5>
-                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                            <span aria-hidden="true">&times;</span>
-                                        </button>
-                                    </div>
-                                    <div class="modal-body">
-                                        <textarea class="summernote" id="content_fullscreen"></textarea>
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
-                                        <button type="button" class="btn btn-primary" id="saveFullscreenContent">Lưu vào form</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
 
                         @push('styles')
                             {{-- Summernote 0.9.0 với Bootstrap 4 --}}

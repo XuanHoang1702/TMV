@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\News;
 use App\Models\Service;
-use App\Models\PricingFooter;
 use Illuminate\Http\Request;
 
 class SearchController extends Controller
@@ -17,9 +16,9 @@ class SearchController extends Controller
     public function search(Request $request)
     {
         $keyword = $request->input('keyword', '');
-        $results = [];
+        $results = collect(); // Initialize as collection instead of array
 
-        // Nếu có keyword, tìm kiếm trong 3 bảng
+        // Nếu có keyword, tìm kiếm trong 2 bảng
         if (!empty($keyword)) {
             // Tìm kiếm trong bảng News
             $newsResults = News::where('is_active', true)
@@ -42,12 +41,13 @@ class SearchController extends Controller
                     ];
                 });
 
-            // Tìm kiếm trong bảng Services
+            // Tìm kiếm trong bảng Services (bao gồm price_range)
             $serviceResults = Service::where('is_active', true)
                 ->where(function ($query) use ($keyword) {
                     $query->where('name', 'LIKE', "%{$keyword}%")
                           ->orWhere('description', 'LIKE', "%{$keyword}%")
-                          ->orWhere('content', 'LIKE', "%{$keyword}%");
+                          ->orWhere('content', 'LIKE', "%{$keyword}%")
+                          ->orWhere('price_range', 'LIKE', "%{$keyword}%");
                 })
                 ->orderBy('sort_order')
                 ->get()
@@ -62,30 +62,28 @@ class SearchController extends Controller
                     ];
                 });
 
-            // Tìm kiếm trong bảng PricingFooter
-            $pricingResults = PricingFooter::where('is_active', true)
-                ->where(function ($query) use ($keyword) {
-                    $query->where('title', 'LIKE', "%{$keyword}%")
-                          ->orWhere('content', 'LIKE', "%{$keyword}%");
-                })
+            // Tìm kiếm báo giá từ price_range trong Services
+            $pricingResults = Service::where('is_active', true)
+                ->whereNotNull('price_range')
+                ->where('price_range', 'LIKE', "%{$keyword}%")
                 ->orderBy('sort_order')
                 ->get()
                 ->map(function ($item) {
                     return [
                         'type' => 'pricing',
-                        'title' => $item->title,
-                        'content' => substr(strip_tags($item->content), 0, 150) . '...',
-                        'url' => route('pricing'),
+                        'title' => $item->name,
+                        'content' => $item->price_range,
+                        'url' => route('services.detail', $item->slug),
                         'date' => $item->updated_at,
-                        'image' => $item->icon
+                        'image' => $item->image
                     ];
                 });
 
             $results = $newsResults->concat($serviceResults)->concat($pricingResults);
         }
 
-        // Nếu không có kết quả tìm kiếm, lấy dữ liệu mới nhất từ 3 bảng
-        if ($results->isEmpty()) {
+        // Nếu không có keyword hoặc không có kết quả tìm kiếm, lấy dữ liệu mới nhất từ 2 bảng
+        if (empty($keyword) || $results->isEmpty()) {
             $newsLatest = News::where('is_active', true)
                 ->whereNotNull('published_at')
                 ->orderBy('published_at', 'desc')
@@ -117,18 +115,20 @@ class SearchController extends Controller
                     ];
                 });
 
-            $pricingLatest = PricingFooter::where('is_active', true)
+            // Lấy báo giá từ price_range cho phần hiển thị mới nhất
+            $pricingLatest = Service::where('is_active', true)
+                ->whereNotNull('price_range')
                 ->orderBy('sort_order')
                 ->take(5)
                 ->get()
                 ->map(function ($item) {
                     return [
                         'type' => 'pricing',
-                        'title' => $item->title,
-                        'content' => substr(strip_tags($item->content), 0, 150) . '...',
-                        'url' => route('pricing'),
+                        'title' => $item->name,
+                        'content' => $item->price_range,
+                        'url' => route('services.detail', $item->slug),
                         'date' => $item->updated_at,
-                        'image' => $item->icon
+                        'image' => $item->image
                     ];
                 });
 

@@ -5,17 +5,17 @@
 @section('content')
 <div class="container-fluid">
     <div class="d-flex justify-content-between align-items-center mb-4">
-        <h1 class="h3 mb-0 text-gray-800">Quản lý Pricing Footer</h1>
+        <h1 class="h3 mb-0 text-gray-800">Chú thích báo giá</h1>
         <a href="{{ route('admin.pricing_footer.create') }}" class="btn btn-primary">
             <i class="fas fa-plus"></i> Thêm mới
         </a>
     </div>
 
-   
+
 
     <div class="card shadow mb-4">
         <div class="card-header py-3">
-            <h6 class="m-0 font-weight-bold text-primary">Danh sách Pricing Footer</h6>
+            <h6 class="m-0 font-weight-bold text-primary">Chú thích báo giá</h6>
         </div>
         <div class="card-body">
             <div class="table-responsive">

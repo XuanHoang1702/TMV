@@ -6,6 +6,9 @@
 <!-- Leaflet CSS -->
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
       integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+<!-- Flatpickr CSS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+
 <style>
     #map {
         height: 450px;
@@ -84,6 +87,57 @@
         color: #6c757d;
         font-weight: 500;
     }
+
+    .working-hours-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 1rem;
+    }
+
+    .hour-item {
+        background: #f8f9fa;
+        border: 1px solid #dee2e6;
+        border-radius: 0.375rem;
+        padding: 1rem;
+    }
+
+    .hour-title {
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+        color: #495057;
+    }
+
+    /* Flatpickr custom styles */
+    .flatpickr-input {
+        background: #fff;
+        border: 1px solid #dee2e6;
+        border-radius: 0.375rem;
+        padding: 0.375rem 0.75rem;
+        font-size: 1rem;
+        width: 100%;
+    }
+
+    .flatpickr-input:focus {
+        border-color: #007bff;
+        box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+    }
+
+    .flatpickr-calendar {
+        border-radius: 0.375rem;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    }
+
+    .flatpickr-time input {
+        color: #495057;
+    }
+
+    .flatpickr-time .numInputWrapper:hover {
+        background: #e9ecef;
+    }
+
+    .flatpickr-time .arrowUp, .flatpickr-time .arrowDown {
+        color: #007bff;
+    }
 </style>
 @endpush
 
@@ -112,6 +166,7 @@
                 <form action="{{ route('admin.informations.store') }}" method="POST" enctype="multipart/form-data" id="contactForm">
                     @csrf
 
+                    <!-- Basic Info -->
                     <div class="row mb-4">
                         <div class="col-md-6 mb-3">
                             <label for="name" class="form-label">🏢 Tên <span class="text-danger">*</span></label>
@@ -178,7 +233,7 @@
                                 <button type="button" class="control-btn active" onclick="setMapMode('click')" title="Click để chọn">
                                     <i class="fas fa-mouse-pointer"></i> Click
                                 </button>
-                                <button type="button" class="control-btn" onclick="setMapMode('search')" title="Tìm kiếm">
+                                <button type="button" class="control-btn" onclick="searchAddress(document.getElementById('searchInput').value.trim())" title="Tìm kiếm">
                                     <i class="fas fa-search"></i> Tìm
                                 </button>
                                 <button type="button" class="control-btn" onclick="fitVietnamBounds()" title="Toàn Việt Nam">
@@ -191,31 +246,32 @@
                     <!-- Working Hours -->
                     <div class="mb-4">
                         <h5 class="mb-3"><i class="fas fa-clock me-2 text-primary"></i>⏰ Thời gian làm việc</h5>
-                        <div class="row">
-                            <div class="col-md-4 mb-3">
-                                <label class="form-label">📅 Thứ 2 - Thứ 6</label>
+                        <div class="working-hours-grid">
+                            <div class="hour-item">
+                                <div class="hour-title">📅 Thứ 2 - Thứ 6</div>
                                 <div class="input-group">
-                                    <input type="time" name="working_time[monday_friday][open]" class="form-control"
+                                    <input type="text" name="working_time[monday_friday][open]" class="form-control flatpickr-time"
                                            value="{{ old('working_time.monday_friday.open', '08:00') }}">
                                     <span class="input-group-text">-</span>
-                                    <input type="time" name="working_time[monday_friday][close]" class="form-control"
+                                    <input type="text" name="working_time[monday_friday][close]" class="form-control flatpickr-time"
                                            value="{{ old('working_time.monday_friday.close', '18:00') }}">
                                 </div>
                             </div>
-                            <div class="col-md-4 mb-3">
-                                <label class="form-label">🗓️ Thứ 7</label>
+                            <div class="hour-item">
+                                <div class="hour-title">🗓️ Thứ 7</div>
                                 <div class="input-group">
-                                    <input type="time" name="working_time[saturday][open]" class="form-control"
+                                    <input type="text" name="working_time[saturday][open]" class="form-control flatpickr-time"
                                            value="{{ old('working_time.saturday.open', '08:00') }}">
                                     <span class="input-group-text">-</span>
-                                    <input type="time" name="working_time[saturday][close]" class="form-control"
+                                    <input type="text" name="working_time[saturday][close]" class="form-control flatpickr-time"
                                            value="{{ old('working_time.saturday.close', '12:00') }}">
                                 </div>
                             </div>
-                            <div class="col-md-4 mb-3">
-                                <label class="form-label">📆 Chủ nhật</label>
+                            <div class="hour-item">
+                                <div class="hour-title">📆 Chủ nhật</div>
                                 <input type="text" name="working_time[sunday]" class="form-control"
-                                       value="{{ old('working_time.sunday', 'Nghỉ') }}" placeholder="Nghỉ">
+                                       value="{{ old('working_time.sunday', 'Nghỉ') }}"
+                                       placeholder="Nghỉ hoặc giờ làm việc">
                             </div>
                         </div>
                     </div>
@@ -246,9 +302,9 @@
                         </div>
                     </div>
 
-                    <!-- Images -->
+                  
 
-
+                    <!-- Form Actions -->
                     <div class="d-flex justify-content-end gap-2">
                         <a href="{{ route('admin.informations.index') }}" class="btn btn-outline-secondary">
                             <i class="fas fa-times me-1"></i>Hủy
@@ -268,6 +324,9 @@
 <!-- Leaflet JS -->
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
         integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+<!-- Flatpickr JS -->
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/vi.js"></script>
 
 <script>
 // Global map object
@@ -396,30 +455,20 @@ function reverseGeocode(lat, lng) {
 // Search functionality
 function setupSearch() {
     const searchInput = document.getElementById('searchInput');
-    let searchTimeout;
-
-    searchInput.addEventListener('input', function(e) {
-        clearTimeout(searchTimeout);
-        const query = e.target.value.trim();
-
-        if (query.length < 3) return;
-
-        searchTimeout = setTimeout(() => {
-            searchAddress(query);
-        }, 500);
-    });
 
     searchInput.addEventListener('keypress', function(e) {
         if (e.key === 'Enter') {
             e.preventDefault();
-            clearTimeout(searchTimeout);
             searchAddress(e.target.value.trim());
         }
     });
 }
 
 function searchAddress(query) {
-    if (!query) return;
+    if (!query) {
+        alert('Vui lòng nhập địa chỉ để tìm kiếm!');
+        return;
+    }
 
     const url = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}&countrycodes=vn&limit=5&addressdetails=1&accept-language=vi`;
 
@@ -441,10 +490,12 @@ function searchAddress(query) {
             // Update form
             updateLocationInfo(lat, lng, address);
 
-            // Clear search
+            // Clear search input
             document.getElementById('searchInput').value = '';
-
-
+            console.log('✅ Search successful:', address);
+        } else {
+            alert('Không tìm thấy địa chỉ phù hợp!');
+            console.warn('❌ No search results found');
         }
     })
     .catch(error => {
@@ -459,7 +510,8 @@ function setMapMode(mode) {
 
     // Update button states
     document.querySelectorAll('.control-btn').forEach(btn => btn.classList.remove('active'));
-    event.target.classList.add('active');
+    const activeBtn = document.querySelector(`.control-btn[onclick*="${mode}"]`) || event.target;
+    activeBtn.classList.add('active');
 
     if (mode === 'click') {
         map.on('click', function(e) {
@@ -491,12 +543,38 @@ function fitVietnamBounds() {
 
 // Form validation
 document.addEventListener('DOMContentLoaded', function() {
+    // Initialize Flatpickr for time inputs
+    flatpickr('.flatpickr-time', {
+        enableTime: true,
+        noCalendar: true,
+        dateFormat: 'H:i',
+        time_24hr: true,
+        locale: 'vi',
+        minuteIncrement: 5,
+        defaultHour: 8,
+        defaultMinute: 0
+    });
+
     const form = document.getElementById('contactForm');
 
     form.addEventListener('submit', function(e) {
+        const name = document.getElementById('name').value.trim();
+        const email = document.getElementById('email').value.trim();
         const lat = document.getElementById('latitude').value;
         const lng = document.getElementById('longitude').value;
         const address = document.getElementById('addressInput').value.trim();
+
+        if (!name) {
+            e.preventDefault();
+            alert('Vui lòng nhập tên!');
+            return false;
+        }
+
+        if (!email) {
+            e.preventDefault();
+            alert('Vui lòng nhập email!');
+            return false;
+        }
 
         if (!lat || !lng) {
             e.preventDefault();

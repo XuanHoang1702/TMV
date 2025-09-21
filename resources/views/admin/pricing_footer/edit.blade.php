@@ -5,7 +5,7 @@
 @section('content')
 <div class="container-fluid">
     <div class="d-flex justify-content-between align-items-center mb-4">
-        <h1 class="h3 mb-0 text-gray-800">Sửa Pricing Footer</h1>
+        <h1 class="h3 mb-0 text-gray-800">Sửa chú thích báo giá</h1>
         <a href="{{ route('admin.pricing_footer.index') }}" class="btn btn-secondary">
             <i class="fas fa-arrow-left"></i> Quay lại
         </a>
@@ -15,7 +15,7 @@
         <div class="col-lg-8">
             <div class="card shadow mb-4">
                 <div class="card-header py-3">
-                    <h6 class="m-0 font-weight-bold text-primary">Thông tin Pricing Footer</h6>
+                    <h6 class="m-0 font-weight-bold text-primary">Thông tin chú thích</h6>
                 </div>
                 <div class="card-body">
                     <form action="{{ route('admin.pricing_footer.update', $pricingFooter) }}" method="POST" enctype="multipart/form-data">

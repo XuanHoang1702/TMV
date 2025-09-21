@@ -33,7 +33,7 @@
                                         <th>Hotline</th>
                                         <th>Địa chỉ</th>
                                         <th>Tọa độ</th>
-                                        <th>Hình ảnh</th>
+
                                         <th>Trạng thái</th>
                                         <th>Hành động</th>
                                     </tr>
@@ -58,16 +58,7 @@
                                                     Chưa xác định
                                                 @endif
                                             </td>
-                                            <td>
-                                                @if($images && count($images) > 0)
-                                                    <img src="{{ Storage::url($images[0]) }}" alt="Hình ảnh" style="width: 60px; height: 60px; object-fit: cover;">
-                                                    @if(count($images) > 1)
-                                                        <small class="text-muted">+{{ count($images) - 1 }}</small>
-                                                    @endif
-                                                @else
-                                                    Chưa có
-                                                @endif
-                                            </td>
+
                                             <td>
                                                 <span class="badge bg-success">Hoạt động</span>
                                             </td>

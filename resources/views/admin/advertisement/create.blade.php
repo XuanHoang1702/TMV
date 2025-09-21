@@ -18,12 +18,21 @@
 
         <div class="mb-3">
             <label>Page</label>
-            <input type="text" name="page" class="form-control" required>
+            <input type="text" name="page" class="form-control" required placeholder="e.g., home, services, about">
         </div>
 
         <div class="mb-3">
-            <label>Ảnh chính</label>
-            <input type="file" name="main_image" class="form-control" required>
+            <label>Tiêu đề</label>
+            <input type="text" name="title" class="form-control" placeholder="Tên quảng cáo">
+        </div>
+
+      
+
+
+        <div class="mb-3">
+            <label>Ảnh chính <span class="text-danger">*</span></label>
+            <input type="file" name="main_image" class="form-control" accept="image/*" required>
+            <div class="form-text">Định dạng: JPEG, PNG, JPG, GIF. Kích thước tối đa: 2MB</div>
         </div>
 
         <div class="mb-3">

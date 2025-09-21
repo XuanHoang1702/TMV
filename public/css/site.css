@@ -42,10 +42,7 @@ html {
     overflow: auto;
 }
 
-.row {
-    /* margin-right: unset;
-    margin-left: unset;*/
-}
+
 
 /*Head*/
 .m-head {
@@ -102,7 +99,7 @@ html {
     font-size: 20px;
 }
 
-.m-head .head-sel-g {}
+
 
 .m-head .head-sel-g .ul-lang {
     border: 1px solid #FFFFFF;
@@ -289,7 +286,7 @@ html {
     text-align: center;
 }
 
-.m-menu .calendar-check .icon-cal {}
+
 
 .m-menu .calendar-check label {
     color: #FFF;
@@ -360,10 +357,6 @@ div .body-scrolling .m-menu {
     }
 }
 
-div.body-scrolling .m-head {
-    /* animation: fadeOut 1s forwards;
-    display: none;*/
-}
 
 div.body-scrolling .col-logo {
     justify-items: center;
@@ -531,7 +524,7 @@ div.body-scrolling .menu-logo img {
 }
 
 
-.cl-bgPop {}
+
 
 .cl-bgPop .modal-content {
     background: #EADBC7;
@@ -596,14 +589,14 @@ ul.ul-ribon ul {
     margin: 0;
 }
 
-.ul-ribon {}
+
 
 .ul-ribon li {
     padding: 5px 0;
 }
 
 
-.ul-ribon li a {}
+
 
 .ul-ribon li.cl-group {
     position: relative;
@@ -615,7 +608,7 @@ ul.ul-ribon ul {
     display: none;
 }
 
-.ul-ribon li.cl-scroll-top {}
+
 
 
 .ul-ribon li.show-ribon a img.slide,
@@ -647,7 +640,7 @@ ul.ul-ribon ul {
     align-items: center;
 }
 
-.calendar-check {}
+
 
 .input-icon {
     position: relative;
@@ -702,7 +695,7 @@ ul.ul-ribon ul {
     margin: 0 2px;
 }
 
-.ul-icon li {}
+
 
 .ul-icon li.li-group>a {
     border: 1px solid #000;
@@ -731,7 +724,7 @@ ul.ul-ribon ul {
     max-width: 100% !important;
 }
 
-.d-Mobile {}
+
 
 .d-Mobile .cl-ribon {
     display: none;
@@ -823,9 +816,7 @@ ul.ul-ribon ul {
     width: 80px;
 }
 
-.d-Mobile div.cl-header .m-menu .menu-icon {
-    /* width: calc(100% - 85px);*/
-}
+
 
 .d-Mobile div.cl-header .m-menu .col-center-item:not(.menu-icon) {
     /* display:none;*/
@@ -834,7 +825,6 @@ ul.ul-ribon ul {
     max-height: calc(100vh - 150px);
 }
 
-.d-Mobile div.cl-header .m-menu .col-center-item:not(.menu-icon)::after {}
 
 
 .d-Mobile div.cl-header .m-menu .main-menu {
@@ -848,8 +838,6 @@ ul.ul-ribon ul {
 .d-Mobile div.cl-header .m-menu .main-menu li {
     display: block;
 }
-
-.d-Mobile div.cl-header .m-menu .main-menu li a {}
 
 
 

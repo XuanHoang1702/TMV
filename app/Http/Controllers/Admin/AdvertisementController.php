@@ -60,9 +60,9 @@ class AdvertisementController extends Controller
             'service_id' => $request->service_id,
             'page' => $request->page,
             'main_image' => $mainImagePath,
-            'sub_images' => json_encode($subImagePaths),
-            'titles' => json_encode($request->titles),
-            'contents' => json_encode($request->contents),
+            'sub_images' => $subImagePaths,
+            'titles' => $request->titles,
+            'contents' => $request->contents,
             'order' => $request->order ?? 0,
             'is_active' => $request->is_active ?? true,
         ]);
@@ -113,7 +113,7 @@ class AdvertisementController extends Controller
             $advertisement->main_image = $mainImagePath;
         }
 
-        $subImagePaths = json_decode($advertisement->sub_images, true) ?? [];
+        $subImagePaths = $advertisement->sub_images ?? [];
         if ($request->hasFile('sub_images')) {
             foreach ($request->file('sub_images') as $subImage) {
                 $subImagePaths[] = $subImage->store('advertisements', 'public');
@@ -122,9 +122,9 @@ class AdvertisementController extends Controller
 
         $advertisement->service_id = $request->service_id;
         $advertisement->page = $request->page;
-        $advertisement->sub_images = json_encode($subImagePaths);
-        $advertisement->titles = json_encode($request->titles);
-        $advertisement->contents = json_encode($request->contents);
+        $advertisement->sub_images = $subImagePaths;
+        $advertisement->titles = $request->titles;
+        $advertisement->contents = $request->contents;
         $advertisement->order = $request->order ?? 0;
         $advertisement->is_active = $request->is_active ?? true;
 
