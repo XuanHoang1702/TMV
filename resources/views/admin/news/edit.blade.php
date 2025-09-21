@@ -151,7 +151,7 @@
 <div class="d-flex justify-content-between align-items-center mb-3">
     <h1>📝 Sửa tin tức</h1>
     <div>
-        <a href="{{ route('admin.news.show', $news) }}" class="btn btn-info"><i class="fas fa-eye"></i> Xem</a>
+        <a href="{{ route('admin.news.show', $news->slug) }}" class="btn btn-info"><i class="fas fa-eye"></i> Xem</a>
         <a href="{{ route('admin.news.index') }}" class="btn btn-secondary"><i class="fas fa-arrow-left"></i> Quay lại</a>
     </div>
 </div>
@@ -171,7 +171,7 @@
         <h5 class="mb-0"><i class="fas fa-newspaper me-2 text-primary"></i>Thông tin Tin tức</h5>
     </div>
     <div class="card-body">
-        <form action="{{ route('admin.news.update', $news) }}" method="POST" enctype="multipart/form-data">
+        <form action="{{ route('admin.news.update', $news->slug) }}" method="POST" enctype="multipart/form-data">
             @csrf
             @method('PUT')
 
@@ -334,7 +334,7 @@
                                 <button type="button" class="btn btn-danger btn-sm remove-image mt-2">Xóa</button>
                             </div>
                         </div>
-                       
+
                     </div>
 
                     <div class="mb-3">

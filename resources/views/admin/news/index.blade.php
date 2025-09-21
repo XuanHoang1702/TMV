@@ -54,9 +54,12 @@
                             </small>
                         </p>
                         <div class="d-flex justify-content-between">
+                            {{-- Fixed: Use $item (model instance) for route model binding --}}
                             <a href="{{ route('admin.news.show', $item) }}" class="btn btn-primary btn-sm">Xem thêm</a>
                             <div>
                                 <a href="{{ route('admin.news.edit', $item) }}" class="btn btn-sm btn-warning">Sửa</a>
+
+                                {{-- Fixed: Use $item for destroy route --}}
                                 <form action="{{ route('admin.news.destroy', $item) }}" method="POST"
                                     style="display:inline;">
                                     @csrf
@@ -65,12 +68,14 @@
                                         onclick="return confirm('Bạn có chắc muốn xóa?')">Xóa</button>
                                 </form>
                                 @if ($item->published_at)
+                                    {{-- Fixed: Use $item for unpublish route --}}
                                     <form action="{{ route('admin.news.unpublish', $item) }}" method="POST"
                                         style="display:inline;">
                                         @csrf
                                         <button type="submit" class="btn btn-sm btn-secondary">Gỡ xuất bản</button>
                                     </form>
                                 @else
+                                    {{-- Fixed: Use $item for publish route --}}
                                     <form action="{{ route('admin.news.publish', $item) }}" method="POST"
                                         style="display:inline;">
                                         @csrf

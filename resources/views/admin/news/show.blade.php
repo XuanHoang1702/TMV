@@ -128,12 +128,10 @@
                         </li>
 
                         <li class="mb-2">
-                            <strong>Tạo lúc:</strong> <span
-                                class="text-muted">{{ $news->created_at->format('d/m/Y H:i') }}</span>
+                            <strong>Tạo lúc:</strong><span class="text-muted">{{ optional($news->created_at)->format('d/m/Y H:i') }}</span>
                         </li>
                         <li class="mb-2">
-                            <strong>Cập nhật:</strong> <span
-                                class="text-muted">{{ $news->updated_at->format('d/m/Y H:i') }}</span>
+                            <strong>Cập nhật:</strong> <span class="text-muted">{{ optional($news->updated_at)->format('d/m/Y H:i') }}</span>
                         </li>
                     </ul>
                 </div>

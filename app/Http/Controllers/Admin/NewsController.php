@@ -10,6 +10,7 @@ use Illuminate\Support\Str;
 use App\Models\EmailNotification;
 use App\Mail\MailNotification;
 use Illuminate\Support\Facades\Mail;
+use Carbon\Carbon;
 
 class NewsController extends Controller
 {
@@ -46,7 +47,7 @@ class NewsController extends Controller
     {
         $validated = $request->validate([
             'title' => 'required|string|max:255',
-            'slug' => 'required|string|unique:news',
+            'slug' => 'nullable|string|unique:news,slug', // Make nullable since we auto-generate
             'summary' => 'required|string|max:500',
             'content' => 'required|string',
             'images' => 'nullable|array',
@@ -72,7 +73,7 @@ class NewsController extends Controller
 
         // Handle meta fields - ensure they're not null
         if (empty($validated['meta_title'])) {
-            $validated['meta_title'] = $validated['title']; // Use title as default meta title
+            $validated['meta_title'] = $validated['title'];
         }
         if (empty($validated['meta_description'])) {
             $validated['meta_description'] = Str::limit(strip_tags($validated['summary'] ?: $validated['content']), 160);
@@ -80,58 +81,55 @@ class NewsController extends Controller
 
         // Handle related news
         if ($request->has('related_news')) {
-            $validated['related_news'] = array_filter($request->related_news); // Remove empty values
+            $validated['related_news'] = array_filter($request->related_news);
         } else {
             $validated['related_news'] = [];
         }
 
-        if ($request->has('published_at')) {
-            $validated['published_at'] = \Carbon\Carbon::createFromFormat('Y-m-d\TH:i', $request->published_at)->toDateTimeString();
+        // Handle published_at
+        if ($request->has('published_at') && $request->published_at) {
+            $validated['published_at'] = Carbon::createFromFormat('Y-m-d\TH:i', $request->published_at)->toDateTimeString();
         }
+
         // Auto-generate slug if empty
         if (empty($validated['slug'])) {
             $validated['slug'] = Str::slug($validated['title']);
         }
 
         News::create($validated);
-        // $users = EmailNotification::all();
-        // foreach ($users as $user) {
-        //     Mail::to($user->email)->send(
-        //         new MailNotification(
-        //             $user,
-        //             'Tin tức mới: ' . $request->title,
-        //             'Chúng tôi vừa có một tin tức mới dành cho bạn.',
-        //             url('/news')
-        //         )
-        //     );
-        // }
+
         return redirect()->route('admin.news.index')
             ->with('success', 'Tin tức đã được tạo thành công');
     }
 
+    // Fixed show method - using route model binding
+    public function show(News $news)
+    {
+        $relatedNews = $news->getRelatedNews();
 
-   public function edit(News $news)
-{
-    // Đảm bảo related_news là array
-    if (is_string($news->related_news)) {
-        $news->setAttribute('related_news', json_decode($news->related_news, true) ?? []);
-    } elseif (!is_array($news->related_news)) {
-        $news->setAttribute('related_news', []);
+        return view('admin.news.show', compact('news', 'relatedNews'));
     }
 
-    // Load categories
-    $categories = \App\Models\Category::all(); // hoặc query phù hợp
+    public function edit(News $news)
+    {
+        // Ensure related_news is array
+        if (is_string($news->related_news)) {
+            $news->setAttribute('related_news', json_decode($news->related_news, true) ?? []);
+        } elseif (!is_array($news->related_news)) {
+            $news->setAttribute('related_news', []);
+        }
 
-    return view('admin.news.edit', compact('news', 'categories'));
-}
+        // Load categories
+        $categories = \App\Models\Category::ofType('news')->active()->get();
+
+        return view('admin.news.edit', compact('news', 'categories'));
+    }
 
     public function update(News $news, Request $request)
     {
-
-
         $validated = $request->validate([
             'title' => 'required|string|max:255',
-            'slug' => 'required|string|unique:news,slug,' . $news->id,
+            'slug' => 'nullable|string|unique:news,slug,' . $news->id,
             'summary' => 'required|string|max:500',
             'content' => 'required|string',
             'images' => 'nullable|array',
@@ -165,13 +163,33 @@ class NewsController extends Controller
             }
         }
 
-        $validated['images'] = array_values($currentImages); // Reindex
+        $validated['images'] = array_values($currentImages);
+
+        // Handle meta fields
+        if (empty($validated['meta_title'])) {
+            $validated['meta_title'] = $validated['title'];
+        }
+        if (empty($validated['meta_description'])) {
+            $validated['meta_description'] = Str::limit(strip_tags($validated['summary'] ?: $validated['content']), 160);
+        }
 
         // Handle related news
         if ($request->has('related_news')) {
-            $validated['related_news'] = array_filter($request->related_news); // Remove empty values
+            $validated['related_news'] = array_filter($request->related_news);
         } else {
             $validated['related_news'] = [];
+        }
+
+        // Handle published_at
+        if ($request->has('published_at') && $request->published_at) {
+            $validated['published_at'] = Carbon::createFromFormat('Y-m-d\TH:i', $request->published_at)->toDateTimeString();
+        } elseif (!$request->has('published_at')) {
+            $validated['published_at'] = $news->published_at; // Keep existing value
+        }
+
+        // Auto-generate slug if empty
+        if (empty($validated['slug'])) {
+            $validated['slug'] = Str::slug($validated['title']);
         }
 
         $news->update($validated);
@@ -181,8 +199,6 @@ class NewsController extends Controller
 
     public function destroy(News $news)
     {
-
-
         // Delete multiple images
         if ($news->images) {
             foreach ($news->images as $imagePath) {
@@ -198,7 +214,6 @@ class NewsController extends Controller
 
     public function publish(News $news)
     {
-
         $news->update([
             'published_at' => now(),
             'is_active' => true
@@ -207,34 +222,28 @@ class NewsController extends Controller
         return back()->with('success', 'Tin tức đã được xuất bản');
     }
 
+    // Fixed unpublish method
     public function unpublish(News $news)
     {
-        $news = News::where('slug', $slug)->firstOrFail();
-        $news->update(['published_at' => null]);
+        $news->update([
+            'published_at' => null,
+            'is_active' => false
+        ]);
 
         return back()->with('success', 'Tin tức đã được gỡ xuất bản');
     }
 
-    public function show(News $news)
-    {
-         $relatedNews = $news->getRelatedNews();
-
-        return view('admin.news.show', compact('news', 'relatedNews'));
-    }
-
     public function removeImage(News $news, Request $request)
     {
-
-
         $imagePath = $request->image;
 
         if ($imagePath && in_array($imagePath, $news->images)) {
-            // Xóa file khỏi storage
-            if (\Storage::disk('public')->exists($imagePath)) {
-                \Storage::disk('public')->delete($imagePath);
+            // Delete file from storage
+            if (Storage::disk('public')->exists($imagePath)) {
+                Storage::disk('public')->delete($imagePath);
             }
 
-            // Cập nhật lại mảng images
+            // Update images array
             $updatedImages = array_values(array_filter($news->images, fn($img) => $img !== $imagePath));
             $news->update(['images' => $updatedImages]);
 

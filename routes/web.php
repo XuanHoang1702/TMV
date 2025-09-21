@@ -259,13 +259,17 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::delete('services/details/{detail}', [ServiceController::class, 'destroyDetail'])->name('services.details.destroy');
 
     // News Management
-    Route::get('news', [\App\Http\Controllers\Admin\NewsController::class, 'index'])->name('news.index');
+   Route::get('news', [\App\Http\Controllers\Admin\NewsController::class, 'index'])->name('news.index');
     Route::get('news/create', [\App\Http\Controllers\Admin\NewsController::class, 'create'])->name('news.create');
     Route::post('news', [\App\Http\Controllers\Admin\NewsController::class, 'store'])->name('news.store');
-    Route::get('news/{slug}', [\App\Http\Controllers\Admin\NewsController::class, 'show'])->name('news.show');
-    Route::get('news/{slug}/edit', [\App\Http\Controllers\Admin\NewsController::class, 'edit'])->name('news.edit');
-    Route::put('news/{slug}', [\App\Http\Controllers\Admin\NewsController::class, 'update'])->name('news.update');
-    Route::delete('news/{slug}', [\App\Http\Controllers\Admin\NewsController::class, 'destroy'])->name('news.destroy');
+    Route::get('news/{news}', [\App\Http\Controllers\Admin\NewsController::class, 'show'])->name('news.show');
+    Route::get('news/{news}/edit', [\App\Http\Controllers\Admin\NewsController::class, 'edit'])->name('news.edit');
+    Route::put('news/{news}', [\App\Http\Controllers\Admin\NewsController::class, 'update'])->name('news.update');
+    Route::delete('news/{news}', [\App\Http\Controllers\Admin\NewsController::class, 'destroy'])->name('news.destroy');
+    Route::post('news/{news}/publish', [\App\Http\Controllers\Admin\NewsController::class, 'publish'])->name('news.publish');
+    Route::post('news/{news}/unpublish', [\App\Http\Controllers\Admin\NewsController::class, 'unpublish'])->name('news.unpublish');
+    Route::post('news/upload-image', [\App\Http\Controllers\Admin\NewsController::class, 'uploadImage'])->name('news.upload-image');
+    Route::delete('news/{news}/remove-image', [\App\Http\Controllers\Admin\NewsController::class, 'removeImage'])->name('news.removeImage');
 
     // Xuất bản tin tức
     Route::post('news/{slug}/publish', [NewsController::class, 'publish'])->name('news.publish');
