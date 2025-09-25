@@ -22,12 +22,12 @@ class NewsController extends Controller
         if ($request->category) {
             $query->where('category_id', $request->category);
         }
-
+        $news = $query->paginate(10);
         $newsList = $query->orderBy('published_at', 'desc')->paginate(12);
 
         $newsBanner = \App\Models\PageContent::where('page', 'news_banner')->first();
 
-        return view('news.index', compact('newsCategories', 'newsList', 'newsBanner'));
+        return view('news.index', compact('newsCategories', 'newsList', 'newsBanner','news'));
     }
 
     public function show($categorySlug, $newsSlug)

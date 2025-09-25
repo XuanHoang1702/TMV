@@ -5,7 +5,7 @@
 @section('meta')
     <meta name="description"
         content="Liên hệ với Thẩm mỹ Dr.DAT để được tư vấn và hỗ trợ tốt nhất. Địa chỉ, số điện thoại và email liên hệ.">
-    <meta name="keywords" content="liên hệ, thẩm mỹ, Dr.DAT, tư vấn, hỗ trợ, địa chỉ, hotline, email">
+    <meta name="keywords" content="liên hệ, thẩm mỹ, Dr.DAT, tư vấn, hỗ trợ, địa chỉ, hotline, email, liên hệ thẩm mỹ Dr.DAT, đặt lịch tư vấn, địa chỉ phòng khám thẩm mỹ, hotline bác sĩ Đạt, email hỗ trợ thẩm mỹ">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta property="og:title" content="Liên hệ - Thẩm mỹ Dr.DAT" />
     <meta property="og:description" content="Liên hệ với Thẩm mỹ Dr.DAT để được tư vấn và hỗ trợ tốt nhất." />

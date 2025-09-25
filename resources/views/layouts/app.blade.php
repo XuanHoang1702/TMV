@@ -119,9 +119,10 @@
         @include('layouts.footer')
         <!--end footer-->
     </div>
+    <div>
+        @include('layouts.booking.booking-popup')
 
-    @include('layouts.booking.booking-popup')
-    @include('layouts.booking.booking_Popup_TuVan')
+    </div>
 
     <!--ribon fix-->
     <div class="cl-ribon">

@@ -7,8 +7,7 @@
     đội ngũ bác sĩ giàu kinh nghiệm. Tư vấn miễn phí 24/7.')
 
 @section('meta_keywords',
-    'thẩm mỹ dr dat, phẫu thuật thẩm mỹ, làm đẹp, spa thẩm mỹ, cắt mí, nâng mũi, hút mỡ, trẻ hóa
-    da')
+    'thẩm mỹ dr dat, phẫu thuật thẩm mỹ, làm đẹp an toàn, spa thẩm mỹ, cắt mí, nâng mũi, hút mỡ, trẻ hóa da, dịch vụ thẩm mỹ chuyên nghiệp, bác sĩ giàu kinh nghiệm, tư vấn miễn phí 24/7')
 
 @section('og_title', 'Trang chủ - Thẩm mỹ Dr.DAT')
 
@@ -147,12 +146,13 @@
 
                                                         {{-- Read More Button --}}
                                                         <div class="dv-button">
-                                                            <a class="cl-btn-full-2"
+                                                            <a class="cl-btn-full-2" style="width:90%"
                                                                 href="{{ route('news.detail', [$news->category->slug, $news->slug]) }}">
                                                                 <span>Xem thêm</span>
                                                                 <i class="fa fa-angle-right"></i>
                                                             </a>
                                                         </div>
+
                                                     </div>
                                                 </div>
                                             @empty

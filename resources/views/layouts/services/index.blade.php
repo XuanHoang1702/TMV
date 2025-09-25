@@ -6,7 +6,7 @@
     <meta name="description"
         content="Khám phá các dịch vụ thẩm mỹ tại Dr.DAT: phẫu thuật thẩm mỹ cô bé, hút mỡ, cấy mỡ, nâng cơ vùng kín và nhiều dịch vụ khác. An toàn, hiệu quả, thực hiện bởi đội ngũ bác sĩ giàu kinh nghiệm.">
     <meta name="keywords"
-        content="dịch vụ thẩm mỹ, Dr.DAT, phẫu thuật cô bé, hút mỡ, cấy mỡ, nâng cơ, làm hồng vùng kín, tư vấn thẩm mỹ, bác sĩ thẩm mỹ">
+        content="dịch vụ thẩm mỹ, Dr.DAT, phẫu thuật cô bé, hút mỡ, cấy mỡ, nâng cơ, làm hồng vùng kín, tư vấn thẩm mỹ, bác sĩ thẩm mỹ, dịch vụ thẩm mỹ Dr.DAT, phẫu thuật thẩm mỹ an toàn, nâng mũi, cắt mí, trẻ hóa da, làm đẹp chuyên nghiệp">
     <meta property="og:title" content="Dịch vụ thẩm mỹ tại Dr.DAT" />
     <meta property="og:description"
         content="Khám phá các dịch vụ thẩm mỹ tiên tiến tại Dr.DAT: phẫu thuật cô bé, hút mỡ, cấy mỡ, nâng cơ vùng kín và nhiều dịch vụ khác. Đảm bảo an toàn và hiệu quả." />

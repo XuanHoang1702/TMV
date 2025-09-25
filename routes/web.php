@@ -1,8 +1,9 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Livewire\Volt\Facades\Volt;
 
-use Livewire\Volt\Volt;
+
 use App\Http\Controllers\Admin\AuthController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\ServiceController;
@@ -40,25 +41,8 @@ Route::view('dashboard', 'dashboard')
     ->middleware(['auth', 'verified'])
     ->name('dashboard');
 
-Route::middleware(['auth'])->group(function () {
-    Route::redirect('settings', 'settings/profile');
-
-    Volt::route('settings/profile', 'settings.profile')->name('settings.profile');
-    Volt::route('settings/password', 'settings.password')->name('settings.password');
-    Volt::route('settings/appearance', 'settings.appearance')->name('settings.appearance');
-});
 
 // Language Route
-Route::get('lang/vi', function () {
-    session(['locale' => 'vi']);
-    return redirect()->back();
-});
-
-Route::get('lang/en', function () {
-    session(['locale' => 'en']);
-    return redirect()->back();
-});
-
 
 
 
@@ -242,12 +226,40 @@ Route::post('/tim-kiem', [SearchController::class, 'search'])->name('search.resu
 Route::post('/dat-lich', [\App\Http\Controllers\Admin\AppointmentController::class, 'storeFrontend'])->name('appointments.store');
 
 // Admin Auth Routes
-Route::get('/admin/login', [AuthController::class, 'showLoginForm'])->name('admin.login');
-Route::post('/admin/login', [AuthController::class, 'login'])->name('admin.login.post');
-Route::post('/admin/logout', [AuthController::class, 'logout'])->name('admin.logout');
+// Route::get('/admin/login', [AuthController::class, 'showLoginForm'])->name('admin.login');
+// Route::post('/admin/login', [AuthController::class, 'login'])->name('admin.login.post');
+// Route::post('/admin/logout', [AuthController::class, 'logout'])->name('admin.logout');
+
+
+use App\Http\Controllers\Auth\VerifyEmailController;
+// Guest routes - Sử dụng Livewire components trực tiếp
+Route::middleware('guest')->group(function () {
+    // Login routes
+    Route::get('/login', \App\Livewire\Auth\Login::class)->name('login');
+    Route::post('/login', \App\Livewire\Auth\Login::class)->name('login');
+
+
+
+
+});
+
+
+// Logout
+Route::post('/logout', function () {
+    Auth::logout();
+    request()->session()->invalidate();
+    request()->session()->regenerateToken();
+    return redirect('/login');
+})->middleware('auth')->name('logout');
 
 // Admin Routes
-Route::prefix('admin')->name('admin.')->group(function () {
+Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () {
+    Route::post('/logout', function () {
+        Auth::logout();
+        request()->session()->invalidate();
+        request()->session()->regenerateToken();
+        return redirect('/login');
+    })->name('logout');
     // Dashboard
     Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
 
@@ -259,7 +271,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::delete('services/details/{detail}', [ServiceController::class, 'destroyDetail'])->name('services.details.destroy');
 
     // News Management
-   Route::get('news', [\App\Http\Controllers\Admin\NewsController::class, 'index'])->name('news.index');
+    Route::get('news', [\App\Http\Controllers\Admin\NewsController::class, 'index'])->name('news.index');
     Route::get('news/create', [\App\Http\Controllers\Admin\NewsController::class, 'create'])->name('news.create');
     Route::post('news', [\App\Http\Controllers\Admin\NewsController::class, 'store'])->name('news.store');
     Route::get('news/{news}', [\App\Http\Controllers\Admin\NewsController::class, 'show'])->name('news.show');
@@ -271,23 +283,13 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::post('news/upload-image', [\App\Http\Controllers\Admin\NewsController::class, 'uploadImage'])->name('news.upload-image');
     Route::delete('news/{news}/remove-image', [\App\Http\Controllers\Admin\NewsController::class, 'removeImage'])->name('news.removeImage');
 
-    // Xuất bản tin tức
-    Route::post('news/{slug}/publish', [NewsController::class, 'publish'])->name('news.publish');
-
-    // Gỡ xuất bản tin tức
-    Route::post('news/{slug}/unpublish', [NewsController::class, 'unpublish'])->name('news.unpublish');
-
-    Route::delete('news/{slug}/remove-image', [NewsController::class, 'removeImage'])->name('news.removeImage');
-    Route::post('news/upload-image', [NewsController::class, 'uploadImage'])->name('news.upload-image');
-
-
     // Appointments Management
     Route::resource('appointments', AppointmentController::class);
     Route::post('appointments/{appointment}/status', [AppointmentController::class, 'updateStatus'])->name('appointments.update-status');
     Route::get('appointments-calendar', [AppointmentController::class, 'calendar'])->name('appointments.calendar');
     Route::get('appointments-export', [AppointmentController::class, 'export'])->name('appointments.export');
 
-
+    // Settings
     Route::get('settings', [SettingController::class, 'index'])->name('settings.index');
     Route::post('settings', [SettingController::class, 'update'])->name('settings.update');
 
@@ -304,7 +306,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::get('profile/edit', [AuthController::class, 'editProfile'])->name('profile.edit');
     Route::put('profile/update', [AuthController::class, 'updateProfile'])->name('profile.update');
 
-    //Menu
+    // Menu
     Route::resource('menus', MenuController::class);
     Route::post('menus/{menu}/toggle-status', [MenuController::class, 'toggleStatus'])->name('menus.toggle-status');
     Route::get('menu/{route}', [MenuController::class, 'show'])->where('route', '.*');
@@ -320,22 +322,23 @@ Route::prefix('admin')->name('admin.')->group(function () {
 
     // Certificates Management
     Route::resource('certificates', \App\Http\Controllers\Admin\CertificateController::class);
-    //Site Information
+
+    // Site Information
     Route::resource('siteInfo', SiteInfoController::class);
     Route::delete('siteInfo/delete-header-logo/{id}', [SiteInfoController::class, 'deleteHeaderLogo'])->name('siteInfo.deleteHeaderLogo');
     Route::delete('siteInfo/delete-footer-logo/{id}', [SiteInfoController::class, 'deleteFooterLogo'])->name('siteInfo.deleteFooterLogo');
     Route::delete('siteInfo/delete-slogan/{id}', [SiteInfoController::class, 'deleteSlogan'])->name('siteInfo.deleteSlogan');
 
-    //Page Content
+    // Page Content
     Route::resource('page_contents', PageContentController::class);
 
-    // Hopital Image
+    // Hospital Image
     Route::resource('hospital_images', HopitalImageController::class);
 
     // Advertisement
     Route::resource('advertisement', AdvertisementController::class);
 
-    //Process
+    // Process
     Route::resource('process', ProcessController::class);
     Route::get('reason', [ProcessController::class, 'reasonIndex'])->name('reason.index');
     Route::get('reason/create', [ProcessController::class, 'reasonCreate'])->name('reason.create');
@@ -346,16 +349,17 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::delete('reason/{process}', [ProcessController::class, 'reasonDestroy'])->name('reason.destroy');
 
     // About Management
-     Route::resource('abouts', \App\Http\Controllers\Admin\AboutController::class);
+    Route::resource('abouts', \App\Http\Controllers\Admin\AboutController::class);
     Route::resource('about-us', \App\Http\Controllers\Admin\AboutUsController::class);
+
     // Zalo Settings
     Route::get('zalo', [\App\Http\Controllers\Admin\ZaloController::class, 'index'])->name('zalo.index');
     Route::post('zalo', [\App\Http\Controllers\Admin\ZaloController::class, 'store'])->name('zalo.store');
     Route::put('zalo', [\App\Http\Controllers\Admin\ZaloController::class, 'update'])->name('zalo.update');
-        // Pricing Footer
-     Route::resource('pricing_footer', PricingFooterController::class);
-Route::post('pricing_footer/{pricingFooter}/toggle-status', [PricingFooterController::class, 'toggleStatus'])->name('pricing_footer.toggle-status');
 
+    // Pricing Footer
+    Route::resource('pricing_footer', PricingFooterController::class);
+    Route::post('pricing_footer/{pricingFooter}/toggle-status', [PricingFooterController::class, 'toggleStatus'])->name('pricing_footer.toggle-status');
 });
 
 require __DIR__.'/auth.php';

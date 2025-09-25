@@ -5,7 +5,7 @@
 @section('meta')
     <meta name="description"
         content="Bảng giá dịch vụ tạo hình thẩm mỹ tại Dr. Đạt với mức giá hợp lý, an toàn và hiệu quả. Tham khảo chi tiết các dịch vụ thẩm mỹ của chúng tôi.">
-    <meta name="keywords" content="bảng giá, dịch vụ thẩm mỹ, tạo hình thẩm mỹ, Dr. Đạt, giá dịch vụ, thẩm mỹ an toàn">
+    <meta name="keywords" content="bảng giá, dịch vụ thẩm mỹ, tạo hình thẩm mỹ, Dr. Đạt, giá dịch vụ, thẩm mỹ an toàn, bảng giá thẩm mỹ Dr.DAT, giá cắt mí, giá nâng mũi, giá hút mỡ, giá trẻ hóa da, tư vấn giá thẩm mỹ">
     <meta property="og:title" content="Bảng giá - Thẩm mỹ Dr.DAT" />
     <meta property="og:description"
         content="Bảng giá dịch vụ tạo hình thẩm mỹ tại Dr. Đạt với mức giá hợp lý, an toàn và hiệu quả." />

@@ -7,26 +7,44 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
 {
-    public function index(Request $request)
-    {
-        $query = User::query();
+    public function __construct()
+{
+    $this->middleware('auth'); // bắt buộc đăng nhập
+    $this->middleware('can:manage-users'); // nếu bạn có Gate/Policy cho phân quyền
+}
 
-        if ($request->search) {
-            $query->where('name', 'LIKE', '%' . $request->search . '%')
-                  ->orWhere('email', 'LIKE', '%' . $request->search . '%');
-        }
+   public function index(Request $request)
+{
+    $currentUser = Auth::user(); // user đang đăng nhập
+    $currentUserId = Auth::id(); // id user đang đăng nhập
 
-        if ($request->role) {
-            $query->where('role', $request->role);
-        }
+    // Ví dụ: chỉ cho admin xem toàn bộ, doctor/staff chỉ xem chính mình
+    $query = User::query();
 
-        $users = $query->orderBy('created_at', 'desc')->paginate(15);
-
-        return view('admin.users.index', compact('users'));
+    if ($currentUser->role !== 'admin') {
+        $query->where('id', $currentUserId);
     }
+
+    if ($request->search) {
+        $query->where(function($q) use ($request) {
+            $q->where('name', 'LIKE', '%' . $request->search . '%')
+              ->orWhere('email', 'LIKE', '%' . $request->search . '%');
+        });
+    }
+
+    if ($request->role) {
+        $query->where('role', $request->role);
+    }
+
+    $users = $query->orderBy('created_at', 'desc')->paginate(15);
+
+    return view('admin.users.index', compact('users'));
+}
+
 
     public function create()
     {

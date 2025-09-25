@@ -20,7 +20,10 @@ class AppointmentController extends Controller
         if ($request->status) {
             $query->where('status', $request->status);
         }
+// Số item mỗi trang
+        $perPage = $request->get('per_page', 15);
 
+        $appointments = $query->paginate($perPage);
         // Filter by date range
         if ($request->date_from) {
             $query->whereDate('appointment_date', '>=', $request->date_from);
@@ -132,64 +135,99 @@ class AppointmentController extends Controller
 
         return redirect()->route('admin.appointments.index')->with('success', 'Appoinment create successfully!');
     }
-    public function storeFrontend(Request $request)
-    {
-        \Log::info('storeFrontend called', $request->all());
+  public function storeFrontend(Request $request)
+{
+    try {
+        if ($request->has('service_id')) {
+            $validated = $request->validate([
+                'customer_name'     => 'required|string|min:3|max:255',
+                'customer_phone'    => 'required|digits:10',
+                // 'customer_email'    => 'required|email|max:255',
+                'service_id'        => 'required|exists:services,id',
+                'appointment_date'  => 'required|date',
+                'appointment_time'  => 'nullable',
+                'notes'             => 'nullable|string|max:1000',
+            ]);
 
-        try {
-            if ($request->has('service_id')) {
-                $validated = $request->validate([
-                    'customer_name'     => 'required|string|min:3|max:255',
-                    'customer_phone'    => 'required|digits:10',
-                    // 'customer_email'    => 'required|email|max:255',
-                    'service_id'        => 'required|exists:services,id',
-                    'appointment_date'  => 'required|date',
-                    'appointment_time'  => 'nullable',
-                    'notes'             => 'nullable|string|max:1000',
-                ]);
+            $service = Service::find($validated['service_id']);
+            $validated['estimated_price'] = $service ? $service->price_range : 0;
+            $validated['appointment_time'] = $validated['appointment_time'] ?? now()->format('H:i');
+        } elseif ($request->has('datlichkham')) {
+            $validated = $request->validate([
+                'customer_name'  => 'required|string|min:3|max:255',
+                'customer_email' => 'required|email|max:255',
+                'customer_phone' => 'required|digits:10',
+                'notes'          => 'nullable|string|max:1000', // Thêm nullable cho notes
+            ]);
 
-                $service = Service::find($validated['service_id']);
-                $validated['estimated_price'] = $service ? $service->price_range : 0;
-                $validated['appointment_time'] = $validated['appointment_time'] ?? now()->format('H:i');
-            } elseif ($request->has('datlichkham')) {
-                $validated = $request->validate([
-                    'customer_name'  => 'required|string|min:3|max:255',
-                    'customer_email' => 'required|email|max:255',
-                    'customer_phone' => 'required|digits:10',
-                ]);
+            $validated['service_id'] = null;
+            $validated['appointment_time'] = now()->format('H:i');
+            $validated['appointment_date'] = now()->format('Y-m-d');
+            $validated['estimated_price'] = 0;
+        } else {
+            // Phần tư vấn
+            $validated = $request->validate([
+                'customer_name'  => 'required|string|min:3|max:255',
+                'customer_email' => 'required|email|max:255',
+                'customer_phone' => 'required|digits:10',
+                'notes'          => 'required|string|max:1000',
+            ]);
 
-                $validated['service_id'] = null;
-                $validated['appointment_time'] = now()->format('H:i');
-                $validated['appointment_date'] = now()->format('Y-m-d');
-                $validated['estimated_price'] = 0;
-            } else {
-                $validated = $request->validate([
-                    'customer_name'  => 'required|string|min:3|max:255',
-                    'customer_email' => 'required|email|max:255',
-                    'customer_phone' => 'required|digits:10',
-                    'notes'          => 'required|string|max:1000',
-                ]);
-
-                $validated['service_id'] = null;
-                $validated['appointment_time'] = now()->format('H:i');
-                $validated['appointment_date'] = now()->format('Y-m-d');
-                $validated['estimated_price'] = 0;
-            }
-
-            $validated['status'] = 'pending';
-            Appointment::create($validated);
-
-            $message = $request->has('service_id') ? 'Đặt lịch hẹn thành công, Chúng tôi sẽ liên hệ với bạn sớm nhất!' :
-                    ($request->has('datlichkham') ? 'Đặt lịch khám thành công, Chúng tôi sẽ liên hệ với bạn sớm nhất!' :
-                    'Gửi thông tin tư vấn thành công, Chúng tôi sẽ liên hệ với bạn sớm nhất!');
-
-            return redirect()->back();
-        } catch (\Illuminate\Validation\ValidationException $e) {
-            return redirect()->back();
-        } catch (\Exception $e) {
-            \Log::error('storeFrontend error: ' . $e->getMessage());
-            return redirect()->back();
+            $validated['service_id'] = null;
+            $validated['appointment_time'] = now()->format('H:i');
+            $validated['appointment_date'] = now()->format('Y-m-d');
+            $validated['estimated_price'] = 0;
         }
-    }
 
+        $validated['status'] = 'pending';
+        Appointment::create($validated);
+
+        // Trả về JSON cho AJAX request (popup tư vấn)
+        if ($request->ajax() || $request->wantsJson() || $request->header('X-Requested-With') === 'XMLHttpRequest') {
+            $message = $request->has('service_id') ? 'Đặt lịch hẹn thành công! Chúng tôi sẽ liên hệ với bạn sớm nhất.' :
+                    ($request->has('datlichkham') ? 'Đặt lịch khám thành công! Chúng tôi sẽ liên hệ với bạn sớm nhất.' :
+                    'Gửi thông tin tư vấn thành công! Chúng tôi sẽ liên hệ với bạn sớm nhất.');
+
+            return response()->json([
+                'success' => true,
+                'message' => $message
+            ]);
+        }
+
+        // Trả về redirect cho regular request
+        $message = $request->has('service_id') ? 'Đặt lịch hẹn thành công! Chúng tôi sẽ liên hệ với bạn sớm nhất.' :
+                ($request->has('datlichkham') ? 'Đặt lịch khám thành công! Chúng tôi sẽ liên hệ với bạn sớm nhất.' :
+                'Gửi thông tin tư vấn thành công! Chúng tôi sẽ liên hệ với bạn sớm nhất.');
+
+        return redirect()->back()->with('success', $message);
+
+    } catch (\Illuminate\Validation\ValidationException $e) {
+        // Trả về JSON validation errors cho AJAX
+        if ($request->ajax() || $request->wantsJson() || $request->header('X-Requested-With') === 'XMLHttpRequest') {
+            return response()->json([
+                'success' => false,
+                'message' => 'Vui lòng kiểm tra lại thông tin đã nhập!',
+                'errors' => $e->errors()
+            ], 422);
+        }
+
+        return redirect()->back()
+            ->withErrors($e->validator)
+            ->withInput();
+    } catch (\Exception $e) {
+        \Log::error('storeFrontend error: ' . $e->getMessage());
+
+        $errorMessage = 'Đã có lỗi xảy ra, vui lòng thử lại sau!';
+
+        // Trả về JSON error cho AJAX
+        if ($request->ajax() || $request->wantsJson() || $request->header('X-Requested-With') === 'XMLHttpRequest') {
+            return response()->json([
+                'success' => false,
+                'message' => $errorMessage
+            ], 500);
+        }
+
+        return redirect()->back()->with('error', $errorMessage);
+    }
+}
 }

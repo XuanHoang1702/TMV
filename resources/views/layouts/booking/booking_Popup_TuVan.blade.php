@@ -1,4 +1,4 @@
-<div id="booking_Popup_TuVan" class="modal fade cl-bgPop" role="dialog" aria-labelledby="myModalLabel">
+{{-- <div id="booking_Popup_TuVan" class="modal fade cl-bgPop" role="dialog" aria-labelledby="myModalLabel">
     <div class="modal-dialog modal-lg" style="max-width: 30%;">
         <div class="modal-content">
             <div class="modal-header" style="flex-direction: unset;">
@@ -139,4 +139,4 @@
             modal.show();
         });
     });
-</script>
+</script> --}}

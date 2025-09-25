@@ -57,6 +57,9 @@ class AuthController extends Controller
                 return back()->withErrors(['current_password' => 'Mật khẩu hiện tại không đúng']);
             }
         }
+if (!empty($validated['password'])) {
+    $user->password = \Hash::make($validated['password']); // cần mã hoá
+}
 
         $user->name = $validated['name'];
         $user->email = $validated['email'];

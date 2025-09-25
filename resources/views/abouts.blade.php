@@ -2,6 +2,16 @@
 
 @section('title', 'Về Dr. Đạt - Thẩm mỹ Dr.DAT')
 
+@section('meta_description', 'Tìm hiểu về bác sĩ Đạt và đội ngũ chuyên gia tại Thẩm mỹ Dr.DAT. Kinh nghiệm dày dặn trong lĩnh vực thẩm mỹ, cam kết an toàn và hiệu quả cho khách hàng.')
+
+@section('meta_keywords', 'về bác sĩ Đạt, thẩm mỹ Dr.DAT, bác sĩ thẩm mỹ uy tín, kinh nghiệm phẫu thuật thẩm mỹ, đội ngũ chuyên gia hàng đầu, an toàn thẩm mỹ, tư vấn miễn phí, làm đẹp an toàn, dịch vụ thẩm mỹ chuyên nghiệp')
+
+@section('og_title', 'Về Dr. Đạt - Thẩm mỹ Dr.DAT')
+
+@section('og_description', 'Tìm hiểu về bác sĩ Đạt và đội ngũ chuyên gia tại Thẩm mỹ Dr.DAT. Kinh nghiệm dày dặn trong lĩnh vực thẩm mỹ, cam kết an toàn và hiệu quả cho khách hàng.')
+
+@section('og_image', asset('images/logo_Dr_Dat.png'))
+
 @section('styles')
     <link rel="stylesheet" href="{{ asset('css/veDrDat.css') }}">
 @endsection
