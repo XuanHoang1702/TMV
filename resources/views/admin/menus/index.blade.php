@@ -10,11 +10,11 @@
                 <div class="card">
                     <div class="card-header">
                         <h3 class="card-title">Danh sách Menu</h3>
-                        {{-- <div class="card-tools">
+                        <div class="card-tools">
                         <a href="{{ route('admin.menus.create') }}" class="btn btn-primary btn-sm">
                             <i class="fas fa-plus"></i> Thêm Menu
                         </a>
-                    </div> --}}
+                    </div>
                     </div>
                     <div class="card-body">
                         <table class="table table-bordered table-striped">
@@ -23,10 +23,10 @@
                                     <th>ID</th>
                                     <th>Label</th>
                                     <th>Icon</th>
-                                    {{-- <th>Route</th> --}}
+                                    <th>Route</th>
                                     <th>Order</th>
                                     <th>Type</th>
-                                    {{-- <th>Status</th> --}}
+
                                     <th>Actions</th>
                                 </tr>
                             </thead>
@@ -36,14 +36,10 @@
                                         <td>{{ $menu->id }}</td>
                                         <td>{{ $menu->label }}</td>
                                         <td>{{ $menu->icon }}</td>
-                                        {{-- <td>{{ $menu->route }}</td> --}}
+                                        <td>{{ $menu->route }}</td>
                                         <td>{{ $menu->order }}</td>
                                         <td>{{ $menu->type }}</td>
-                                        {{-- <td>
-                                            <span class="badge {{ $menu->is_active ? 'badge-success' : 'badge-danger' }}">
-                                                {{ $menu->is_active ? 'Active' : 'Inactive' }}
-                                            </span>
-                                        </td> --}}
+
                                         <td>
                                             <a href="{{ route('admin.menus.edit', $menu) }}" class="btn btn-warning btn-sm">
                                                 <i class="fas fa-edit"></i>
@@ -73,7 +69,7 @@
                                                 <td>{{ $child->id }}</td>
                                                 <td>&nbsp;&nbsp;&nbsp;&nbsp;{{ $child->label }}</td>
                                                 <td>{{ $child->icon }}</td>
-                                                {{-- <td>{{ $child->route }}</td> --}}
+                                                <td>{{ $child->route }}</td>
                                                 <td>{{ $child->order }}</td>
                                                 <td>{{ $child->type }}</td>
                                                 {{-- <td>

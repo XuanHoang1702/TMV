@@ -13,12 +13,17 @@ return new class extends Migration
     {
         Schema::create('processes', function (Blueprint $table) {
             $table->id();
-            $table->integer('sort_order')->default(0); // Thứ tự
-            $table->string('title');                   // Tiêu đề
-            
-            $table->string('page')->nullable();        // Thuộc trang nào (vd: services, news...)
-            $table->integer('section')->default(1);    // Khu vực hiển thị
+            $table->unsignedBigInteger('service_id')->nullable();
+            $table->integer('order'); // Thứ tự
+            $table->string('title');  // Tiêu đề
+            $table->string('page');   // Trang (vd: services, news...)
+            $table->string('section', 30); // Khu vực hiển thị
             $table->timestamps();
+
+            $table->foreign('service_id')
+                  ->references('id')
+                  ->on('services')
+                  ->onDelete('set null');
         });
     }
 

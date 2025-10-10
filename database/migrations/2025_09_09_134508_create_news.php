@@ -17,8 +17,6 @@ return new class extends Migration
             $table->string('slug')->unique();
             $table->text('summary')->nullable();
             $table->longText('content')->nullable();
-            $table->string('image')->nullable();
-            $table->enum('category', ['chuyen-mon', 'dao-tao', 'tu-thien', 'bao-chi']);
             $table->boolean('is_featured')->default(false);
             $table->timestamp('published_at')->nullable();
             $table->boolean('is_active')->default(true);
@@ -26,6 +24,15 @@ return new class extends Migration
             $table->string('meta_title')->nullable();
             $table->text('meta_description')->nullable();
             $table->timestamps();
+
+            $table->unsignedBigInteger('category_id')->nullable();
+            $table->longText('images')->nullable();
+            $table->longText('related_news')->nullable();
+
+            $table->foreign('category_id')
+                  ->references('id')
+                  ->on('categories')
+                  ->onDelete('set null');
         });
     }
 

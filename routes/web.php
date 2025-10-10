@@ -42,12 +42,6 @@ Route::view('dashboard', 'dashboard')
     ->name('dashboard');
 
 
-// Language Route
-
-
-
-
-
 //Frontend Routes
 // Home route
 Route::get('/api/zalo-contact', function () {
@@ -58,10 +52,10 @@ Route::get('/api/zalo-contact', function () {
             // Fallback nếu chưa có data
             return response()->json([
                 'zalo' => [
-                    'contact' => '0367881230',
+                    'contact' => '0123456789',
                     'type' => 'phone',
                     'icon' => 'fas fa-comment',
-                    'url' => 'https://zalo.me/0367881230',
+                    'url' => 'https://zalo.me/0123456789',
                 ],
                 'messenger' => [
                     'contact' => 'drdatclinic',
@@ -70,10 +64,10 @@ Route::get('/api/zalo-contact', function () {
                     'url' => 'https://m.me/drdatclinic',
                 ],
                 'call' => [
-                    'contact' => '0367881230',
+                    'contact' => '0123456789',
                     'type' => 'phone',
                     'icon' => 'fas fa-phone',
-                    'url' => 'tel:0367881230',
+                    'url' => 'tel:0123456789',
                 ]
             ]);
         }
@@ -102,10 +96,10 @@ Route::get('/api/zalo-contact', function () {
         // Fallback nếu có lỗi
         return response()->json([
             'zalo' => [
-                'contact' => '0367881230',
+                'contact' => '0123456789',
                 'type' => 'phone',
                 'icon' => 'fas fa-comment',
-                'url' => 'https://zalo.me/0367881230',
+                'url' => 'https://zalo.me/0123456789',
             ],
             'messenger' => [
                 'contact' => 'drdatclinic',
@@ -114,10 +108,10 @@ Route::get('/api/zalo-contact', function () {
                 'url' => 'https://m.me/drdatclinic',
             ],
             'call' => [
-                'contact' => '0367881230',
+                'contact' => '0123456789',
                 'type' => 'phone',
                 'icon' => 'fas fa-phone',
-                'url' => 'tel:0367881230',
+                'url' => 'tel:0123456789',
             ]
         ], 200); // Trả về 200 để frontend không crash
     }
@@ -155,8 +149,20 @@ Route::get('/', function () {
             ->take(5)
             ->get();
     }
+ $newsMenuLabel = \App\Models\Menu::where('route', 'news.index')
+    ->value('label');
 
-    return view('home', compact('banners', 'categories', 'services', 'certificates', 'tabs', 'newsByCategory'));
+
+    // Truyền ra view
+    return view('home', compact(
+        'banners',
+        'categories',
+        'services',
+        'certificates',
+        'tabs',
+        'newsByCategory',
+        'newsMenuLabel'
+    ));
 })->name('home');
 
 // Sitemap route
@@ -212,7 +218,7 @@ Route::get('/tin-tuc/{category}/{slug}', [\App\Http\Controllers\NewsController::
 Route::get('/lien-he', function () {
     $hospitalImages = \App\Models\HopitalImage::latest()->take(5)->get();
     $information = \App\Models\Information::first();
-    $contactBanner = \App\Models\PageContent::where('page', 'contact')->first();
+    $contactBanner = \App\Models\PageContent::where('page', 'contact_banner')->first();
     return view('contact', compact('hospitalImages', 'information', 'contactBanner'));
 })->name('contact');
 

@@ -7,7 +7,8 @@
     đội ngũ bác sĩ giàu kinh nghiệm. Tư vấn miễn phí 24/7.')
 
 @section('meta_keywords',
-    'thẩm mỹ dr dat, phẫu thuật thẩm mỹ, làm đẹp an toàn, spa thẩm mỹ, cắt mí, nâng mũi, hút mỡ, trẻ hóa da, dịch vụ thẩm mỹ chuyên nghiệp, bác sĩ giàu kinh nghiệm, tư vấn miễn phí 24/7')
+    'thẩm mỹ dr dat, phẫu thuật thẩm mỹ, làm đẹp an toàn, spa thẩm mỹ, cắt mí, nâng mũi, hút mỡ,
+    trẻ hóa da, dịch vụ thẩm mỹ chuyên nghiệp, bác sĩ giàu kinh nghiệm, tư vấn miễn phí 24/7')
 
 @section('og_title', 'Trang chủ - Thẩm mỹ Dr.DAT')
 
@@ -91,7 +92,8 @@
             <div class="container" data-aos="zoom-in" data-aos-duration="2000">
                 <div class="row">
                     <div class="col-12">
-                        <h4 class="cl-title-sec">TIN TỨC</h4>
+                        <h4 class="cl-title-sec">{{ mb_strtoupper($newsMenuLabel, 'UTF-8') }}</h4>
+
                     </div>
                 </div>
 

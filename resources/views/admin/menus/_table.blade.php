@@ -58,12 +58,12 @@
                         <td>{{ $child->route }}</td>
                         <td>{{ $child->order }}</td>
                         <td>{{ $child->type }}</td>
-                        <td>
+                        {{-- <td>
                             <span
                                 class="badge {{ $child->is_active ? 'badge-success' : 'badge-danger' }}">
                                 {{ $child->is_active ? 'Active' : 'Inactive' }}
                             </span>
-                        </td>
+                        </td> --}}
                         <td>
                             <a href="{{ route('admin.menus.edit', $child) }}"
                                 class="btn btn-warning btn-sm">

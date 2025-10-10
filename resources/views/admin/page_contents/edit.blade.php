@@ -4,7 +4,7 @@
 
 @section('content')
 <div class="d-flex justify-content-between align-items-center mb-3">
-    <h1>Chỉnh sửa Nội dung Trang</h1>
+    <h1>Chỉnh sửa Tiêu đề Trang</h1>
     <a href="{{ route('admin.page_contents.index') }}" class="btn btn-secondary">
         <i class="fas fa-arrow-left"></i> Quay lại
     </a>
@@ -23,7 +23,7 @@
 
 <div class="card shadow-sm">
     <div class="card-header bg-warning text-dark">
-        <h5 class="mb-0"><i class="fas fa-edit"></i> Chỉnh sửa Nội dung Trang</h5>
+        <h5 class="mb-0"><i class="fas fa-edit"></i> Chỉnh sửa tiêu đề Trang</h5>
     </div>
     <div class="card-body">
         <form action="{{ route('admin.page_contents.update', $page->id) }}" method="POST">

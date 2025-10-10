@@ -13,10 +13,10 @@ class CreateCertificatesTable extends Migration
     {
         Schema::create('certificates', function (Blueprint $table) {
             $table->id();
-            $table->string('title'); // e.g. "Chứng Chỉ Hành Nghề"
+            $table->string('title');
             $table->string('image_path')->nullable();
-            $table->text('description')->nullable(); // Description text
-            $table->integer('order')->default(0); // For ordering display
+            $table->text('description')->nullable();
+            $table->integer('order')->default(0);
             $table->timestamps();
         });
     }

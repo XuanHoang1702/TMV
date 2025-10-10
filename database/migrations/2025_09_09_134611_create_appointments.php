@@ -12,7 +12,9 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('appointments', function (Blueprint $table) {
- $table->id();
+            $table->id();
+            $table->unsignedBigInteger('service_id')->nullable()->after('customer_email');
+            $table->foreign('service_id')->references('id')->on('services');
             $table->string('customer_name');
             $table->string('customer_phone', 20);
             $table->string('customer_email')->nullable();

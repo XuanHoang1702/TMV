@@ -26,6 +26,7 @@ class NewsController extends Controller
         $newsList = $query->orderBy('published_at', 'desc')->paginate(12);
 
         $newsBanner = \App\Models\PageContent::where('page', 'news_banner')->first();
+        
 
         return view('news.index', compact('newsCategories', 'newsList', 'newsBanner','news'));
     }

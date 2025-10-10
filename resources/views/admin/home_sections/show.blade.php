@@ -4,13 +4,13 @@
 
 @section('content')
 <div class="d-flex justify-content-between align-items-center mb-3">
-    <h1>Chi tiết Home Section</h1>
+    <h1>Chi tiết </h1>
     <a href="{{ route('admin.home_sections.index') }}" class="btn btn-secondary">Quay lại</a>
 </div>
 
 <div class="card">
     <div class="card-header">
-        <h5 class="mb-0">Thông tin Home Section</h5>
+        <h5 class="mb-0">Thông tin</h5>
     </div>
     <div class="card-body">
         <div class="row">

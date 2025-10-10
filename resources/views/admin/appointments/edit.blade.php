@@ -53,15 +53,10 @@
                                     <label for="service_id" class="form-label">Dịch vụ</label>
                                     <select class="form-select @error('service_id') is-invalid @enderror" id="service_id" name="service_id">
                                         <option value="">Chọn dịch vụ</option>
-                                        @php
-                                            $groupedServices = $services->groupBy('category');
-                                        @endphp
-                                        @foreach($groupedServices as $category => $categoryServices)
-                                            <optgroup label="{{ $category ?: 'Chưa phân loại' }}">
-                                                @foreach($categoryServices as $service)
-                                                    <option value="{{ $service->id }}" {{ old('service_id', $appointment->service_id) == $service->id ? 'selected' : '' }}>{{ $service->name }}</option>
-                                                @endforeach
-                                            </optgroup>
+                                        @foreach($services as $service)
+                                            @if($service->parent_id) <!-- Chỉ hiển thị dịch vụ con (có parent_id) -->
+                                                <option value="{{ $service->id }}" {{ old('service_id', $appointment->service_id) == $service->id ? 'selected' : '' }}>{{ $service->name }}</option>
+                                            @endif
                                         @endforeach
                                     </select>
                                     @error('service_id')

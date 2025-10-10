@@ -16,7 +16,7 @@
             <th>ID</th>
             <th>Tiêu đề</th>
             <th>Hình ảnh</th>
-            <th>Liên kết</th>
+            
             <th>Thứ tự</th>
             <th>Trạng thái</th>
             <th>Section</th>
@@ -30,7 +30,7 @@
             <td>{{ $banner->id }}</td>
             <td>{{ $banner->title }}</td>
 <td><img src="{{ asset('storage/' . $banner->image_path) }}" alt="{{ $banner->title }}" style="width: 100px;"></td>
-            <td>{{ $banner->link }}</td>
+
             <td>{{ $banner->order }}</td>
             <td>
                 @if($banner->is_active)

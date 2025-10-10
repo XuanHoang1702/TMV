@@ -35,7 +35,7 @@ class FrontendServiceController extends Controller
     public function show($slug)
     {
         // DEBUG: Log để kiểm tra slug
-        Log::info('Service show method called with slug: ' . $slug);
+
 
         // Tìm service trước
         $service = Service::where('slug', $slug)
@@ -45,20 +45,7 @@ class FrontendServiceController extends Controller
             }, 'category'])
             ->first();
 
-        // DEBUG: Log service data
-        if ($service) {
-            Log::info('Service found:', [
-                'id' => $service->id,
-                'name' => $service->name,
-                'description' => $service->description ? 'YES' : 'NULL',
-                'content' => $service->content ? 'YES' : 'NULL',
-                'price_range' => $service->price_range ?? 'NULL',
-                'duration' => $service->duration ?? 'NULL',
-                'children_count' => $service->children->count()
-            ]);
-        } else {
-            Log::info('Service NOT found for slug: ' . $slug);
-        }
+        
 
         // Các biến chung
         $serviceBanner = \App\Models\PageContent::where('page', 'services_banner')->first();

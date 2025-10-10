@@ -1,4 +1,4 @@
-{{-- @extends('layouts.admin')
+@extends('layouts.admin')
 
 @section('title', 'Thêm Menu')
 
@@ -61,4 +61,4 @@
         </div>
     </div>
 </div>
-@endsection --}}
+@endsection

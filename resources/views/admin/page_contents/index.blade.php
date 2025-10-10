@@ -4,16 +4,16 @@
 
 @section('content')
 <div class="d-flex justify-content-between align-items-center mb-3">
-    <h1>Quản lý Nội dung Trang</h1>
+    <h1>Quản lý Tiêu Đề Trang</h1>
     <a href="{{ route('admin.page_contents.create') }}" class="btn btn-primary">
-        <i class="fas fa-plus"></i> Thêm Nội dung Trang Mới
+        <i class="fas fa-plus"></i> Thêm Tiêu Đề Trang Mới
     </a>
 </div>
 
 
 <div class="card">
     <div class="card-header">
-        <h5 class="mb-0">Danh sách Nội dung Trang</h5>
+        <h5 class="mb-0">Danh sách Tiêu Đề Trang</h5>
     </div>
     <div class="card-body">
         <div class="table-responsive">

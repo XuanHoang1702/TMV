@@ -13,11 +13,16 @@ return new class extends Migration
     {
         Schema::create('informations', function (Blueprint $table) {
             $table->id();
+            $table->boolean('is_read')->default(0);
             $table->string('name');
             $table->string('address');
-            $table->json('working_time')->nullable();
+            $table->decimal('latitude', 10, 7)->nullable();
+            $table->decimal('longitude', 10, 7)->nullable();
+            $table->longText('working_time')->nullable();
             $table->string('email');
-            $table->timestamps();
+            $table->string('hotline')->nullable();
+            $table->string('website')->nullable();
+            $table->timestamps(); 
         });
     }
 

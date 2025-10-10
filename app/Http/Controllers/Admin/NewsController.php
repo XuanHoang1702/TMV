@@ -127,6 +127,11 @@ class NewsController extends Controller
 
     public function update(News $news, Request $request)
     {
+        if ($request->has('related_news') && is_string($request->related_news)) {
+    $decoded = json_decode($request->related_news, true);
+    $request->merge(['related_news' => is_array($decoded) ? $decoded : []]);
+}
+
         $validated = $request->validate([
             'title' => 'required|string|max:255',
             'slug' => 'nullable|string|unique:news,slug,' . $news->id,

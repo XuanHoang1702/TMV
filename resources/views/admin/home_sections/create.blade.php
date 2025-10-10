@@ -4,7 +4,7 @@
 
 @section('content')
 <div class="d-flex justify-content-between align-items-center mb-3">
-    <h1>Thêm Home Section mới</h1>
+    <h1>Thêm mới</h1>
     <a href="{{ route('admin.home_sections.index') }}" class="btn btn-secondary">Quay lại</a>
 </div>
 
@@ -20,7 +20,7 @@
 
 <div class="card">
     <div class="card-header">
-        <h5 class="mb-0">Thông tin Home Section</h5>
+        <h5 class="mb-0">Thông tin </h5>
     </div>
     <div class="card-body">
         <form action="{{ route('admin.home_sections.store') }}" method="POST" enctype="multipart/form-data">
@@ -179,7 +179,7 @@
 
             <div class="d-flex justify-content-end">
                 <a href="{{ route('admin.home_sections.index') }}" class="btn btn-secondary me-2">Cancel</a>
-                <button type="submit" class="btn btn-primary">Create Home Section</button>
+                <button type="submit" class="btn btn-primary">Create </button>
             </div>
         </form>
     </div>

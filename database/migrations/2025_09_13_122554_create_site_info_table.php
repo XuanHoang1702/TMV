@@ -13,8 +13,10 @@ return new class extends Migration
     {
         Schema::create('site_info', function (Blueprint $table) {
             $table->id();
-            $table->string('logo');
+            $table->string('header_logo')->nullable()->after('logo');
+            $table->string('footer_logo')->nullable()->after('header_logo');
             $table->string('slogan');
+
             $table->timestamps();
         });
     }

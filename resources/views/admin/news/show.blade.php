@@ -37,7 +37,7 @@
                         <div class="col-md-6">
                             <p><strong><i class="fas fa-calendar text-primary"></i> Ngày xuất bản:</strong>
                                 @if ($news->published_at)
-                                    <span class="badge badge-success">{{ $news->published_at->format('H:i, d/m/Y') }}</span>
+                                    <span class="badge badge-success text-black">{{ $news->published_at->format('H:i, d/m/Y') }}</span>
                                 @else
                                     <span class="badge badge-secondary">Bản nháp</span>
                                 @endif

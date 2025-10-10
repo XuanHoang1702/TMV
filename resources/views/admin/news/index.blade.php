@@ -12,17 +12,7 @@
 
     <form method="GET" action="{{ route('admin.news.index') }}" class="mb-3">
         <div class="row">
-            <div class="col-md-3">
-                <select name="category" class="form-select">
-                    <option value="">Tất cả danh mục</option>
-                    <option value="chuyen-mon" {{ request('category') == 'chuyen-mon' ? 'selected' : '' }}>Chuyên môn
-                    </option>
-                    <option value="dao-tao" {{ request('category') == 'dao-tao' ? 'selected' : '' }}>Đào tạo</option>
-                    <option value="tu-thien" {{ request('category') == 'tu-thien' ? 'selected' : '' }}>Từ thiện</option>
-                    <option value="bao-chi" {{ request('category') == 'bao-chi' ? 'selected' : '' }}>Báo chí - Truyền thông
-                    </option>
-                </select>
-            </div>
+           
             <div class="col-md-3">
                 <select name="status" class="form-select">
                     <option value="">Tất cả trạng thái</option>

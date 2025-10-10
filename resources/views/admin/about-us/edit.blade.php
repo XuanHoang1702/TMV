@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="container">
-    <h1>Sửa About Us</h1>
+    <h1>Sửa nội dung trang liên hệ</h1>
 
     <form action="{{ route('admin.about-us.update', $aboutUs) }}" method="POST" enctype="multipart/form-data">
         @csrf

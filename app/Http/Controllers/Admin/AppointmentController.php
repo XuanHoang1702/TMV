@@ -59,19 +59,24 @@ class AppointmentController extends Controller
     {
         return view('admin.appointments.show', compact('appointment'));
     }
+public function update(Request $request, Appointment $appointment)
+{
+    $validated = $request->validate([
+        'customer_name' => 'required|string|max:255',
+        'customer_email' => 'required|email|max:255',
+        'customer_phone' => 'required|string|max:20',
+        'service_id' => 'nullable|exists:services,id',
+        'appointment_date' => 'required|date|after_or_equal:today',
+        'appointment_time' => 'required|date_format:H:i',
+        'status' => 'required|in:pending,confirmed,completed,cancelled',
+        'notes' => 'nullable|string|max:1000',
+    ]);
+        $service = Service::find($validated['service_id']);
+        $validated['estimated_price'] = $service ? $service->price_range : 0;
+    $appointment->update($validated);
 
-    public function update(Request $request, Appointment $appointment)
-    {
-        $validated = $request->validate([
-            'status' => 'required|in:pending,confirmed,completed,cancelled',
-            'notes' => 'nullable|string'
-        ]);
-
-        $appointment->update($validated);
-
-        return redirect()->route('admin.appointments.index')->with('success', 'Appoinment updated');
-    }
-
+    return redirect()->route('admin.appointments.index')->with('success', 'Lịch hẹn đã được cập nhật thành công!');
+}
     public function destroy(Appointment $appointment)
     {
         $appointment->delete();

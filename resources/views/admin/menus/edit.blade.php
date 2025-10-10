@@ -24,11 +24,11 @@
                                 <input type="text" class="form-control" id="icon" name="icon"
                                     value="{{ old('icon', $menu->icon) }}" placeholder="e.g., fas fa-home">
                             </div>
-                            {{-- <div class="form-group">
+                            <div class="form-group">
                                 <label for="route">Route</label>
                                 <input type="text" class="form-control" id="route" name="route"
                                     value="{{ old('route', $menu->route) }}" required>
-                            </div> --}}
+                            </div>
                             <div class="form-group">
                                 <label for="parent_id">Parent Menu</label>
                                 <select class="form-control" id="parent_id" name="parent_id">

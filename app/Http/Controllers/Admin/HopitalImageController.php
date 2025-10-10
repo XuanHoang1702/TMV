@@ -131,9 +131,7 @@ class HopitalImageController extends Controller
     {
         $total = HopitalImage::count();
 
-        if ($total <= 5) {
-            return redirect()->back()->withErrors(['error' => 'Không thể xóa vì số lượng ảnh tối thiểu là 5.']);
-        }
+       
 
         $image = HopitalImage::findOrFail($id);
 

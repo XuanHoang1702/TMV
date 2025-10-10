@@ -4,8 +4,8 @@
 
 @section('content')
 <div class="d-flex justify-content-between align-items-center mb-3">
-    <h1>Danh sách Home Sections</h1>
-    <a href="{{ route('admin.home_sections.create') }}" class="btn btn-primary">Thêm Home Section mới</a>
+    <h1>Danh sách </h1>
+    <a href="{{ route('admin.home_sections.create') }}" class="btn btn-primary">Thêm mới</a>
 </div>
 
 <table class="table table-bordered table-hover">

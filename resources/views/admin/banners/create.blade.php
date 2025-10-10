@@ -45,13 +45,6 @@
                 <div class="form-text">Định dạng: JPG, PNG, GIF. Kích thước tối đa: 2MB</div>
             </div>
 
-            <div class="mb-3">
-                <label for="link" class="form-label">Liên kết</label>
-                <input type="text" class="form-control @error('link') is-invalid @enderror" id="link" name="link" value="{{ old('link') }}">
-                @error('link')
-                    <div class="invalid-feedback">{{ $message }}</div>
-                @enderror
-            </div>
 
             <div class="mb-3">
                 <label for="page" class="form-label">Page</label>

@@ -534,8 +534,7 @@
                                                 class="btn btn-danger btn-sm remove-image mt-2">Xóa</button>
                                         </div>
                                     </div>
-                                    <button type="button" class="btn btn-secondary btn-sm" id="add-image">Thêm
-                                        ảnh</button>
+                                   
                                     <small class="form-text text-muted">Tải lên ảnh từ thiết bị của bạn.</small>
                                 </div>
                             </div>

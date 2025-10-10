@@ -1,4 +1,3 @@
-
 @extends('layouts.admin')
 
 @section('title', 'Chi tiết thông tin liên hệ')
@@ -47,7 +46,6 @@
                                     <th>Địa chỉ</th>
                                     <td>{{ $information->address ?: 'Chưa có' }}</td>
                                 </tr>
-                               
                                 <tr>
                                     <th>Tọa độ</th>
                                     <td>
@@ -60,9 +58,33 @@
                                 </tr>
                                 <tr>
                                     <th>Giờ làm việc</th>
-                                    <td>{{ $information->working_time ?: 'Chưa có' }}</td>
+                                    <td>
+                                        @php
+                                            $workingTime = json_decode($information->working_time, true);
+                                            if ($workingTime) {
+                                                $days = [
+                                                    'monday_friday' => 'Thứ 2 - Thứ 6',
+                                                    'saturday' => 'Thứ 7',
+                                                    'sunday' => 'Chủ nhật'
+                                                ];
+                                                $display = '';
+                                                foreach ($days as $key => $day) {
+                                                    if (isset($workingTime[$key])) {
+                                                        if (is_array($workingTime[$key])) {
+                                                            $display .= "$day: {$workingTime[$key]['open']} - {$workingTime[$key]['close']}<br>";
+                                                        } else {
+                                                            $display .= "$day: {$workingTime[$key]}<br>";
+                                                        }
+                                                    }
+                                                }
+                                                echo $display ?: 'Chưa có';
+                                            } else {
+                                                echo 'Chưa có';
+                                            }
+                                        @endphp
+                                       
+                                    </td>
                                 </tr>
-
                                 <tr>
                                     <th>Ngày tạo</th>
                                     <td>{{ $information->created_at->format('d/m/Y H:i') }}</td>
@@ -73,7 +95,6 @@
                                 </tr>
                             </table>
                         </div>
-
                     </div>
                 </div>
             </div>

@@ -18,19 +18,23 @@ return new class extends Migration
             $table->text('description')->nullable();
             $table->longText('content')->nullable();
             $table->string('image')->nullable();
-            $table->string('icon')->nullable();
+            $table->string('icon_page_home')->nullable();
+            $table->string('icon_page_service')->nullable();
             $table->string('price_range', 100)->nullable();
             $table->string('duration', 50)->nullable();
             $table->string('category_id', 100)->nullable();
-            $table->integer('parent_id')->nullable()->after('id');
-            $table->foreign('parent_id')->references('id')->on('services')->onDelete('cascade');
+            $table->unsignedBigInteger('parent_id')->nullable();
             $table->boolean('is_active')->default(true);
             $table->integer('sort_order')->default(0);
             $table->string('meta_title')->nullable();
             $table->text('meta_description')->nullable();
-            $table->boolean('allow_line_breaks')->default(false)->after('is_active');
+            $table->boolean('allow_line_breaks')->default(false);
             $table->timestamps();
 
+            $table->foreign('parent_id')
+                  ->references('id')
+                  ->on('services')
+                  ->onDelete('cascade');
         });
     }
 
@@ -40,6 +44,5 @@ return new class extends Migration
     public function down(): void
     {
         Schema::dropIfExists('services');
-
     }
 };

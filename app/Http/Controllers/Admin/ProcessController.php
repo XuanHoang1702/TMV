@@ -8,7 +8,7 @@ use App\Models\Process;
 use App\Models\ProcessImage;
 use App\Models\Service;
 use Illuminate\Support\Facades\Validator;
-
+use Illuminate\Support\Facades\Storage;
 class ProcessController extends Controller
 {
     /**

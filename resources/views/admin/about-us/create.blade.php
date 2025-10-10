@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="container">
-    <h1>Thêm mới About Us</h1>
+    <h1>Thêm mới nội dung trang liên hệ</h1>
 
     <form action="{{ route('admin.about-us.store') }}" method="POST" enctype="multipart/form-data">
         @csrf

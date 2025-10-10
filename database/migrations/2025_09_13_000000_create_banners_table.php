@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('image_path');
             $table->string('link')->nullable();
             $table->string('page');
+            $table->string('section')->default('home');
             $table->integer('order')->default(0);
             $table->boolean('is_active')->default(true);
             $table->timestamps();
